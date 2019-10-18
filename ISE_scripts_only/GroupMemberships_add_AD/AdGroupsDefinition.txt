@@ -1,0 +1,39 @@
+AdGroupSource;AdGroupTarget;
+"STPK_Center for Behandlingsklager";ESDH1_KC
+"STPK_Center for Behandlingsklager";ESDH1_JUR
+"STPK_Center for Behandlingsklager";ESDH1_VIS
+"STPK_Center for Behandlingsklager";ESDH1_SOS
+"STPK_Center for Behandlingsklager";ESDH1_DOR
+"STPK_Center for Behandlingsklager";ESDH1_EMDIR
+"STPK_Jura og Rettigheder";ESDH1_JUR
+"STPK_Jura og Rettigheder";ESDH1_KC
+"STPK_Jura og Rettigheder";ESDH1_VIS
+"STPK_Jura og Rettigheder";ESDH1_SOS
+"STPK_Jura og Rettigheder";ESDH1_DOR
+"STPK_Jura og Rettigheder";ESDH1_EMDIR
+"STPK_Jura og Rettigheder";ESDH1_INDFØDSRET
+"STPK_Visitation";ESDH1_VIS
+"STPK_Visitation";ESDH1_KC
+"STPK_Visitation";ESDH1_JUR
+"STPK_Visitation";ESDH1_SOS
+"STPK_Visitation";ESDH1_DOR
+"STPK_Visitation";ESDH1_EMDIR
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_SOS
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_KC
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_VIS
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_JUR
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_DOR
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_EMDIR
+"STPK_Sundhedsfaglige og Sagkyndige";ESDH1_INDFØDSRET
+"STPK_Drifts- og Ressourcestyring";ESDH1_DOR
+"STPK_Drifts- og Ressourcestyring";ESDH1_EMDIR
+"STPK_Drifts- og Ressourcestyring";ESDH1_JUR
+"STPK_Drifts- og Ressourcestyring";ESDH1_KC
+"STPK_Drifts- og Ressourcestyring";ESDH1_VIS
+"STPK_Drifts- og Ressourcestyring";ESDH1_SOS
+"STPK_Direktion";ESDH1_EMDIR
+"STPK_Direktion";ESDH1_JUR
+"STPK_Direktion";ESDH1_KC
+"STPK_Direktion";ESDH1_VIS
+"STPK_Direktion";ESDH1_SOS
+"STPK_Direktion";ESDH1_DOR

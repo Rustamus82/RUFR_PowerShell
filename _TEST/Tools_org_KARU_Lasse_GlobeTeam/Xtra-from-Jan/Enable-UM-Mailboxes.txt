@@ -1,0 +1,8 @@
+
+ Enable-UMMailbox -Identity the@dksund.dk -UMMailboxPolicy O365UM
+
+$users = import-csv .\SDS_UM_Users.csv
+ 
+foreach($user in $users){
+    Enable-UMMailbox -Identity $user.UPN -UMMailboxPolicy O365UM
+

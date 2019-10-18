@@ -1,0 +1,33 @@
+
+
+Vist navn:	Sektor for Diagnostik & Infektionskontrol - nyt spor
+
+Alias:		SFSDI-Nyt-spor-Dynlst
+
+PrimarySMTP:	SFSDI-Nyt-spor-Dynlst@ssi.dk
+Noter:		Dynamisk Distributionsliste på foranledning af Anne Vitoft - Omfatter 3 afdelinger
+		- Medfødte Sygdomme
+		- Autoimmunologi & Markører
+		- Prædiagnostik, Forretningsudv. & Support
+
+Ejer:		Anne Vitoft
+
+Medlemmer:	Kun følgende modtagertyper = Brugere med Exchange-postkasser
+
+Regler:		Afdelinger (department):
+
+		Medfødte Sygdomme
+		Autoimmunologi & Markører
+		Prædiagnostik, Forretningsudv. & Support
+
+$members = Get-o365DynamicDistributionGroup <name>
+Get-o365Recipient -RecipientPreviewFilter $members.RecipientFilter
+
+
+$UserCredential = Get-Credential
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
+Import-PSSession $Session
+
+
+
+New-o365DynamicDistributionGroup -Name "Sektor for Diagnostik & Infektionskontrol - nyt spor" -Alias "SFSDI-Nyt-spor-Dynlst" -PrimarySmtpAddress "SFSDI-Nyt-spor-Dynlst@ssi.dk" -IncludedRecipients "MailboxUsers" -ConditionalDepartment "Medfødte Sygdomme","Autoimmunologi & Markører","Prædiagnostik, Forretningsudv. & Support"

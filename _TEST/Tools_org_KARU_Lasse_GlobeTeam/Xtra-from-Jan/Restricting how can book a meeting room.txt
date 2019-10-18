@@ -1,0 +1,7 @@
+Meeting room	Group allowed to book
+092-207		092-207-Allowed-to-book
+206-301		206-301-Allowed-to-book
+
+
+Get-Mailbox 092-207 | Set-CalendarProcessing -AllBookInPolicy:$false -AllRequestInPolicy:$false –BookInPolicy “092-207-Allowed-to-book@ssi.dk”
+Get-Mailbox 206-301 | Set-CalendarProcessing -AllBookInPolicy:$false -AllRequestInPolicy:$false –BookInPolicy “206-301-Allowed-to-book@ssi.dk”

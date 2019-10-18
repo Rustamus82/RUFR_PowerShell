@@ -1,0 +1,131 @@
+Navn;Type;Beskrivelse;Ansvarlig;Ejer
+Alle CBK;Distributionsgruppe - Universelt;Distributionsliste;Charles Bo Volkersen Conrad - CBVC;CBVC
+Alle sagsbehandlere CBK;Distributionsgruppe - Universelt;Distributionsliste;Charles Bo Volkersen Conrad - CBVC;CBVC
+Alle sektionsledere CBK;Distributionsgruppe - Universelt;Distributionsliste;Charles Bo Volkersen Conrad - CBVC;CBVC
+Jura og Rettigheder sagsbehandlere;Distributionsgruppe - Universelt;Distributionsliste;Søren Enggaard Stidsen;SEST
+STPK Chefer og sektionsledere;Distributionsgruppe - Universelt;Distributionsliste;Jakob Steensgaard;JSTE
+STPK Sektionsledere;Distributionsgruppe - Universelt;Distributionsliste;Jakob Steensgaard;JSTE
+WorkZone Superbrugere;Distributionsgruppe - Universelt;Distributionsliste;Charles Bo Volkersen Conrad - CBVC;CBVC
+Migrated;Organisationsenhed;;;
+stpk_g_Skype_Enterprise;Sikkerhedsgruppe - Globalt;Adgang til SfB IOS shared service;Kristjan IOS;KRLE
+stpk_g_Skype_Enterprise_Voice;Sikkerhedsgruppe - Globalt;Adgang til SfB IOS shared service;Kristjan IOS;KRLE
+stpk_g_Skype_Standard;Sikkerhedsgruppe - Globalt;Adgang til SfB IOS shared service;Kristjan IOS;KRLE
+EC-afd_po;Sikkerhedsgruppe - Globalt;Afdelingsgruppe - Automatisk vedligeholdt af MIM;MIM;
+KC-afd_po;Sikkerhedsgruppe - Globalt;Afdelingsgruppe - Automatisk vedligeholdt af MIM;MIM;
+STYRELSEN FOR PATIENTKLAGE-afd_po;Sikkerhedsgruppe - Globalt;Afdelingsgruppe - Automatisk vedligeholdt af MIM;MIM;
+VISITATION OG SAGKYNDIGE-afd_po;Sikkerhedsgruppe - Globalt;Afdelingsgruppe - Automatisk vedligeholdt af MIM;MIM;
+STYRELSEN FOR PATIENTKLAGE;Sikkerhedsgruppe - Globalt;Firmagruppe - Automatisk vedligeholdt af MIM;MIM;
+STYRELSEN FOR PATIENTKLAGER;Sikkerhedsgruppe - Globalt;Firmagruppe - Automatisk vedligeholdt af MIM;MIM;
+grp-Teamsek;Sikkerhedsgruppe - Globalt;giver fuld adgang til fælles postkasse Teamsek Onboard;Jakob Steensgaard;JSTE
+STPK_G_KC;Sikkerhedsgruppe - Globalt;Gruppe for Behandlingsklager;;
+STPK_G_Direktion;Sikkerhedsgruppe - Globalt;Guppe til STPK Direktion;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_ADM_Okonomi_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\ADM__Okonomi;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_Adm_AdmSer_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Adm_AdmSer;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_ADM_ESDHSek_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\ADM_ESDHSek;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_ADM_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\ADM;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_DB_Sagkyndige_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\DB_Sagkyndige;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_Kommunikation_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\EC_Kommunikation;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_Ledelse_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\EC_Ledelse;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\EC;Rikke Nielsen;RINI
+STPK_G_G-Drev_KC_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\KC;Søren Enggaard Stidsen;SEST
+STPK_G_G-Drev_KomFaelles_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\KomFaelles;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_LayoutSkabeloner_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\LayoutSkabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Publicering_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Publicering;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Skemaer_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Skemaer;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Tvaers_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Tvaers;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_UnderPalmen_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\UnderPalmen;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_Wordskabeloner_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Wordskabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_WorkZone_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\WorkZone;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_J-Drev_R;Sikkerhedsgruppe - Globalt;Læseadgang til J-Drev;Rikke Nielsen;RINI
+STPK_G_Okonomi_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Okonomi;Jakob Steensgaard;JSTE
+STPK_G_S-Drev_Direktion_R;Sikkerhedsgruppe - Globalt;Læseadgang til S:\Direktion;Jakob Steensgaard;JSTE
+stpk_g_g-acadre-statistik-cb_r;Sikkerhedsgruppe - Globalt;"Læseadgang til ""G:\01 - Acadre statistik\Center..."" i STPK";Jakob Steensgaard;JSTE
+stpk_g_g-acadre-statistik-sa_r;Sikkerhedsgruppe - Globalt;"Læseadgang til ""G:\01 - Acadre statistik\Sekretariat..."" i STPK";Jakob Steensgaard;JSTE
+STPK_G_G-Drev_JUR_Informationssikkerhed_R;Sikkerhedsgruppe - Globalt;Læseadgang til G:\Informationssikkerhed;Søren Enggaard Stidsen;SEST
+stpk_g_wzskabtest_r;Sikkerhedsgruppe - Globalt;Læseadgang til mappen med WorkZone-testskabelonerne (i sst.dk);Kim Apitz;KIAP
+STPK_G_G-Drev_ADM_Okonomi_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\ADM__Okonomi;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_Adm_AdmSer_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Adm_AdmSer;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_ADM_ESDHSek_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\ADM_ESDHSek;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_ADM_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\ADM;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_DB_Sagkyndige_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\DB_Sagkyndige;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_Kommunikation_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\EC_Kommunikation;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_Ledelse_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\EC_Ledelse;Rikke Nielsen;RINI
+STPK_G_G-Drev_EC_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\EC;Rikke Nielsen;RINI
+STPK_G_G-Drev_KC_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\KC;Søren Enggaard Stidsen;SEST
+STPK_G_G-Drev_KomFaelles_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\KomFaelles;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_LayoutSkabeloner_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\LayoutSkabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Publicering_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Publicering;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Skemaer_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Skemaer;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_Tvaers_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Tvaers;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_UnderPalmen_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\UnderPalmen;Jakob Steensgaard;JSTE
+STPK_G_G-Drev_Wordskabeloner_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Wordskabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_G-Drev_WorkZone_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\WorkZone;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_G_J-Drev_W;Sikkerhedsgruppe - Globalt;Skriveadgang til J:\;Rikke Nielsen;RINI
+STPK_G_Okonomi_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Okonomi;Jakob Steensgaard;JSTE
+STPK_G_S-Drev_Direktion_W;Sikkerhedsgruppe - Globalt;Skriveadgang til S:\Direktion;Jakob Steensgaard;JSTE
+stpk_g_g-acadre-statistik_w;Sikkerhedsgruppe - Globalt;"Skriveadgang til ""G:\01 - Acadre statistik"" i STPK";Jakob Steensgaard;JSTE
+stpk_g_g-kc-06-cm_w;Sikkerhedsgruppe - Globalt;"Skriveadgang til ""G:\KC\06. ...\CBK chefmøder""";;
+STPK_G_G-Drev_JUR_Informationssikkerhed_W;Sikkerhedsgruppe - Globalt;Skriveadgang til G:\Informationssikkerhed;Søren Enggaard Stidsen;SEST
+stpk_g_wzskabtest_w;Sikkerhedsgruppe - Globalt;Skriveadgang til mappen med WZ-testskabelonerne (i sst.dk);Kim Apitz;KIAP
+Bw_g_STPK_Users;Sikkerhedsgruppe - Globalt;User priviligie til BlueWhale STPK løsningen;Thomas Mørk ;THM
+stpx_g_wz-fraser_w;Sikkerhedsgruppe - Globalt;"WorkZone fraseredaktør-rollen i ""WZSkabProd""";Kim Apitz;KIAP
+stpk_g_Andet;Sikkerhedsgruppe - Globalt;;;
+stpk_g_erstatning;Sikkerhedsgruppe - Globalt;;Rikke Nielsen;RINI
+stpk_g_klagecenter;Sikkerhedsgruppe - Globalt;;Søren Stidsen;SEST
+STPK_L_G-Drev_ADM_Okonomi_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\ADM__Okonomi;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_ADM_AdmSer_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\ADM_AdmSer;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_ADM_ESDHSek_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\ADM_ESDHSek;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_DB_Sagkyndige_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\DB_Sagkyndige;Rikke Nielsen;RINI
+STPK_L_G-Drev_EC_Kommunikation_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\EC_Kommunikation;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_EC_Ledelse_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\EC_Ledelse;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_EC_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\EC;Rikke Nielsen;RINI
+STPK_L_G-Drev_JUR_Informationssikkerhed_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\JUR_Informationssikkerhed;Søren Enggaard Stidsen;SEST
+STPK_L_G-Drev_KC_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\KC;Søren Enggaard Stidsen;SEST
+STPK_L_G-Drev_KomFaelles_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\KomFaelles;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_LayoutSkabeloner_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\LayoutSkabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Publicering_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\Publicering;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Skemaer_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\Skemaer;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Tvaers_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\Tvaers;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_UnderPalmen_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\UnderPalmen;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_Wordskabeloner_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\Wordskabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_WorkZone_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til G:\WorkZone;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_J-Drev_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til STPK_L_J-Drev;Rikke Nielsen;RINI
+STPK_L_Okonomi_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til STPK_L_Okonomi;Jakob Steensgaard;JSTE
+STPK_L_S-Drev_Direktion_R;Sikkerhedsgruppe - Lokalt domæne;Læseadgang til STPK_L_S-Drev_Direktion;Jakob Steensgaard;JSTE
+stpk_l_g-acadre-statistik-cb_r;Sikkerhedsgruppe - Lokalt domæne;"Læseadgang til ""G:\01 - Acadre statistik\Center..."" i STPK";Charles Bo Volkersen Conrad - CBVC;CBVC
+stpk_l_g-acadre-statistik-sa_r;Sikkerhedsgruppe - Lokalt domæne;"Læseadgang til ""G:\01 - Acadre statistik\Sekretariat..."" i STPK";Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_ADM_R;Sikkerhedsgruppe - Lokalt domæne;"Læseadgang til ""G:\ADM"" i STPK";Jakob Steensgaard;JSTE
+STPK_L_G-Drev_ADM_Okonomi_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\ADM__Okonomi;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_ADM_AdmSer_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\ADM_AdmSer;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_ADM_ESDHSek_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\ADM_ESDHSek;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_DB_Sagkyndige_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\DB_Sagkyndige;Rikke Nielsen;RINI
+STPK_L_G-Drev_EC_Kommunikation_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\EC_Kommunikation;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_EC_Ledelse_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\EC_Ledelse;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_EC_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\EC;Rikke Nielsen;RINI
+STPK_L_G-Drev_JUR_Informationssikkerhed_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\JUR_Informationssikkerhed;Søren Enggaard Stidsen;SEST
+STPK_L_G-Drev_KC_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\KC;Søren Enggaard Stidsen;SEST
+STPK_L_G-Drev_KomFaelles_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\KomFaelles;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_LayoutSkabeloner_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\LayoutSkabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Publicering_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\Publicering;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Skemaer_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\Skemaer;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_Tvaers_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\Tvaers;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_UnderPalmen_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\UnderPalmen;Jakob Steensgaard;JSTE
+STPK_L_G-Drev_Wordskabeloner_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\Wordskabeloner;Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_WorkZone_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til G:\WorkZone;Charles Bo Volkersen Conrad - CBVC;CBVC
+stpk_l_g-kc-06-cm_w;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til stpk_l_g-kc-06-cm;"Skriveadgang til ""G:\KC\06. ...\CBK chefmøder""";CBVC
+STPK_L_J-Drev_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til STPK_L_J-Drev;Rikke Nielsen;RINI
+STPK_L_Okonomi_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til STPK_L_Okonomi;Jakob Steensgaard;JSTE
+STPK_L_S-Drev_Direktion_W;Sikkerhedsgruppe - Lokalt domæne;Skriveadgang til STPK_L_S-Drev_Direktion;Jakob Steensgaard;JSTE
+stpk_l_g-acadre-statistik_w;Sikkerhedsgruppe - Lokalt domæne;"Skriveadgang til ""G:\01 - Acadre statistik"" i STPK";Charles Bo Volkersen Conrad - CBVC;CBVC
+STPK_L_G-Drev_ADM_W;Sikkerhedsgruppe - Lokalt domæne;"Skriveadgang til ""G:\ADM"" i STPK";Jakob Steensgaard;JSTE
+Bw_l_STPK_Users;Sikkerhedsgruppe - Lokalt domæne;User priviligie til BlueWhale STPK løsningen;Thomas Mørk ;THM
+stpk_g_tandvis_mail;Sikkerhedsgruppe - Universelt;"Adgang til postkassen ""Tand visitation"" (tandvis@stpk.dk)";;
+STPK_U_tandvis_mail;Sikkerhedsgruppe - Universelt;"Adgang til postkassen ""Tand visitation"" (tandvis@stpk.dk)";;
+CBK Team 1;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 2;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 3;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 4;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 5;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 6;Sikkerhedsgruppe - Universelt;N/A;;
+CBK Team 7;Sikkerhedsgruppe - Universelt;N/A;;
+STPK_U_SharedMailboxes_Test;Sikkerhedsgruppe - Universelt;testgruppe til sharedmailboxes;;
