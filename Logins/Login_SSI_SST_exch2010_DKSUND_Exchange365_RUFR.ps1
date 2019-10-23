@@ -28,7 +28,8 @@ function Start-Sleep($seconds) {
 #*********************************************************************************************************************************************
 #Session option timeout set variable.
 #*********************************************************************************************************************************************
-$Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  3  -OperationTimeout 5 -IdleTimeout 180000
+#$Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  0  -OperationTimeout 0 -IdleTimeout 12000000
+$Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  180000  -OperationTimeout 0 -IdleTimeout 14400000
 #*********************************************************************************************************************************************
 #LOGIN
 #*********************************************************************************************************************************************
