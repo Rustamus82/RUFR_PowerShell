@@ -128,13 +128,16 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
     {
-		    $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+		    #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
+            #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
+
+            $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
  		    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
-            Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-            sleep 300
+            Write-Host "Time out 10 min..." -foregroundcolor Yellow 
+            sleep 600
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
@@ -331,13 +334,17 @@ else {
     Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
     {
-		    $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+
+            #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
+            #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
+
+            $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
  		    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
-            Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-            sleep 300
+            Write-Host "Time out 10 min..." -foregroundcolor Yellow 
+            sleep 600
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
