@@ -188,6 +188,8 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
+    
+    #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
     $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
     Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
@@ -394,6 +396,7 @@ else {
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
+    #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
     $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
     Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 

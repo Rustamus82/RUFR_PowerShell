@@ -212,8 +212,9 @@ sleep 900
 
 Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' Mødelokalle..." -foregroundcolor Cyan 
 #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
-$MSOLSKU = (Get-MsolUser -UserPrincipalName $ADuser@dksund.dk).Licenses[0].AccountSkuId
-Set-MsolUserLicense -UserPrincipalName $ADuser@dksund.dk -RemoveLicenses $MSOLSKU
+#Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
+$MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
+Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
 
 Write-Host "Time out 5 min..." -foregroundcolor Yellow 
