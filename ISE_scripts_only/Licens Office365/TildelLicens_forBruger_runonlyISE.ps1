@@ -68,5 +68,3 @@ cls
 #Get all licensed users 
 #Get-MSOLUser -All | Where-Object { $_.isLicensed -eq $true } | Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated |  Export-CSV C:\PowerShell\Logs\LicensedUsers.csv -NoTypeInformation -Encoding UTF8
 #Write-Log -Message '------ Script execution started ------' -Level Info -Path C:\PowerShell\Logs\funktionspostkasseoprettelse_Log.txt
-
-

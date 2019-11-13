@@ -37,14 +37,15 @@ cls
 
 Set-Location -Path 'FileShare:'
 $Folders = Get-ChildItem 
+$Folders.Count
 
-$NtfsUserRigtsExecution = foreach ($item in $Folders)
+foreach ($item in $Folders)
 {
     $UserPersonalDrivePathClean = $item.FullName
     $UserStringNameDKSUND = "dksund\" + $item.Name
     $UserStringNameSSI = "ssi\" + $item.Name
-   
-   "$('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date)) retriving & updating Description and Owner in AD: {0} " -f $item.Name | Out-File $log  -Append
+       
+    "Updating NTFS accress rules and Owner on $Global:FileShare : {0} " -f $item.Name | Out-File $log  -Append
     
     try
     {
@@ -52,7 +53,7 @@ $NtfsUserRigtsExecution = foreach ($item in $Folders)
     }
     catch 
     {
-         "$('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date)) retriving & updating Description and Owner in AD: {0} " -f $UserStringNameDKSUND | Out-File $log  -Append
+        "Error on Updating NTFS accress rules in AD: {0} " -f $UserStringNameDKSUND | Out-File $log  -Append
         $_.Exception.message | Out-File $log -Append
     }
 
@@ -62,14 +63,14 @@ $NtfsUserRigtsExecution = foreach ($item in $Folders)
     }
     catch 
     {
-         "$('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date)) retriving & updating Description and Owner in AD: {0} " -f $UserStringNameSSI | Out-File $log  -Append
+        "Error on Updating NTFS accress rules in AD: {0} " -f $UserStringNameSSI | Out-File $log  -Append
         $_.Exception.message | Out-File $log -Append
     }    
     
-    #$ACL = Get-ACL $UserPersonalDrivePathClean
-    #$Group = New-Object System.Security.Principal.NTAccount("$UserStringNameDKSUND")
-    #$ACL.SetOwner($Group)
-    #Set-Acl -Path $UserPersonalDrivePathClean -AclObject $ACL
+    $ACL = Get-ACL $UserPersonalDrivePathClean
+    $Group = New-Object System.Security.Principal.NTAccount("DKSUND\dks_l_file8managers_o")
+    $ACL.SetOwner($Group)
+    Set-Acl -Path $UserPersonalDrivePathClean -AclObject $ACL
     
     
     <# foreach ($group in $SecurityGroupDC.SamAccountName) {
@@ -79,10 +80,7 @@ $NtfsUserRigtsExecution = foreach ($item in $Folders)
         Set-NtfsUserRightsOnPath -path $UserPersonalDrivePathClean -user "$domain\$group" -rights "full" -InheritanceF 'ContainerInherit,ObjectInherit' -PropagationF None -allowordeny Allow
     }#>   
 }
-Write-Output $NtfsUserRigtsExecution
 
-$NtfsUserRigtsExecution[14].AccessToString | Select-String -SimpleMatch 'ssi'
- | gm
 
 
 
