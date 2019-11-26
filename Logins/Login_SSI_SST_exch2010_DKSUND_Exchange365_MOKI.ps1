@@ -67,7 +67,7 @@ Connect-MsolService -Credential $Global:credo365
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential ssi\adm-moki -Message "SSI AD login"
 $Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
-$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-Lync-FE05.SSI.AD/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
+$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-Lync-FE03.SSI.AD/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
 Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber  
 #eksemmel Get-LYNCCsUser
 

@@ -2,6 +2,11 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+26-11-2019 RUFR_PowerShell_v1.68
+Srv-lync-fe05 virker ikke og er slukket, logins for lync server ændres til srv-lync-fe03.ssi.ad 
+dvs alle scrupts med login opdateret under .\Logins samt \Logins\Session_reconnect.ps1
+
+***********************************************************************************************************************************************************
 14-10-2019 RUFR_PowerShell_v1.65
 
 tilføjet login script .\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIJE.ps1
