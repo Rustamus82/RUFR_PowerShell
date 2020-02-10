@@ -57,6 +57,8 @@ function Show-Menu
       Write-Host
       Write-Host " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI" -foregroundcolor Cyan
       Write-Host
+      Write-Host " Skriv 'ssigrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse" -foregroundcolor Cyan
+      Write-Host
       Write-Host " Tryk '5sst' for at oprette ny Distributionsgruppe/Postlister SST" -foregroundcolor Cyan
       Write-Host
       Write-Host " Skriv 'sstgrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse" -foregroundcolor Cyan
