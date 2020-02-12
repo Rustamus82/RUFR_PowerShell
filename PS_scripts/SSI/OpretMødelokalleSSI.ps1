@@ -154,8 +154,8 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
         Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
         Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
         Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
-        Write-Host "Time out 10 min..." -foregroundcolor Yellow 
-        sleep 600
+        Write-Host "Time out 15 min..." -foregroundcolor Yellow 
+        sleep 900
 }
 Else { Write-Warning "Tjek om det er korrekt Mødelokalle/bruger, da den ikke kunne findes og Licens kunne ikke tildeles" }
 
