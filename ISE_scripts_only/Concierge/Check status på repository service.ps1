@@ -11,13 +11,13 @@ Connect-MsolService -Credential $Global:credo365
 cls
 #>
 
-
 Invoke-RestMethod "http://s-exccon-p.dksund.dk/reportingservice/api/servicestatus"
 
 #user errors
-$a = Invoke-RestMethod "http://s-exccon-p.dksund.dk/reportingservice/api/errors/meeting"; 
-($a).smtp | Out-File .\CSV\conusererrors.txt
-[array]$allmailbox =  get-content .\CSV\conusererrors.txt
+$a = Invoke-RestMethod "http://s-exccon-p.dksund.dk/reportingservice/api/errors/meeting"
+$CommandPath = (Get-Location).Path |Split-Path -Parent 
+($a).smtp | Out-File $CommandPath\CSV\conusererrors.txt
+[array]$allmailbox =  get-content $CommandPath\CSV\conusererrors.txt
 $allmailbox.Count
 cls
 

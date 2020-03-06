@@ -39,23 +39,23 @@ function Show-Menu
       Write-Host 
       Write-Host "*** Fællespostkasse ***" -foregroundcolor Yellow
       Write-Host
-      Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI" -foregroundcolor Cyan
+      Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI/SDS" -foregroundcolor Cyan
       Write-Host
       Write-Host " Tryk '1sst' for at oprette ny Fælles/Funktionspostkasse SST" -foregroundcolor Cyan
       Write-Host
       Write-Host " Tryk '2' for at konverter eksisterende fællespostkasse af type 'Shared' til 'Regular'(Normal user)," -foregroundcolor Cyan
-      Write-Host "          samt tildele Licens i office365 SSI "  -foregroundcolor Cyan
+      Write-Host "          samt tildele Licens i office365 SSI/SDS "  -foregroundcolor Cyan
       Write-Host
       Write-Host " Tryk '3' for at konverter eksisterende fællespostkasse af type 'Regular'(Normal user) til type 'Shared'," -foregroundcolor Cyan
       Write-Host "          samt fjren Licensen SSI" -foregroundcolor Cyan
       Write-Host
       Write-Host " Tryk '4' for at konverter eksisterende fællespostkasse af type 'Shared' til 'Regual' (Normal user for Sikkermail)" -foregroundcolor Cyan
-      Write-Host "          i tilhørende OU sikkermail, samt Tildele Licens i Office 365 SSI" -foregroundcolor Cyan
+      Write-Host "          i tilhørende OU sikkermail, samt Tildele Licens i Office 365 SSI/SDS" -foregroundcolor Cyan
       Write-Host
       Write-Host
       Write-Host "*** Gruppe / DIstributionslister ***" -foregroundcolor Yellow
       Write-Host
-      Write-Host " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI" -foregroundcolor Cyan
+      Write-Host " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI/SDS" -foregroundcolor Cyan
       Write-Host
       Write-Host " Skriv 'ssigrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse" -foregroundcolor Cyan
       Write-Host
@@ -65,7 +65,7 @@ function Show-Menu
       Write-Host
       Write-Host "*** Adm-Konti ifm. lokal admin rettigheder (Dispensation) ***" -foregroundcolor Yellow
       Write-Host
-      Write-Host " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST Domænet" -foregroundcolor Cyan
+      Write-Host " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST/DKSUND Domænet" -foregroundcolor Cyan
       Write-Host
       Write-Host
       Write-Host "*** MødeLokaler ***"   -foregroundcolor  Yellow
@@ -207,7 +207,7 @@ do
             '6' {
                  cls
                  # " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST Domænet"
-	             & "$PSScriptRoot\PS_scripts\Create_ADM-KONTO_forExisting_ADuser_SST_SSI.ps1"
+	             & "$PSScriptRoot\PS_scripts\Create_ADM-KONTO_forExisting_ADuser_SST_SSI_DKSUND.ps1"
 		  }
            
             
