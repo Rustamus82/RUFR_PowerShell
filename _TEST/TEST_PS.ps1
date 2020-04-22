@@ -82,10 +82,15 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 Import-PSSession $Session
 
 
-Get-Mailbox -Identity hbi@dksund.dk | FL message*
-Set-Mailbox -Identity hbi@dksund.dk -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
-Get-Mailbox -Identity hbi@dksund.dk | FL
+Write-Host "Opretter reggel at Mail som er sendt fra postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
+$ADuser = 'bio-service@ssi.dk'
+cls
+Get-o365Mailbox -Identity $ADuser | FL message*
+Set-o365Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
+Get-o365Mailbox -Identity $ADuser | FL
 
+Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
+Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
 
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010

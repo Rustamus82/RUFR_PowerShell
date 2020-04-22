@@ -136,8 +136,8 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
-            Write-Host "Time out 15 min..." -foregroundcolor Yellow 
-            sleep 900
+            Write-Host "Time out 16 min..." -foregroundcolor Yellow 
+            sleep 960
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
@@ -345,8 +345,8 @@ else {
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
-            Write-Host "Time out 10 min..." -foregroundcolor Yellow 
-            sleep 600
+            Write-Host "Time out 16 min..." -foregroundcolor Yellow 
+            sleep 960
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
