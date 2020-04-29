@@ -179,6 +179,8 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
     Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+    Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+    Set-o365mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
     Set-o365mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
     Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
@@ -389,6 +391,8 @@ else {
     $MailCalenderPath = "$ADuser" + ":\Kalender"
     Set-o365mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
     Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+    Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+    Set-o365mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
     Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
     Write-Host "time out 15 min..." -foregroundcolor Yellow 

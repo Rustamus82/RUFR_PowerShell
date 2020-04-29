@@ -8,6 +8,7 @@ $Global:credo365 = Get-Credential adm-rufr@dksund.onmicrosoft.com -Message "logi
 $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
 Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
 Connect-MsolService -Credential $Global:credo365
+$WorkingDir = Convert-Path .
 cls
 #>
 
@@ -35,29 +36,20 @@ cls
 #C:\Users\Concierge\AppData\Roaming\Fischer & Kerrn\Logs
 
 
-
-
 # if want to export to list csv
-#$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
-#$allmailbox.Count
-#$allmailbox.alias | Sort-Object -Descending
+Get-o365Mailbox -ResultSize Unlimited | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
+$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" "$WorkingDir\MailBoxes.csv" -NoTypeInformation -Encoding UTF8
+<#
+$allmailbox.Count
+$allmailbox.alias | Sort-Object -Descending
+#>
 
- 
-Foreach ($Mailbox in $allmailbox) 
-{   
-    
-     Connect-MsolService -Credential $Global:credo365
-     $path = $Mailbox + ":\" + (Get-o365MailboxFolderStatistics $Mailbox | Where-Object { $_.Foldertype -eq "Calendar" }).Name
-     #org: $path = $Mailbox.alias + ":\" + (Get-o365MailboxFolderStatistics $Mailbox.alias | Where-Object { $_.Foldertype -eq "Calendar" } | Select-Object -First 1).Name
-     #$pathRUFR = "rufr" + ":\" + (Get-o365MailboxFolderStatistics rufr | ? { $_.Foldertype -eq "Calendar"}).Name
-     #Set-o365mailboxfolderpermission -identity ($path) -user Default -Accessrights LimitedDetails
-     Write-host -Object $("Udfører handling på {0}" -f  $Mailbox) -ForegroundColor Cyan
-     Get-o365Mailbox -Identity $Mailbox
-     Add-o365MailboxFolderPermission $Mailbox -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-     Set-o365mailboxfolderpermission $Mailbox -User conciergemobile -AccessRights foldervisible
 
-     Add-o365MailboxFolderPermission -Identity ($path) -User ConciergeMobile -AccessRights Editor -ErrorAction SilentlyContinue
-     Set-o365mailboxfolderpermission -identity ($path) -User ConciergeMobile -AccessRights Editor
-     Start-Sleep -milliseconds 1000
-     
-}
+#Get-o365Mailbox -ResultSize Unlimited | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
+$allmailbox = Get-o365Mailbox -ResultSize Unlimited| Where-Object { $_.RecipientTypeDetails -eq "RoomMailbox" } 
+#if want to export to list csv
+$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "RoomMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" "$WorkingDir\RoomMailbox.csv" -NoTypeInformation -Encoding UTF8
+<#
+$allmailbox.Count
+$allmailbox.alias
+#>

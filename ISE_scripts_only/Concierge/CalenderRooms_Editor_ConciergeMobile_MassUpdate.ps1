@@ -29,11 +29,13 @@ Connect-MsolService -Credential $Global:credo365;cls
 
 #Get-o365Mailbox -ResultSize Unlimited | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
 $allmailbox = Get-o365Mailbox -ResultSize Unlimited| Where-Object { $_.RecipientTypeDetails -eq "RoomMailbox" } 
-# if want to export to list csv
-#$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
-#$allmailbox.Count
-#$allmailbox.alias
- 
+#if want to export to list csv
+$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "RoomMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" "$WorkingDir\RoomMailbox.csv" -NoTypeInformation -Encoding UTF8
+<#
+$allmailbox.Count
+$allmailbox.alias | Sort-Object -Descending
+#>
+
 Foreach ($Mailbox in $allmailbox)
 {
      Connect-MsolService -Credential $Global:credo365

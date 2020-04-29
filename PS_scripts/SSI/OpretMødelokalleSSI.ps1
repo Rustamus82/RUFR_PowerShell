@@ -205,6 +205,7 @@ Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroun
 $ADuserCalenderPath = "$ADuser" + ":\Kalender"
 Set-o365mailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
 Add-o365MailboxFolderPermission –Identity $ADuserCalenderPath –User ConciergeMobile –AccessRights Editor
+Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
 Get-o365MailboxFolderPermission -Identity $ADuserCalenderPath
 
 Write-Host "time out 15 min..." -foregroundcolor Yellow 

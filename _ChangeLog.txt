@@ -2,6 +2,16 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+22-04-2020 RUFR_PowerShell_v1.70
+.\PS_scripts\SSI\OpretFællespostkasseSSI.ps1
+.\PS_scripts\SSI\OpretMødelokalleSSI.ps1
+opdateret med timeut 16 min efter tildeling af licens alle steder, manglede når den skulle gøre det første gang da var den stadig 10
+
+***********************************************************************************************************************************************************
+12-02-2020 RUFR_PowerShell_v1.69
+Fællespostkasse og mødelokale ændret timeout fra 10 til 15 efter licens tildeling.
+
+***********************************************************************************************************************************************************
 26-11-2019 RUFR_PowerShell_v1.68
 Srv-lync-fe05 virker ikke og er slukket, logins for lync server ændres til srv-lync-fe03.ssi.ad 
 dvs alle scrupts med login opdateret under .\Logins samt \Logins\Session_reconnect.ps1

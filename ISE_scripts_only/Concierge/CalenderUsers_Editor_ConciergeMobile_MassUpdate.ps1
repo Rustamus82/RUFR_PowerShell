@@ -9,43 +9,41 @@ $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authe
 Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
 Connect-MsolService -Credential $Global:credo365
 cls
+$WorkingDir = Convert-Path .
 #>
 
 
-#login til  Office 365 og session.
-Import-Module MSOnline
-# Save credential to a file
-$Global:credo365 = Get-Credential adm-rufr@dksund.onmicrosoft.com #| Export-Clixml C:\RUFR_PowerShell\Logins\xml\adm-rufr_o365.xml
-# Load credential
-#$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\adm-rufr_o365.xml
-#reconnect office 365 session to avoid connectivetty and exparation issues.
-Get-PSSession  | ?{$_.ComputerName -like "*.outlook.com"} | Remove-PSSession
-$sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true -Credential $Global:credo365
-Import-PSSession $sessiono365 -Prefix o365 -AllowClobber
-Connect-MsolService -Credential $Global:credo365;cls
-
 #$pathRUFR = "rufr" + ":\" + (Get-o365MailboxFolderStatistics rufr | ? { $_.Foldertype -eq "Calendar"}).Name
+
+Get-ADUser rufr -Properties * | Select *
+Get-o365Mailbox -Identity "C_SLF.NGC" | Select-Object *
 
 
 # ConciergeMobile get granted access to  alle user mailbox Calendar right - Editor
 #*******************************************************************************************************************************************************************************
 
-#Get-o365Mailbox -ResultSize Unlimited | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
-$allmailbox = Get-o365Mailbox -ResultSize Unlimited -Filter {(RecipientTypeDetails -eq "UserMailbox") -or (RecipientTypeDetails -eq "SharedMailbox") -and (Alias -ne 'ConciergeMobile')} #| Where-Object { ($_.RecipientTypeDetails -eq "UserMailbox") -and ($_.Alias -ne 'ConciergeMobile') } 
-$allmailbox.Count
-# if want to export to list csv
-#$allmailbox | Where-Object { $_.RecipientTypeDetails -eq "UserMailbox" }| Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" C:\RUFR_PowerShell\_UnderUdvikling\CSV\MailBoxes.csv -NoTypeInformation -Encoding UTF8
-#$allmailbox.Count
-#$allmailbox.alias | Sort-Object -Descending
+$mailboxes = Get-o365Mailbox -ResultSize Unlimited -Filter {(RecipientTypeDetails -eq "UserMailbox") -or (RecipientTypeDetails -eq "SharedMailbox") -and (Alias -ne 'ConciergeMobile')} #| Where-Object { ($_.RecipientTypeDetails -eq "UserMailbox") -and ($_.Alias -ne 'ConciergeMobile') } 
+$allmailbox =  $mailboxes | where {$_.UserPrincipalName -notlike "*C_*"}
+$allmailbox |  Select-Object WindowsEmailAddress,Identity , DisplayName | Export-CSV -delimiter ";" "$WorkingDir\MailBoxes.csv" -NoTypeInformation -Encoding UTF8
 
+
+
+<#
+# if want to export to list csv
+
+$allmailbox |  Select-Object WindowsEmailAddress,Identity , DisplayName | Sort-Object -Descending |ogv
+
+$allmailbox.Count
+$allmailbox.alias | Sort-Object -Descending |ogv
+#>
  
 Foreach ($Mailbox in $allmailbox) 
 {   
      #reconnect office 365 session to avoid connectivetty and exparation issues.
-     Get-PSSession  | ?{$_.ComputerName -like "*.outlook.com"} | Remove-PSSession
-     $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true -Credential $Global:credo365
-     Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
-     Connect-MsolService -Credential $Global:credo365
+     #Get-PSSession  | ?{$_.ComputerName -like "*.outlook.com"} | Remove-PSSession
+     #$Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true -Credential $Global:credo365
+     #Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
+     #Connect-MsolService -Credential $Global:credo365
 
      
      $path = $Mailbox.alias + ":\" + (Get-o365MailboxFolderStatistics $Mailbox.alias | Where-Object { $_.Foldertype -eq "Calendar" }).Name
