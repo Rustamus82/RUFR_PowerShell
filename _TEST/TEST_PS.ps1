@@ -55,6 +55,8 @@ Set-o365Mailbox MiSeq_MI_1 -Type Room
 
 
 
+Get-EXOMailbox rufr
+
 
 
 #coopy from one group member to other
