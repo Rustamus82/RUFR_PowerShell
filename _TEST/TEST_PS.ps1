@@ -55,8 +55,13 @@ Set-o365Mailbox 207-3-vku -Type Room
 Set-o365Mailbox 207-3-vku -Type Equipment
 
 
+<<<<<<< HEAD
 #Hide from address book for remote mailbox that is migrated to Office 365
 Get-SSIRemoteMailbox -Identity "adm-rufr@dksund.dk"
+=======
+Get-EXOMailbox rufr
+
+>>>>>>> 8f3eafc6088985523481fe2ccdd05345738385b7
 
 #unhide from adresse book
 Set-SSIRemoteMailbox  -Identity rufr -HiddenFromAddressListsEnabled $false
