@@ -47,15 +47,21 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))   {}
 
 
 #view type of mailboxs - SSI
-Get-o365Mailbox MiSeq_MI_2| select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
+Get-o365Mailbox adm-rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
 
 
 #convert to other type
-Set-o365Mailbox MiSeq_MI_1 -Type Room
+Set-o365Mailbox 207-3-vku -Type Room
+Set-o365Mailbox 207-3-vku -Type Equipment
 
 
+#Hide from address book for remote mailbox that is migrated to Office 365
+Get-SSIRemoteMailbox -Identity "adm-rufr@dksund.dk"
 
-
+#unhide from adresse book
+Set-SSIRemoteMailbox  -Identity rufr -HiddenFromAddressListsEnabled $false
+#hide from address book
+Set-SSIRemoteMailbox  -Identity "adm-rufr@dksund.dk" -HiddenFromAddressListsEnabled $true
 
 #coopy from one group member to other
 Set-Location -Path 'SSIAD:' 
