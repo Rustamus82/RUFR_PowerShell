@@ -45,17 +45,10 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction Silentl
 sleep 4
 
 #DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
-$Global:UserCredDksund = Get-Credential dksund\adm_KRLE -Message "DKSUND AD login & Exchange OnPrem"
+$Global:UserCredDksund = Get-Credential adm_KRLE@dksund.dk -Message "DKSUND AD login & Exchange OnPrem"
 #$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 $Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
-
-#login til  Office 365 og session.
-# Save credential to a file
-#Get-Credential adm_KRLE@dksund.onmicrosoft.com | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
-#Save credential with password to vairable.
-# Load credential from file
-#$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 
 Import-Module MSOnline
 $Global:credo365 = Get-Credential adm_KRLE@dksund.onmicrosoft.com -Message "login til  Office 365"

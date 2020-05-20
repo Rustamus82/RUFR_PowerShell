@@ -38,7 +38,7 @@ Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
             sleep 300
         
     }
-    Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
+    Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fï¿½llespostkasse/bruger" }
 
 
 #true or False - filter
@@ -55,13 +55,8 @@ Set-o365Mailbox 207-3-vku -Type Room
 Set-o365Mailbox 207-3-vku -Type Equipment
 
 
-<<<<<<< HEAD
-#Hide from address book for remote mailbox that is migrated to Office 365
-Get-SSIRemoteMailbox -Identity "adm-rufr@dksund.dk"
-=======
 Get-EXOMailbox rufr
 
->>>>>>> 8f3eafc6088985523481fe2ccdd05345738385b7
 
 #unhide from adresse book
 Set-SSIRemoteMailbox  -Identity rufr -HiddenFromAddressListsEnabled $false
@@ -84,7 +79,7 @@ $Email = Get-o365Mailbox rufr | select PrimarySmtpAddress
 
 $Email.PrimarySmtpAddress
 
-$Email = Get-o365Group 'RUFR test pære og æbler' | select WindowsEmailAddress
+$Email = Get-o365Group 'RUFR test pï¿½re og ï¿½bler' | select WindowsEmailAddress
 $Email.WindowsEmailAddress
 
 
@@ -93,25 +88,25 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 Import-PSSession $Session
 
 
-Write-Host "Opretter reggel at Mail som er sendt fra postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
+Write-Host "Opretter reggel at Mail som er sendt fra postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fï¿½llespostkasse." -foregroundcolor Cyan 
 $ADuser = 'bio-service@ssi.dk'
 cls
 Get-o365Mailbox -Identity $ADuser | FL message*
 Set-o365Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
 Get-o365Mailbox -Identity $ADuser | FL
 
-Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
+Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fï¿½llespostkasse." -foregroundcolor Cyan 
 Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
 
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
 
 Import-Module activedirectory
- 
+
 Get-user JMAD | fl name, Linkedmasteraccount
 
 Set-user JMAD -LinkedMasterAccount dksund\JMAD -LinkedDomainController s-ad-dc-01p.dksund.dk
 
 Enable-ADAccount -Identity JMAD
- 
-#Get-user -ResultSize unlimited | ft name, Linkedmasteraccount  
+
+#Get-user -ResultSize unlimited | ft name, Linkedmasteraccountï¿½ 

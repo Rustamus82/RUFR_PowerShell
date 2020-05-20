@@ -8,9 +8,9 @@ Write-Host " 1st 'login' er til server i SST domænet. Benyt SST\adm-XXXX" -foreg
 Write-Host
 Write-Host " 2nd 'login' er til Hybrid DKSUND Exchange.  Benyt DKSUND\adm-XXXX" -foregroundcolor Yellow
 Write-Host
-Write-Host " 3d 'login' er til Office365. Benyt din <admin-xxxx>@dksund.onmicrosoft.com>" -foregroundcolor Yellow
+#Write-Host " 3d 'login' er til Office365. Benyt din <admin-xxxx>@dksund.onmicrosoft.com>" -foregroundcolor Yellow
 Write-Host
-Write-Host " 4th 'login' er til SSI AD. Benyt SSI\admin-XXXX" -foregroundcolor Yellow
+Write-Host " 3d 'login' er til SSI AD. Benyt SSI\admin-XXXX" -foregroundcolor Yellow
 Write-Host
 Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
 #*********************************************************************************************************************************************
@@ -46,7 +46,8 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction Silentl
 sleep 4
 
 #DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
-$Global:UserCredDksund = Get-Credential dksund\adm-rufr -Message "DKSUND AD login & Exchange OnPrem"
+#$Global:UserCredDksund = Get-Credential dksund\adm-rufr -Message "DKSUND AD login & Exchange OnPrem"
+$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login & Exchange OnPrem"
 $Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 #$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
@@ -58,18 +59,19 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 # Load credential from file
 #$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 
-<#Import-Module MSOnline
-$Global:credo365 = Get-Credential adm-rufr@dksund.onmicrosoft.com -Message "login til  Office 365"
+#Import-Module MSOnline
+#$Global:credo365 = Get-Credential adm-rufr@dksund.dk -Message "login til  Office 365"
+$Global:credo365 = $Global:UserCredDksund
 $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
 Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
-Connect-MsolService -Credential $Global:credo365#>
+Connect-MsolService -Credential $Global:credo365
 
 
-#Import-Module MSOnline
+<#Import-Module exhcnage online, nyere end MSOnline
 Import-Module ExchangeOnlineManagement
 Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
 $Global:credo365 = Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
-
+#>
 
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential ssi\adm-rufr -Message "SSI AD login"

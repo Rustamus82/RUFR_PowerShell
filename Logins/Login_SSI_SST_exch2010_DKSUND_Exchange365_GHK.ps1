@@ -53,14 +53,6 @@ $Global:UserCredDksund = Get-Credential dksund\adm_ghk -Message "DKSUND AD login
 #$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 #Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 
-
-#login til  Office 365 og session.
-# Save credential to a file
-#Get-Credential adm-rufr@dksund.onmicrosoft.com | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
-#Save credential with password to vairable.
-# Load credential from file
-#$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
-
 <#
 Import-Module MSOnline
 $Global:credo365 = Get-Credential adm-rufr@dksund.onmicrosoft.com -Message "login til  Office 365"
