@@ -24,7 +24,7 @@ $OUPathSharedMailSTPS = 'OU=STPS,OU=eDelt,OU=Systemkonti,DC=SST,DC=dk'
 
 
 $userDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
-$ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må IKKE indeholde '-', 'Æ', 'Ø', 'Å', '/', '\', ',' (f.eks Servicedesk):"
+$ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
 $company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk eller 3 for stps.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 
@@ -35,10 +35,10 @@ $SikkerhedsgrupperDescription = "Giver fuld adgang til fællespostkasse $ADuser"
 #****************
 
 #Check for illegal characters - legal are a-zA-Z0-9_-  also check for aloowed lenght from 5 to 20
-if($ADuser -match  '[^a-zA-Z0-9_-]' -or $ADuser.Length -le 4 -or $ADuser.Length -ge 21){
+if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Length -gt 20){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213):" -ForegroundColor Yellow
+    Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karaktere, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: 202-213):" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     exit

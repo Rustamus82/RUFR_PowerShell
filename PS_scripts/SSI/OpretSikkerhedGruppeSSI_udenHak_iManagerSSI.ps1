@@ -20,13 +20,13 @@ function Start-Sleep($seconds) {
 $OUPathForExchangeSikkerhedsgrupperSSI = 'OU=ResourceGroups,OU=Exchange,OU=Groups,OU=SSI,DC=SSI,DC=ad'
 $OUPathForExchangeSikkerhedsgrupperSDS = 'OU=Exchange Sikkerhedsgrupper,OU=Sundhedsdatastyrelsen,OU=Ressourcer,DC=SSI,DC=ad'
 
-$ExchangeSikkerhedsgruppe =  Read-Host -Prompt "Angiv Sikkerhedsgruppe navn til eksisterende fællespostkasse, må indeholde kun [^a-zA-Z0-9_-] (f.eks. GRP-servicedesk)"
+$ExchangeSikkerhedsgruppe =  Read-Host -Prompt "Angiv Sikkerhedsgruppe navn til eksisterende fællespostkasse, må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks. GRP-servicedesk)"
 $Manager = Read-Host -Prompt 'Angiv Ejers INITIALER til Sikkerhedsgruppe'
 $company = Read-Host "Tast 1 for SSI eller 2 for Sundhedsdatastyrelsen (så får den @ssi.dk eller @sundhedsdata.dk)"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til fællespostkasse"
 
 ##Check for illegald Characters
-if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9_-]'){
+if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Sikkerhedsgruppe, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: GRP-servicedesk)" -ForegroundColor Yellow

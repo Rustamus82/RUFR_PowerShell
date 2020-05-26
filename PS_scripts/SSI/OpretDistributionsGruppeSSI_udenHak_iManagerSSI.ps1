@@ -25,17 +25,17 @@ $company = Read-Host "Tast 1 for SSI eller 2 for Sundhedsdatastyrelsen (så får
 $Description = Read-Host -Prompt "Angiv beskrivelse af hvad vil den bruger til? (eller skriv '.' til at springe over N/A)"
 
 ##Check for illegal Characters i email alias
-if($GroupAlias -match  '[^a-zA-Z0-9_-]'){
+if($GroupAlias -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9_-] (eksempel: itsupportere)" -ForegroundColor Yellow
+    Write-Host "Distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9-_.] (eksempel: itsupportere)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     exit
 }
 
 ##Check for illegal Characters
-if($GroupDispName -match  '[^\sa-zA-Z0-9_-ÆØÅæøå]'){
+if($GroupDispName -match  '[^\sa-zA-Z0-9_\-ÆØÅæøå]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Distributionsliste Display Name, Må kun indeholde [^\sa-zA-Z0-9_-ÆØÅæøå] (eksempel: IT supportere)" -ForegroundColor Yellow

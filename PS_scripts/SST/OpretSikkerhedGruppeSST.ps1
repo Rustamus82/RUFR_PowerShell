@@ -21,16 +21,16 @@ $OUPathForExchangeSikkerhedsgrupperSST = 'OU=SST,OU=Sikkerhedsgrupper,DC=SST,DC=
 $OUPathForExchangeSikkerhedsgrupperDEP = 'OU=DEP,OU=Sikkerhedsgrupper,DC=SST,DC=dk'
 $OUPathForExchangeSikkerhedsgrupperSTPS = 'OU=STPS,OU=Sikkerhedsgrupper,DC=SST,DC=dk'
 
-$ExchangeSikkerhedsgruppe =  Read-Host -Prompt "Angiv Sikkerhedsgruppe navn, må ikke indeholde 'mellemrum', '-', 'Æ', 'Ø', 'Å', '/', '\', ',' (f.eks. GRP-servicedesk)"
+$ExchangeSikkerhedsgruppe =  Read-Host -Prompt "Angiv Sikkerhedsgruppe navn, må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks. GRP-servicedesk)"
 $Manager = Read-Host -Prompt 'Angiv Ejers INITIALER til Sikkerhedsgruppe'
 $company = Read-Host "Tast 1 for Sundhedsstyrelsen, 2 for Sundheds- og Ældreministeriet eller 3 for Styrelsen for Patientsikkerhed"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til sikkerhedgruppen $ExchangeSikkerhedsgruppe."
 
 ##Check for illegal characters
-if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9_-]'){
+if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Sikkerhedsgruppe, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
+    Write-Host "Sikkerhedsgruppe, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     exit

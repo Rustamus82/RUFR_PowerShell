@@ -16,7 +16,7 @@ function Start-Sleep($seconds) {
 #script
 #*********************************************************************************************************************************************
 $userDisplayName = Read-Host -Prompt "Tast Displayname på mødelokalet, f.eks SST Mødelokale 402"
-$ADuser =  Read-Host -Prompt "Tast 'Alias' på nyt mødelokale min.5 og max. 20 karakterer, Må IKKE indeholde 'mellemrum', 'Æ', 'Ø', 'Å', '/', '\', ',' - (eksempel: 202-213)"
+$ADuser =  Read-Host -Prompt "Tast 'Alias' på nyt mødelokale min.5 og max. 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] - (eksempel: 202-213)"
 $Manager =  Read-Host -Prompt "Angiv Ejers INITIALER på Mødelokalle/sikkerhedsgruppen"
 $Capacity =  Read-Host -Prompt "Tast 'antal' personer for kapacitet af mødelokalet"
 $company = Read-Host -Prompt "Tast 1 for @sst.dk, 2 for @sum.dk eller 3 for @stps.dk for den tilhørende postkasse"
@@ -31,10 +31,10 @@ $ADuserDescription = 'Mødelokale'
 $SikkerhedsgrupperDescription = "Giver fuld adgang til Mødelokale $ADuser"
 
 #Check for illegal characters - legal are a-zA-Z0-9_-  also check for aloowed lenght from 5 to 20
-if($ADuser -match  '[^a-zA-Z0-9_-]' -or $ADuser.Length -le 4 -or $ADuser.Length -ge 21){
+if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Length -gt 20){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karakterer, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213):" -ForegroundColor Yellow
+    Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: 202-213):" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     exit

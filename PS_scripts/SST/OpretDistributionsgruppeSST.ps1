@@ -20,14 +20,14 @@ function Start-Sleep($seconds) {
 $OUPathDistrubutionslisterSST = 'OU=SST,OU=Distributionsgrupper,DC=SST,DC=dk'
 $OUPathDistrubutionslisterDEP = 'OU=DEP,OU=Distributionsgrupper,DC=SST,DC=dk'
 $OUPathDistrubutionslisterSTPS = 'OU=STPS,OU=Distributionsgrupper,DC=SST,DC=dk'
-$GroupAlias = Read-Host -Prompt "Angiv distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9_-] (eksempel: itsupportere)"
-$GroupDispName = Read-Host -Prompt "Angiv distribution liste DisplayName eller gentag Alias, må kun indeholde [^\sa-zA-Z0-9_-ÆØÅæøå] (eksempel: IT supportere)"
+$GroupAlias = Read-Host -Prompt "Angiv distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9\-_\.] (eksempel: itsupportere)"
+$GroupDispName = Read-Host -Prompt "Angiv distribution liste DisplayName eller gentag Alias, må kun indeholde [^\sa-zA-Z0-9-_.ÆØÅæøå] (eksempel: IT supportere)"
 $Manager = Read-Host -Prompt 'Angiv distributionsliste Ejer'
 $company = Read-Host "Tast 1 for Sundhedsstyrelsen, 2 for Sundheds- og Ældreministeriet eller 3 for Styrelsen for Patientsikkerhed  (så får den @sst.dk, @sum.dk eller @stps.dk)"
 $Description = Read-Host -Prompt "Angiv beskrivelse af hvad vil den bruger til? (eller skriv '.' til at springe over N/A)"
 
 ##Check for illegal Characters i email alias
-if($GroupAlias -match  '[^a-zA-Z0-9_-]'){
+if($GroupAlias -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9_-] (eksempel: itsupportere)" -ForegroundColor Yellow
@@ -37,10 +37,10 @@ if($GroupAlias -match  '[^a-zA-Z0-9_-]'){
 }
 
 ##Check for illegal Characters
-if($GroupDispName -match  '[^\sa-zA-Z0-9_-ÆØÅæøå]'){
+if($GroupDispName -match  '[^\sa-zA-Z0-9\-_\.ÆØÅæøå]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Distributionsliste Display Name, Må kun indeholde [^\sa-zA-Z0-9_-ÆØÅæøå] (eksempel: IT supportere)" -ForegroundColor Yellow
+    Write-Host "Distributionsliste Display Name, Må kun indeholde [^\sa-zA-Z0-9-_.ÆØÅæøå] (eksempel: IT supportere)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     #exit

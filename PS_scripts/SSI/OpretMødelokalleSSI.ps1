@@ -38,8 +38,8 @@ $company = "1"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til Mødelokalle $ADuser"
 
 
-#Check for illegal characters - legal are a-zA-Z0-9_-  also check for aloowed lenght from 5 to 20
-if($ADuser -match  '[^a-zA-Z0-9_-]' -or $ADuser.Length -le 4 -or $ADuser.Length -ge 21){
+#Check for illegal characters - legal are a-zA-Z0-9-_.  also check for aloowed lenght from 5 to 20
+if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Length -gt 20){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213):" -ForegroundColor Yellow
