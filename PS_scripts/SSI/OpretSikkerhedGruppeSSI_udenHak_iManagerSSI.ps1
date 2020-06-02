@@ -29,7 +29,7 @@ $SikkerhedsgrupperDescription = "Giver fuld adgang til fællespostkasse"
 if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
-    Write-Host "Sikkerhedsgruppe, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
+    Write-Host "Sikkerhedsgruppe, Må kun indeholde [^a-zA-Z0-9\-_\.] (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
     exit

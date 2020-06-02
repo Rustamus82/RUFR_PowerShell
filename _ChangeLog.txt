@@ -2,6 +2,21 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+02-06-2020 RUFR_PowerShell_v1.71
+Følgende har fået ændret regular expression: [^a-zA-Z0-9\-_\.] som tillader de her bogstaber
+
+.\PS_scripts\SSI\OpretFællespostkasseSSI.ps1
+.\PS_scripts\SSI\OpretMødelokalleSSI.ps1
+.\PS_scripts\SSI\OpretDistributionsGruppeSSI_udenHak_iManagerSSI.ps1
+.\PS_scripts\SSI\OpretSikkerhedGruppeSSI_udenHak_iManagerSSI.ps1
+.\PS_scripts\SST\OpretDistributionsgruppeSST.ps1
+.\PS_scripts\SST\OpretFællespostkasseSST.ps1
+.\PS_scripts\SST\OpretMødelokaleSST.ps1
+.\PS_scripts\SST\OpretSikkerhedGruppeSST.ps1
+
+Derudover match på 5 til 20 karakter forbedret. Lasse har hjulpet.
+
+***********************************************************************************************************************************************************
 22-04-2020 RUFR_PowerShell_v1.70
 .\PS_scripts\SSI\OpretFællespostkasseSSI.ps1
 .\PS_scripts\SSI\OpretMødelokalleSSI.ps1
