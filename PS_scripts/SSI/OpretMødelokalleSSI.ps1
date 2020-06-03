@@ -208,8 +208,8 @@ Add-o365MailboxFolderPermission –Identity $ADuserCalenderPath –User Concierg
 Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
 Get-o365MailboxFolderPermission -Identity $ADuserCalenderPath
 
-Write-Host "time out 15 min..." -foregroundcolor Yellow 
-sleep 900
+Write-Host "time out 20 min..." -foregroundcolor Yellow 
+sleep 1200
 
 Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' Mødelokalle..." -foregroundcolor Cyan 
 #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated

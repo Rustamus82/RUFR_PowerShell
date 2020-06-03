@@ -136,7 +136,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
-            Write-Host "Time out 16 min..." -foregroundcolor Yellow 
+            Write-Host "time out 16 min..." -foregroundcolor Yellow 
             sleep 960
         
     }
@@ -185,8 +185,8 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
 
-    Write-Host "time out 15 min..." -foregroundcolor Yellow 
-    sleep 900
+    Write-Host "time out 20 min..." -foregroundcolor Yellow 
+    sleep 1200
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
@@ -395,8 +395,8 @@ else {
     Set-o365mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
     Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
-    Write-Host "time out 15 min..." -foregroundcolor Yellow 
-    sleep 900
+    Write-Host "time out 20 min..." -foregroundcolor Yellow 
+    sleep 1200
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
