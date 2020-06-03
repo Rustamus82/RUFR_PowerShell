@@ -2,14 +2,14 @@
 Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
 Write-Host "============================================ Du er ved at logge på ====================================================="  -foregroundcolor Cyan
 Write-Host
-Write-Host " Bemærk! du får 4 gange 'login' popups!" -foregroundcolor Cyan -backgroundcolor DarkCyan
+Write-Host " Bemærk! du får 3 gange 'login' popups!" -foregroundcolor Cyan -backgroundcolor DarkCyan
 Write-Host
 Write-Host " 1st 'login' er til server i SST domænet. Benyt SST\adm-XXXX" -foregroundcolor Yellow
 Write-Host
 Write-Host " 2nd 'login' er til Hybrid DKSUND Exchange.  Benyt DKSUND\adm-XXXX" -foregroundcolor Yellow
 Write-Host
-Write-Host " 3d 'login' er til Office365. Benyt din <admin-xxxx>@dksund.onmicrosoft.com>" -foregroundcolor Yellow
-Write-Host
+#Write-Host " 3d 'login' er til Office365. Benyt din <admin-xxxx>@dksund.onmicrosoft.com>" -foregroundcolor Yellow
+#Write-Host
 Write-Host " 4th 'login' er til SSI AD. Benyt SSI\admin-XXXX" -foregroundcolor Yellow
 Write-Host
 Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
@@ -52,8 +52,8 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 
 
 Import-Module MSOnline
-$Global:credo365 = Get-Credential adm-MOTJ@dksund.onmicrosoft.com -Message "login til  Office 365"
-#$Global:credo365 = $Global:UserCredDksund
+#$Global:credo365 = Get-Credential adm-MOTJ@dksund.onmicrosoft.com -Message "login til  Office 365"
+$Global:credo365 = $Global:UserCredDksund
 $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
 Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
 Connect-MsolService -Credential $Global:credo365

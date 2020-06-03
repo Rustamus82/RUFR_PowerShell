@@ -22,9 +22,7 @@ function Show-Menu
       Write-Host
       Write-Host "	Skriv 'dacj' for at logge på som DACJ                                                                           " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'afkh' for at logge på som AFKH                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'anae' for at logge på med ANAE                                                                       " -foregroundcolor Green
+      Write-Host "	Skriv 'tije' for at logge på som TIJE                                                                           " -foregroundcolor Cyan
       Write-Host
       Write-Host "	Skriv 'login' for at logge på med valgfri LOGIN                                                                 " -foregroundcolor Green 
       Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor DarkYellow
@@ -126,16 +124,6 @@ do
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_dacj.ps1"
 		  }
 
-            'afkh' {
-                 cls
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_AFKH.ps1"
-		  }
-            'anae' {
-                 cls
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_anae.ps1"
-		  }
             'tije' {
                  cls
 	         
