@@ -4,6 +4,7 @@ ChangeLog
 ***********************************************************************************************************************************************************
 03-06-2020 RUFR_PowerShell_v1.72
 Fællespostkasse og mødelokale ændret timeout fra 15 til 20 efter licens tildeling.
+cosmeticn cange in meny and logins
 ***********************************************************************************************************************************************************
 02-06-2020 RUFR_PowerShell_v1.71
 Følgende har fået ændret regular expression: [^a-zA-Z0-9\-_\.] som tillader de her bogstaber
