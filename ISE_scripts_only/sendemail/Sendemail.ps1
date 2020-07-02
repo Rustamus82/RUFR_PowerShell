@@ -4,17 +4,17 @@
 ###########Define Variables########
 
 $fromaddress = "donotreply@sundhedsdata.dk"
-$toaddress = "rufr@ssi.dk"
-#$bccaddress = "klar@ssi.dk"
-$CCaddress = "klar@ssi.dk"
-$Subject = "Action Required: attachment - Fil fra BSR"
+$toaddress = "bebo@sundhedsdata.dk"
+#$bccaddress = "ssiprep@ssi.dk"
+$CCaddress = "rufr@ssi.dk"
+$Subject = "Action Required: test besked fra .."
 $body = get-content .\content.htm
 #$body = get-content "$PSScriptRoot\content.htm"
 $smtpserver = "relay.dksund.dk"
 
 
 #your file location
-$Path = "C:\Users\rufr\Desktop\sendemail"
+$Path = "C:\RUFR_PowerShell\ISE_scripts_only\sendemail"
 $Files = Get-ChildItem -Path $Path -Include *.txt -Recurse  | Where-Object {$_.CreationTime -gt (Get-Date).Date}
 
 ####################################
