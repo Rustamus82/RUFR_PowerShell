@@ -47,7 +47,7 @@ sleep 4
 
 #DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
 #$Global:UserCredDksund = Get-Credential dksund\adm-rufr -Message "DKSUND AD login & Exchange OnPrem"
-$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login & Exchange OnPrem"
+$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange OnPrem & Online"
 $Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 #$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
@@ -59,19 +59,22 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 # Load credential from file
 #$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 
-#Import-Module MSOnline
+<##Import-Module MSOnline
 #$Global:credo365 = Get-Credential adm-rufr@dksund.dk -Message "login til  Office 365"
 $Global:credo365 = $Global:UserCredDksund
 $Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
 Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
 Connect-MsolService -Credential $Global:credo365
-
-
-<#Import-Module exhcnage online, nyere end MSOnline
-Import-Module ExchangeOnlineManagement
-Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
-$Global:credo365 = Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
 #>
+
+#Import-Module exhcnage online, nyere end MSOnline
+Import-Module ExchangeOnlineManagement
+$Global:credo365 = $Global:UserCredDksund
+Connect-ExchangeOnline -Credential $Global:credo365 -ShowProgress $true -ShowBanner:$false
+#$Global:credo365 = Get-Credential adm-rufr@dksund.dk -Message "login til  Office 365"
+#Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true -ShowBanner:$false
+#Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true 
+
 
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential ssi\adm-rufr -Message "SSI AD login"

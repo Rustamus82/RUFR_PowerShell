@@ -48,7 +48,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))   {}
 
 #view type of mailboxs - SSI
 Get-o365Mailbox adm-rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
-
+Get-exoMailbox rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
 
 #convert to other type
 Set-o365Mailbox 207-3-vku -Type Room
@@ -79,7 +79,7 @@ $Email = Get-o365Mailbox rufr | select PrimarySmtpAddress
 
 $Email.PrimarySmtpAddress
 
-$Email = Get-o365Group 'RUFR test pï¿½re og ï¿½bler' | select WindowsEmailAddress
+$Email = Get-o365Group 'RUFR test pære og æbler' | select WindowsEmailAddress
 $Email.WindowsEmailAddress
 
 
@@ -88,12 +88,21 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 Import-PSSession $Session
 
 
+
+
 Write-Host "Opretter reggel at Mail som er sendt fra postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fï¿½llespostkasse." -foregroundcolor Cyan 
-$ADuser = 'bio-service@ssi.dk'
+$ADuser = 'testservicedesk@sundhedsdata.dk'
 cls
+Get-EXOMailbox -Identity $ADuser -PropertySets Delivery |fl Message*
+#Get-EXOMailbox -Identity $ADuser -PropertySets All
+
 Get-o365Mailbox -Identity $ADuser | FL message*
-Set-o365Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
-Get-o365Mailbox -Identity $ADuser | FL
+
+Set-Mailbox -Identity
+
+Set-Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
+Set-Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $false -MessageCopyForSentAsEnabled $false
+Get-Mailbox -Identity $ADuser | FL message*
 
 Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fï¿½llespostkasse." -foregroundcolor Cyan 
 Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
