@@ -18,7 +18,7 @@ $Global:UserCredDKSUND = Get-Credential -Message "Angiv brugernavn og password" 
 $Global:UserCredSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’sst.dk\adm-rufr’
 
 
-$computer = 'SSI004337.ssi.ad';Test-Connection -ComputerName $computer
+$computer = 'CONCIERGEGUEST.dksund.dk';Test-Connection -ComputerName $computer
 
 
 ## Computer sessions

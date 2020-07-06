@@ -1,11 +1,24 @@
 ﻿
 #start powershell as admin and install following following:
-Find-Module -Name "msonline*" | Install-Module
+#Legacy MSONLINE - msonline module deprecated
+#Find-Module -Name "msonline*" | Install-Module
+
 Find-Module -Name "Lync 2013*" | Install-Module
 Find-Module -Name "Skype*" | Install-Module
 
+#på server/PC hvor man magler psgallery: https://stackoverflow.com/questions/43323123/warning-unable-to-find-module-repositories
+Get-PSRepository
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+Register-PSRepository -Default -Verbose
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+Get-PSRepository 
+Get-Module -Name PowerShellGet
+Update-Module -Name PowerShellGet
+
 #ExchangeOnline
+Find-Module -Name "ExchangeOnl*" | Install-Module
 Install-Module -Name ExchangeOnlineManagement
+Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnlineManagement
 
 
 #Install the PowerShellGet module for the first time or run your current version of the PowerShellGet module side-by-side with the latest version:
@@ -15,7 +28,7 @@ Install-Module PowershellGet -Force
 Update-Module -Name ExchangeOnlineManagement
 
 #check
-Get-InstalledModule
+Get-InstalledModule -Name ExchangeOnline*
 Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnlineManagement
 
 #In this example, modules with a name that starts with Msonline that are found by Find-Module in the online gallery are #installed to the default folder, C:\Program Files\WindowsPowerShell\Modules

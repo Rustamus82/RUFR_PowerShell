@@ -109,4 +109,15 @@ Set-user JMAD -LinkedMasterAccount dksund\JMAD -LinkedDomainController s-ad-dc-0
 
 Enable-ADAccount -Identity JMAD
 
-#Get-user -ResultSize unlimited | ft name, Linkedmasteraccount� 
+#Get-user -ResultSize unlimited | ft name, Linkedmasteraccount
+
+
+#see and export from dynamic distribution liste
+$dynamicgroup= Get-o365DynamicDistributionGroup SSI-Alle-Mailbokse
+
+$dynamicgroup.RecipientContainer
+$dynamicgroup.RecipientFilter
+
+Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgroup.RecipientFilter -OrganizationalUnit $dynamicgroup.RecipientContainer | Format-Table Name,Primary*
+
+Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
