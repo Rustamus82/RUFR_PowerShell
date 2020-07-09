@@ -13,7 +13,7 @@ cls
 
 
 #Hent nyeste inhold fra Lasses script (H:\SFNSI\DOSAFD\LocalAdminGroups) til lokalt sted C:\RUFR_PowerShell\PS_scripts\LocalAdminGroups\
-Copy-Item \\s-inf-fil03p\hvl\SFNSI\IOSAFD\LocalAdminGroups\ .\ISE_scripts_only -recurse -Force -Verbose; sleep 3; cls
+Copy-Item \\s-inf-fil03p\hvl\SFNSI\IOSAFD\LocalAdminGroups\ .\ -recurse -Force -Verbose; sleep 3; cls
 
 
 #login & importer AD modul cmdlets
@@ -34,7 +34,8 @@ $credsSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’
 .\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName SSI -UserName 'adm-smr' -ComputerName SSI000248 -Credential $CredsSSI
 
 # 2 En pc ad gangen - DKSUND
-.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'adm_SSAT' -ComputerName SDS000694 -Credential $credsDKsund
+.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'adx_ufvi' -ComputerName SSI001236 -Credential $credsDKsund
+.\
 
 # 2 En pc ad gangen - SST
 .\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName SST -UserName 'adm-asp' -ComputerName SST09902 -Credential $credsSST
