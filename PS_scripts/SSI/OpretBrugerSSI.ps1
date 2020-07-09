@@ -33,7 +33,7 @@ Set-Location -Path 'SSIAD:'
 Write-Host "Checker om ADobjekt findes i forvejen...." -foregroundcolor Cyan
 if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser})) 
 {   
-    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | select CanonicalName
+    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
     Write-Host "Bruger findes i AD:" -foregroundcolor Green
     Write-Host  $ADSeaerch.CanonicalName -foregroundcolor Green
 
@@ -57,7 +57,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     
     
     If ((Get-ADUser $ADuser -Properties *).Company  -eq 'Statens Serum Institut'){
-    (Get-ADUser $ADuser -Properties * | Select Company)
+    (Get-ADUser $ADuser -Properties * | Select-Object Company)
     Add-ADGroupMember -Identity kintra_g_KoncernHR_site-visitor_r $ADuser
     Add-ADGroupMember -Identity kintra_g_KoncernIT_site-visitor_r $ADuser
     Add-ADGroupMember -Identity kintra_g_SSI_site-visitor_r $ADuser
@@ -65,7 +65,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     Add-ADGroupMember -Identity Concierge_MOB $ADuser
     }
     elseif((Get-ADUser $ADuser -Properties *).Company  -eq 'Sundhedsdatastyrelsen') {
-    (Get-ADUser $ADuser -Properties * | Select Company)
+    (Get-ADUser $ADuser -Properties * | Select-Object Company)
     Add-ADGroupMember -Identity kintra_g_KoncernHR_site-visitor_r $ADuser
 	Add-ADGroupMember -Identity kintra_g_KoncernIT_driftsstatus-member_w $ADuser
 	Add-ADGroupMember -Identity kintra_g_KoncernIT_site-visitor_r $ADuser
@@ -87,7 +87,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 {
     Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    sleep 60
+    Start-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 }
 Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
@@ -109,7 +109,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 		Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
         Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-        sleep 300
+        Start-Sleep 300
         #som resultat vil den være synlig i Offic365 , da den fik licens.
 }
 Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
@@ -119,7 +119,7 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Enable Lync til Lync" -foregroundcolor Cyan 
-Enable-LYNCCsUser -Identity $UPN -RegistrarPool 'pool02.ssi.ad' -SipAddressType SamAccountName -SipDomain ssi.dk; sleep 45
+Enable-LYNCCsUser -Identity $UPN -RegistrarPool 'pool02.ssi.ad' -SipAddressType SamAccountName -SipDomain ssi.dk; Start-Sleep-Sleep 45
 
 Write-Host "Client Policy set to 'KunADfoto' " -foregroundcolor Cyan 
 Grant-LYNCCsClientPolicy -PolicyName 'KunADfoto' -Identity $UPN
@@ -138,7 +138,7 @@ Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan
 Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
 
-sleep 180
+Start-Sleep 180
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
@@ -146,13 +146,13 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Ændre kalender rettighed for $ADuser til 'LimitedDetails' og tilføjer 'ConciergeMobile' som kalender 'editor' " -foregroundcolor Cyan 
 $MailCalenderPath = "$ADuser" + ":\Kalender"
 Set-o365mailboxfolderpermission –identity  $MailCalenderPath –user Default –Accessrights LimitedDetails
-sleep 1 
+Start-Sleep 1 
 Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
-sleep 1 
+Start-Sleep 1 
 Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-sleep 1 
+Start-Sleep 1 
 Set-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-sleep 1 
+Start-Sleep 1 
 Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta

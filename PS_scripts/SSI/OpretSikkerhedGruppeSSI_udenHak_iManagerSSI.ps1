@@ -42,7 +42,7 @@ if ($company -eq "1"){
     
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
     Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Start-Sleep 20
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
@@ -51,7 +51,7 @@ if ($company -eq "1"){
 Elseif ($company -eq "2") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSDS
     Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Start-Sleep 20
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
@@ -71,7 +71,7 @@ Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manage
 #Venter Synkronisering til DKSUND
 Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow
 Write-Host "Obs! Husk at sætte hak i Manager kan opdatere medlemskabsliste, da dette del kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-sleep 10800
+Start-Sleep 10800
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
@@ -96,7 +96,7 @@ Else
 }
 
 Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-sleep 20
+Start-Sleep 20
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"

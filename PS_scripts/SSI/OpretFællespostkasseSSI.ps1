@@ -48,7 +48,7 @@ Set-Location -Path 'DKSUNDAD:'
 Write-Host "Checker om ADobjekt findes i forvejen i DKSUND AD...." -foregroundcolor Cyan
 if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser})) 
 {   
-    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | select CanonicalName
+    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
     Write-Host "Bruger findes i DKSUND AD:" -foregroundcolor Green
     Write-Host  $ADSeaerch.CanonicalName -foregroundcolor Green
 
@@ -58,7 +58,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     
         Set-ADGroup $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Start-Sleep-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
@@ -67,7 +67,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     Elseif ($company -eq "2") {
         Set-ADGroup $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Start-Sleep-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
@@ -96,7 +96,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     {
     Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    sleep 60
+    Start-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
     Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
@@ -113,7 +113,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
         Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@ssi.dk"
         Set-SSIDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-        sleep 60    
+        Start-Sleep 60    
     }
     Else
     {
@@ -137,7 +137,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
             Write-Host "time out 16 min..." -foregroundcolor Yellow 
-            sleep 960
+            Start-Sleep 960
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
@@ -186,7 +186,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
 
     Write-Host "time out 20 min..." -foregroundcolor Yellow 
-    sleep 1200
+    Start-Sleep 1200
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
@@ -198,7 +198,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
 
     Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-    sleep 300
+    Start-Sleep 300
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
@@ -226,7 +226,7 @@ else {
     
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Start-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
@@ -235,7 +235,7 @@ else {
     Elseif ($company -eq "2") {
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSDS
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Start-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
@@ -264,7 +264,7 @@ else {
 
 
     Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
-    sleep 120
+    Start-Sleep 120
 
 
     Write-Host "Tilføjer 'sammacount' email og opdatere 'comapny' felt field in AD for $ADuser." -foregroundcolor Cyan
@@ -285,7 +285,7 @@ else {
 
     #Venter Synkronisering til DKSUND
     Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
-    sleep 10800
+    Start-Sleep 10800
 
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
@@ -298,7 +298,7 @@ else {
     {
     Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    sleep 60
+    Start-Sleep-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
     Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
@@ -317,7 +317,7 @@ else {
         Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@ssi.dk"
         Set-SSIDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-        sleep 60    
+        Start-Sleep-Sleep 60    
     }
     Else
     {
@@ -348,7 +348,7 @@ else {
 		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
             Write-Host "Time out 16 min..." -foregroundcolor Yellow 
-            sleep 960
+            Start-Sleep 960
         
     }
     Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
@@ -396,7 +396,7 @@ else {
     Get-MailboxFolderPermission -Identity $MailCalenderPath
 
     Write-Host "time out 20 min..." -foregroundcolor Yellow 
-    sleep 1200
+    Start-Sleep 1200
 
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
@@ -406,7 +406,7 @@ else {
 
     
     Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-    sleep 300
+    Start-Sleep 300
 
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"

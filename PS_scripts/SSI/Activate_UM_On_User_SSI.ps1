@@ -18,7 +18,7 @@ function Start-Sleep($seconds) {
 #***************************************************************************
 #Variabler
 $ADuser = Read-Host -Prompt "Tast Initialer for Bruger, som skal oprettes:"
-$UPN = "$ADuser@ssi.dk"
+#$UPN = "$ADuser@ssi.dk"
 $sip = $ADuser+"@ssi.dk"
 
 Write-Host "Skifter til SSI AD." -foregroundcolor Cyan  
@@ -27,7 +27,7 @@ Set-Location -Path 'SSIAD:'
 Write-Host "Checker om ADobjekt findes i forvejen...." -foregroundcolor Cyan
 if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser})) 
 {   
-    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | select CanonicalName
+    $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
     Write-Host "Bruger findes i AD:" -foregroundcolor Green
     Write-Host  $ADSeaerch.CanonicalName -foregroundcolor Green
 

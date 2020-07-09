@@ -1,10 +1,10 @@
-#PSVersion 5 Script made/assembled by Rust@m 09-07-2020
+ï»¿#PSVersion 5 Script made/assembled by Rust@m 09-07-2020
 Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
-Write-Host "============================================ Du er ved at logge på ====================================================="  -foregroundcolor Cyan
+Write-Host "============================================ Du er ved at logge pÃ¥ ====================================================="  -foregroundcolor Cyan
 Write-Host
-Write-Host " Bemærk! du får 3 gange 'login' popups!" -foregroundcolor Cyan -backgroundcolor DarkCyan
+Write-Host " BemÃ¦rk! du fÃ¥r 3 gange 'logins' popups!" -foregroundcolor Cyan -backgroundcolor DarkCyan
 Write-Host
-Write-Host " 1st 'login' er til server i SST domænet. Benyt SST\adm-XXXX" -foregroundcolor Yellow
+Write-Host " 1st 'login' er til server i SST domÃ¦net. Benyt SST\adm-XXXX" -foregroundcolor Yellow
 Write-Host
 Write-Host " 2nd 'login' er til Hybrid DKSUND Exchange.  Benyt DKSUND\adm-XXXX" -foregroundcolor Yellow
 Write-Host
@@ -43,7 +43,7 @@ Import-PSSession $Global:SessionExchangeSST -Prefix SST
 #Write-Verbose "Loading the Exchange snapin (module)"
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction SilentlyContinue
 
-sleep 4
+Start-Sleep 4;
 
 #login til  Office 365 og session.
 # Save credential to a file
@@ -81,7 +81,7 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential ssi\adm-rufr -Message "SSI AD login"
 $Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
-$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-lync-fe03.ssi.ad/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
+$Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe03.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
 Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
 #eksemmel Get-LYNCCsUser
 
@@ -110,8 +110,8 @@ $Global:ServerNameSST = (Get-ADDomainController -DomainName sst.dk -Discover -Ne
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til SSI AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive –Name 'SSIAD' –PSProvider ActiveDirectory –Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI –Root '//RootDSE/' -Scope Global
-    #alternativet creds: –Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
+    New-PSDrive Name 'SSIAD' PSProvider ActiveDirectory Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI Root '//RootDSE/' -Scope Global
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
     Write-Output -InputObject "PSDrive SSIAD already exists"
@@ -120,8 +120,8 @@ if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til DKSUND AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive –Name 'DKSUNDAD' –PSProvider ActiveDirectory –Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund –Root '//RootDSE/' -Scope Global
-    #alternativet creds: –Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
+    New-PSDrive Name 'DKSUNDAD' PSProvider ActiveDirectory Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund Root '//RootDSE/' -Scope Global
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
     Write-Output -InputObject "PSDrive DKSUNDAD already exists"
@@ -131,8 +131,8 @@ if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til SST AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSTAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive –Name 'SSTAD' –PSProvider ActiveDirectory –Server "$Global:ServerNameSST" -Credential $Global:UserCredSST –Root '//RootDSE/' -Scope Global
-    #alternativet creds: –Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
+    New-PSDrive Name 'SSTAD' PSProvider ActiveDirectory Server "$Global:ServerNameSST" -Credential $Global:UserCredSST Root '//RootDSE/' -Scope Global
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
     Write-Output -InputObject "PSDrive SSTAD already exists"

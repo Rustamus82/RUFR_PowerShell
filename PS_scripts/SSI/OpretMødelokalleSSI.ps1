@@ -21,7 +21,7 @@ $Manager =  Read-Host -Prompt "Angiv Ejers INITIALER på Mødelokalle/sikkerheds
 $Capacity =  Read-Host -Prompt "Tast 'antal' personer for Kapacitet af mødeloaket. Skriv tal:"
 
 $OUpathRoomSSI = 'OU=Rooms,OU=Ressourcer,DC=ssi,DC=ad'
-$OUpathEquipmentSSI = 'OU=Equipment,OU=Ressourcer,DC=ssi,DC=ad'
+#$OUpathEquipmentSSI = 'OU=Equipment,OU=Ressourcer,DC=ssi,DC=ad'
 
 $OUPathForExchangeSikkerhedsgrupperSSI = 'OU=ResourceGroups,OU=Exchange,OU=Groups,OU=SSI,DC=SSI,DC=ad'
 #$OUPathSharedMailSSI = 'OU=Faelles postkasser,OU=Ressourcer,DC=SSI,DC=ad'
@@ -33,7 +33,7 @@ $ADuserDescription = 'Mødelokale'
 $ExchangeSikkerhedsgruppe = 'GRP-'+$ADuser
 Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
 
-$company = "1"
+#$company = "1"
 #Read-Host "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk for den nye postkasse"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til Mødelokalle $ADuser"
 
@@ -54,7 +54,7 @@ Set-Location -Path 'SSIAD:'
 New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
    
 Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-sleep 20
+Start-Sleep-Sleep 20
 
 Write-Host "Tilføjer $Manager til gruppen $ExchangeSikkerhedsgruppe medlemskab." -foregroundcolor Cyan
 Add-ADGroupMember -Identity $ExchangeSikkerhedsgruppe -Members $Manager 
@@ -73,13 +73,13 @@ Else
     findes ikke i AD, eller der er ikke valgt korrekt 'Company' værdi." -ErrorAction Stop
 }
 
-sleep 6
+Start-Sleep 6
 
 Write-Host "Opretter Mødedelokale $ADuser objekt i SSI AD." -foregroundcolor Cyan
 New-ADUser -Name $ADuser -DisplayName $userDisplayName -GivenName $ADuserDescription -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSSI
 
 Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
-sleep 120
+Start-Sleep 120
 
 
 if ([bool](Get-ADuser -Filter  {Name -eq $ADuser}))
@@ -96,12 +96,12 @@ Else
 #new added, need to see it works...?!
 Write-Host "Omdøber bruger..." -foregroundcolor Cyan
     Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$userDisplayName"
-    sleep 6
+    Start-Sleep 6
 
 
 #Venter Synkronisering til DKSUND
 Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
-sleep 10800
+Start-Sleep 10800
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
@@ -130,11 +130,11 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 Write-Host "Forsøger at E-Mail aktivere Mødelokalle på Exchange 2016" -foregroundcolor Cyan       
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
-    $RemoteMail = $ADuser+'@dksund.mail.onmicrosoft.com'
+    #$RemoteMail = $ADuser+'@dksund.mail.onmicrosoft.com'
     Enable-SSIRemoteMailbox $ADuser -RemoteRoutingAddress  "$ADuser@dksund.mail.onmicrosoft.com"
     #Disable-ssiRemoteMailbox $ADuser
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    sleep 60
+    Start-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 }
 Else { Write-Warning "Misslykedes at E-Mail aktivere Mødelokalle/Bruger: $ADuser, noget gik galt..." }
@@ -155,7 +155,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
         Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
         Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         Write-Host "Time out 16 min..." -foregroundcolor Yellow 
-        sleep 960
+        Start-Sleep 960
 }
 Else { Write-Warning "Tjek om det er korrekt Mødelokalle/bruger, da den ikke kunne findes og Licens kunne ikke tildeles" }
 
@@ -196,7 +196,7 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
 Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
-sleep 120
+Start-Sleep 120
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
@@ -209,7 +209,7 @@ Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights fold
 Get-o365MailboxFolderPermission -Identity $ADuserCalenderPath
 
 Write-Host "time out 20 min..." -foregroundcolor Yellow 
-sleep 1200
+Start-Sleep 1200
 
 Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' Mødelokalle..." -foregroundcolor Cyan 
 #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
@@ -219,7 +219,7 @@ Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSO
 
 
 Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-sleep 300
+Start-Sleep 300
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"

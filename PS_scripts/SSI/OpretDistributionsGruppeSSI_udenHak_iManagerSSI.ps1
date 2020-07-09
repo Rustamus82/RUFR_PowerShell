@@ -53,7 +53,7 @@ Set-Location -Path 'SSIAD:'
 If ($company -eq "1") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSSI
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Start-Sleep 20
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -64,7 +64,7 @@ If ($company -eq "1") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSSI
     
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Start-Sleep 20
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -86,7 +86,7 @@ Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manage
 
 Write-Host "TimeOut på 3 timmer, til AD gruppe synkroniseres med DKSUND, venter synkronisering...." -foregroundcolor Yellow
 Write-Host "Obs! Husk at sætte hak i Manager kan opdatere medlemskabsliste, da dette del kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-sleep 10800
+Start-Sleep 10800
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
@@ -117,7 +117,7 @@ Else
 
 
  Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
- sleep 20
+ Start-Sleep 20
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
