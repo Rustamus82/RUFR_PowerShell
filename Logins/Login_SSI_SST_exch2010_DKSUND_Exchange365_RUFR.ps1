@@ -110,7 +110,7 @@ $Global:ServerNameSST = (Get-ADDomainController -DomainName sst.dk -Discover -Ne
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til SSI AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive Name 'SSIAD' PSProvider ActiveDirectory Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI Root '//RootDSE/' -Scope Global
+    New-PSDrive -Name 'SSIAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI -Root '//RootDSE/' -Scope 'Global'
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
@@ -120,7 +120,7 @@ if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til DKSUND AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive Name 'DKSUNDAD' PSProvider ActiveDirectory Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund Root '//RootDSE/' -Scope Global
+    New-PSDrive -Name 'DKSUNDAD' -PSProvider 'ActiveDirectory' -Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund -Root '//RootDSE/' -Scope Global
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
@@ -131,7 +131,7 @@ if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til SST AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSTAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive Name 'SSTAD' PSProvider ActiveDirectory Server "$Global:ServerNameSST" -Credential $Global:UserCredSST Root '//RootDSE/' -Scope Global
+    New-PSDrive -Name 'SSTAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSST" -Credential $Global:UserCredSST -Root '//RootDSE/' -Scope Global
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-RUFR') 
      
 } Else {
