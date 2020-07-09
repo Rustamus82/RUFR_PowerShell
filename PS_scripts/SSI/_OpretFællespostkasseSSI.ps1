@@ -147,15 +147,15 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
-    Get-Mailbox $ADuser | set-Clutter -Enable $false
+    Get-o365Mailbox $ADuser | set-o365Clutter -Enable $false
 
     Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
     $alias = $ADuser
     if (-not ($alias -eq "*" -or $alias -eq "")) {
          
-         Get-Mailbox -identity $alias | add-mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
-         Add-recipientPermission $alias -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
-         Set-Mailbox -Identity $alias -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+         Get-o365Mailbox -identity $alias | add-o365mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
+         Add-o365recipientPermission $alias -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
+         Set-o365Mailbox -Identity $alias -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
     }
     Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til fællespostkasse: $ADuser..." }
 
@@ -164,13 +164,13 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
 
     Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -Type Shared
+    Set-o365Mailbox $ADuser -Type Shared
 
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
+    Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
     Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
-    Set-MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+    Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
            
     
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -178,11 +178,11 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
     Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
-    Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
-    Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-    Set-mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
-    Set-mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
-    Get-MailboxFolderPermission -Identity $MailCalenderPath
+    Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+    Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+    Set-o365mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
+    Set-o365mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
+    Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
 
     Write-Host "time out 20 min..." -foregroundcolor Yellow 
@@ -205,11 +205,11 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
     Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ExchangeSikkerhedsgruppe, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
     Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
+    $ResultMailboxType = (Get-o365Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
-    $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
+    $ResultSharedmail = (Get-o365Mailbox "$ADuser").PrimarySmtpAddress
     Write-Host "Fællespostkasse oprettet: $ResultSharedmail" -foregroundcolor Green -backgroundcolor DarkCyan
-    $ResultGroup = (Get-Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
+    $ResultGroup = (Get-o365Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
     Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
     Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
     Pause            
@@ -358,15 +358,15 @@ else {
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
-    Get-Mailbox $ADuser | set-Clutter -Enable $false
+    Get-o365Mailbox $ADuser | set-o365Clutter -Enable $false
 
     Write-Host "(K) Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
     $alias = $ADuser
     if (-not ($alias -eq "*" -or $alias -eq "")) {
          
-         Get-Mailbox -identity $alias | add-mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
-         Add-recipientPermission $alias -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
-         Set-Mailbox -Identity $alias -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+         Get-o365Mailbox -identity $alias | add-o365mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
+         Add-o365recipientPermission $alias -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
+         Set-o365Mailbox -Identity $alias -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
     }
     Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til fællespostkasse: $ADuser..." }
 
@@ -375,13 +375,13 @@ else {
 
 
     Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -Type Shared
+    Set-o365Mailbox $ADuser -Type Shared
 
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
+    Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
     Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
-    Set-MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+    Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
 
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -389,11 +389,11 @@ else {
 
     Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
-    Set-mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
-    Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
-    Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-    Set-mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
-    Get-MailboxFolderPermission -Identity $MailCalenderPath
+    Set-o365mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
+    Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+    Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+    Set-o365mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
+    Get-o365MailboxFolderPermission -Identity $MailCalenderPath
 
     Write-Host "time out 20 min..." -foregroundcolor Yellow 
     sleep 1200
@@ -414,11 +414,11 @@ else {
 
     Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ExchangeSikkerhedsgruppe, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
     Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
+    $ResultMailboxType = (Get-o365Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
-    $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
+    $ResultSharedmail = (Get-o365Mailbox "$ADuser").PrimarySmtpAddress
     Write-Host "Fællespostkasse oprettet: $ResultSharedmail" -foregroundcolor Green -backgroundcolor DarkCyan
-    $ResultGroup = (Get-Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
+    $ResultGroup = (Get-o365Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
     Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
     Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
     Pause 
@@ -426,6 +426,6 @@ else {
 } 
 
 #Fejlfinding
-#Get-Mailbox $ADuser | fl
+#Get-o365Mailbox $ADuser | fl
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Server $ServerNameDKSUND #http://stackoverflow.com/questions/6307127/hiding-errors-when-using-get-adgroup
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Credential $UserCredDksund -AuthType Negotiate -Server $ServerNameDKSUND

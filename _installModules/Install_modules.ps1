@@ -1,10 +1,7 @@
 ﻿
 #start powershell as admin and install following following:
 #Legacy MSONLINE - msonline module deprecated
-#Find-Module -Name "msonline*" | Install-Module
-
-Find-Module -Name "Lync 2013*" | Install-Module
-Find-Module -Name "Skype*" | Install-Module
+Find-Module -Name "msonline*" | Install-Module 
 
 #på server/PC hvor man magler psgallery: https://stackoverflow.com/questions/43323123/warning-unable-to-find-module-repositories
 Get-PSRepository
@@ -17,8 +14,16 @@ Update-Module -Name PowerShellGet
 
 #ExchangeOnline
 Find-Module -Name "ExchangeOnl*" | Install-Module
-Install-Module -Name ExchangeOnlineManagement
+Update-Module -Name ExchangeOnlineManagement
 Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnlineManagement
+#Install-Module -Name ExchangeOnlineManagement
+#Install-Module -Name AzureAD
+Find-Module -Name "AzureAD" | Install-Module
+Install-Module -Name "AzureAD" -Scope AllUsers -AllowClobber
+
+Install-Module -Name "msonline" -Scope AllUsers -AllowClobber
+Install-Module -Name "ExchangeOnlineManagement" -Scope AllUsers -AllowClobber
+
 
 
 #Install the PowerShellGet module for the first time or run your current version of the PowerShellGet module side-by-side with the latest version:
@@ -27,9 +32,13 @@ Install-Module PowershellGet -Force
 #Update your existing version of the PowerShellGet module to the latest version
 Update-Module -Name ExchangeOnlineManagement
 
+#Update your existing version of the PowerShellGet module to the latest version
+Update-Module -Name AzureAD
+Import-Module AzureAD; Get-Module AzureAD
 #check
 Get-InstalledModule -Name ExchangeOnline*
-Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnlineManagement
+Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnl*
+Import-Module ExchangeOnlineShell; Get-Module ExchangeOnlineShell
 
 #In this example, modules with a name that starts with Msonline that are found by Find-Module in the online gallery are #installed to the default folder, C:\Program Files\WindowsPowerShell\Modules
 

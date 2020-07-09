@@ -1,4 +1,4 @@
-#PSVersion 5 Script made/assembled by Rust@m 09-07-2020
+#PSVersion 5 Script made/assembled by Rust@m 15-03-2017
 Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
 Write-Host "============================================ Du er ved at logge på ====================================================="  -foregroundcolor Cyan
 Write-Host
@@ -45,44 +45,42 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction Silentl
 
 sleep 4
 
+#DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
+#$Global:UserCredDksund = Get-Credential dksund\adm-rufr -Message "DKSUND AD login & Exchange OnPrem"
+$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange OnPrem & Online"
+$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
+#$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
+Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
+
 #login til  Office 365 og session.
 # Save credential to a file
-#Get-Credential adm-rufr@dksund.dk | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
+#Get-Credential adm-rufr@dksund.onmicrosoft.com | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 #Save credential with password to vairable.
 # Load credential from file
 #$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 
+<##Import-Module MSOnline
+#$Global:credo365 = Get-Credential adm-rufr@dksund.dk -Message "login til  Office 365"
+$Global:credo365 = $Global:UserCredDksund
+$Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
+Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
+Connect-MsolService -Credential $Global:credo365
+#>
 
-#Import-Module exhcnage online & Azure AD
+#Import-Module exhcnage online, nyere end MSOnline
 Import-Module ExchangeOnlineManagement
-Import-Module AzureAD
-$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
-Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
-Connect-AzureAD -Credential $Global:UserCredDksund
-#$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
+$Global:credo365 = $Global:UserCredDksund
+Connect-ExchangeOnline -Credential $Global:credo365 -ShowProgress $true -ShowBanner:$false
+#$Global:credo365 = Get-Credential adm-rufr@dksund.dk -Message "login til  Office 365"
 #Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true -ShowBanner:$false
 #Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true 
-
-##Import-Module MSOnline - Depricated soon.....
-#Import-Module MSOnline
-#$Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:UserCredDksund
-#Import-PSSession $Global:sessiono365 -AllowClobber
-Connect-MsolService -Credential $Global:UserCredDksund
-
-
-
-#DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
-#$Global:UserCredDksund = Get-Credential dksund\adm-rufr -Message "DKSUND AD login, Exchange Online & Hybrid"
-$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
-#$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
-Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 
 
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential ssi\adm-rufr -Message "SSI AD login"
 $Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
-$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-lync-fe03.ssi.ad/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
-Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
+$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-lync-fe03.ssi.ad/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
+Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber  
 #eksemmel Get-LYNCCsUser
 
 
@@ -90,7 +88,7 @@ Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction Sil
 #Activer Directory Modules import
 #*********************************************************************************************************************************************
 Import-Module -Name ActiveDirectory 
-Import-Module lync -ErrorAction SilentlyContinue
+Import-Module lync
 #Remove-Module -Name ActiveDirectory
 
 #*********************************************************************************************************************************************

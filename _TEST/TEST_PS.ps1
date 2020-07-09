@@ -84,7 +84,7 @@ $Email.WindowsEmailAddress
 
 
 
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $Global:UserCredDksund -Authentication Basic -AllowRedirection
 Import-PSSession $Session
 
 
@@ -130,3 +130,22 @@ $dynamicgroup.RecipientFilter
 Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgroup.RecipientFilter -OrganizationalUnit $dynamicgroup.RecipientContainer | Format-Table Name,Primary*
 
 Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
+
+
+
+
+#Import-Module exhcnage online & Azure AD
+Import-Module ExchangeOnlineManagement
+
+Import-Module AzureAD
+$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
+Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
+Connect-AzureAD -Credential $Global:UserCredDksund
+#Connect-ExchangeOnlineShell -Credential $Global:UserCredDksund
+
+get-command *exo*
+
+
+IF([bool](Get-AzureADUser -SearchString "balalaika")){}
+
+Get-SSIMailbox rufr
