@@ -12,7 +12,7 @@ function Show-Menu
       Write-Host
       Write-Host "	Skriv 'jomh' for at logge på som JOMH                                                                           " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'mafe' for at logge på som MAFE                                                                           " -foregroundcolor Cyan
+      Write-Host "	Skriv 'snt' for at logge på som SNT                                                                           " -foregroundcolor Cyan
       Write-Host
       Write-Host "	Skriv 'motj' for at logge på som MOTJ                                                                           " -foregroundcolor Cyan
       Write-Host
@@ -24,7 +24,7 @@ function Show-Menu
       Write-Host
       Write-Host "	Skriv 'tije' for at logge på som TIJE                                                                           " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'login' for at logge på med valgfri LOGIN                                                                 " -foregroundcolor Green 
+      Write-Host "	Skriv 'admin' for at logge med adm-konti variabler                                                              " -foregroundcolor Green 
       Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor DarkYellow
       Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -foregroundcolor Yellow
       Write-Host "*** Bruger ***" -foregroundcolor Yellow
@@ -97,9 +97,9 @@ do
                  cls
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JOMH.ps1"
 		  }
-            'mafe' {
+            'snt' {
                  cls
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_MAFE.ps1"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_snt.ps1"
 		  }
             'motj' {
                  cls
@@ -130,7 +130,7 @@ do
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIJE.ps1"
 		  }
 
-             'login' {
+             'admin' {
                  cls
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ANY.ps1"
 		  }
