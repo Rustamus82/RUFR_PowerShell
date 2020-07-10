@@ -147,14 +147,15 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
 		 
-    #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
-    #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
-    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
-    #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
-    #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
-    Write-Host "Time out 16 min..." -foregroundcolor Yellow 
-    Start-Sleep 960
+        #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
+        #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
+
+        $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+        Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
+        Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
+        Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
+        Write-Host "Time out 16 min..." -foregroundcolor Yellow 
+        Start-Sleep 960
 }
 Else { Write-Warning "Tjek om det er korrekt Mødelokalle/bruger, da den ikke kunne findes og Licens kunne ikke tildeles" }
 
@@ -164,15 +165,15 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
-Get-Mailbox $ADuser | set-Clutter -Enable $false
+Get-o365Mailbox $ADuser | set-o365Clutter -Enable $false
 
 
 Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
      
-     Get-Mailbox -identity $ADuser | add-mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
-     Add-recipientPermission $ADuser -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
-     Set-Mailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+     Get-o365Mailbox -identity $ADuser | add-o365mailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
+     Add-o365recipientPermission $ADuser -AccessRights SendAs -Trustee $ExchangeSikkerhedsgruppe -Confirm:$false
+     Set-o365Mailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
 }
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til Mødelokalle: $ADuser..." }
            
@@ -182,19 +183,18 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
-Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type room -ResourceCapacity $Capacity
-Set-Mailbox -Identity $ADuser -Type room -ResourceCapacity $Capacity
+Set-o365Mailbox $ADuser -Type room -ResourceCapacity $Capacity
 
-#Get-Mailbox $ADuser | fl
+#Get-o365Mailbox $ADuser | fl
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 #Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve Mødelokalle." -foregroundcolor Cyan 
-#Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
+#Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
-Set-MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
 Start-Sleep 120
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -203,10 +203,10 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
 $ADuserCalenderPath = "$ADuser" + ":\Kalender"
-Set-mailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
-Add-MailboxFolderPermission –Identity $ADuserCalenderPath –User ConciergeMobile –AccessRights Editor
-Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
-Get-MailboxFolderPermission -Identity $ADuserCalenderPath
+Set-o365mailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
+Add-o365MailboxFolderPermission –Identity $ADuserCalenderPath –User ConciergeMobile –AccessRights Editor
+Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+Get-o365MailboxFolderPermission -Identity $ADuserCalenderPath
 
 Write-Host "time out 20 min..." -foregroundcolor Yellow 
 Start-Sleep 1200
@@ -214,7 +214,7 @@ Start-Sleep 1200
 Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' Mødelokalle..." -foregroundcolor Cyan 
 #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
 #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
-$MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
+$MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
 Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
 
@@ -230,11 +230,11 @@ Write-Host "Husk at sætte hak i Manager må godt opdatere medlemskabsliste på 
 Write-Host "Husk at oprette Mødelokalle $ResultRoom i Conciegre system, hvis den skulle bookes derfra..." -foregroundcolor Yellow -backgroundcolor DarkCyan
 Write-Host
 Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-$ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
+$ResultMailboxType = (Get-o365Mailbox $ADuser).RecipientTypeDetails
 Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
-$ResultRoom = (Get-Mailbox $ADuser).PrimarySmtpAddress
+$ResultRoom = (Get-o365Mailbox $ADuser).PrimarySmtpAddress
 Write-Host "Mødelokalle oprettet: $ResultRoom" -foregroundcolor Green -backgroundcolor DarkCyan
-$ResultGroup = (Get-Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
+$ResultGroup = (Get-o365Group $ExchangeSikkerhedsgruppe).WindowsEmailAddress
 Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Oprettet i Conciegre system?: Ja/Nej" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Kapacitet: $Capacity" -foregroundcolor Green -backgroundcolor DarkCyan

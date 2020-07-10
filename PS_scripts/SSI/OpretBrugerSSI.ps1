@@ -119,7 +119,7 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Enable Lync til Lync" -foregroundcolor Cyan 
-Enable-LYNCCsUser -Identity $UPN -RegistrarPool 'pool02.ssi.ad' -SipAddressType SamAccountName -SipDomain ssi.dk; Start-Sleep-Sleep 45
+Enable-LYNCCsUser -Identity $UPN -RegistrarPool 'pool02.ssi.ad' -SipAddressType SamAccountName -SipDomain ssi.dk; Start-Sleep 45
 
 Write-Host "Client Policy set to 'KunADfoto' " -foregroundcolor Cyan 
 Grant-LYNCCsClientPolicy -PolicyName 'KunADfoto' -Identity $UPN

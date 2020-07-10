@@ -58,7 +58,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     
         Set-ADGroup $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        Start-Sleep-Sleep 20
+        Start-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
@@ -67,7 +67,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     Elseif ($company -eq "2") {
         Set-ADGroup $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        Start-Sleep-Sleep 20
+        Start-Sleep 20
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
@@ -131,10 +131,10 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 		    #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
             #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
 
-            $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
  		    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
+            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
+            #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+		    #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
             Write-Host "time out 16 min..." -foregroundcolor Yellow 
             Start-Sleep 960
@@ -164,7 +164,8 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
 
 
     Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -Type Shared
+    Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type Shared
+    Set-Mailbox -Identity $ADuser -Type Shared
 
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
     Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -192,7 +193,7 @@ if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser}))
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
     
     #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
-    $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
+    $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
     Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
 
@@ -298,7 +299,7 @@ else {
     {
     Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    Start-Sleep-Sleep 60
+    Start-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
     Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
@@ -317,7 +318,7 @@ else {
         Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@ssi.dk"
         Set-SSIDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-        Start-Sleep-Sleep 60    
+        Start-Sleep 60    
     }
     Else
     {
@@ -342,10 +343,10 @@ else {
             #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
             #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
 
-            $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
  		    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
+            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
+            #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+		    #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         
             Write-Host "Time out 16 min..." -foregroundcolor Yellow 
             Start-Sleep 960
@@ -375,7 +376,8 @@ else {
 
 
     Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
-    Set-Mailbox $ADuser -Type Shared
+    Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type Shared
+    Set-Mailbox -Identity $ADuser -Type Shared
 
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
     Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -401,7 +403,7 @@ else {
     Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan 
     #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
     #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
-    $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses[0].AccountSkuId
+    $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
     Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
     

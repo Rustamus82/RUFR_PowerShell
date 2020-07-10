@@ -1,13 +1,14 @@
-#PSVersion 5 Script made/assembled by Rust@m 02-05-2018
-<#Login RUFR all AD login, Hybrid and o365
+ï»¿#PSVersion 5 Script made/assembled by Rust@m 02-05-2018
+<#Login RUFR all AD login, Hybrid and EXO
 $CommandPath = (Get-Location).Path | Split-Path -Parent; $script = "$CommandPath\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_RUFR.ps1"; & $script
 
-#Login RUFR only office365
-Import-Module MSOnline
-$Global:credo365 = Get-Credential adm-rufr@dksund.onmicrosoft.com -Message "login til  Office 365"
-$Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:credo365
-Import-PSSession $Global:sessiono365 -Prefix o365 -AllowClobber
-Connect-MsolService -Credential $Global:credo365
+#Import-Module exhcnage online & Azure AD
+Import-Module ExchangeOnlineManagement
+Import-Module AzureAD
+$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
+Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
+Connect-AzureAD -Credential $Global:UserCredDksund
+Connect-MsolService -Credential $Global:UserCredDksund
 cls
 #>
 
@@ -21,24 +22,31 @@ Get-ADuser -Filter  "sAMAccountName -eq 'rufr'"
 Get-ADuser -Filter  {SamAccountName -eq "rufr"}
 Get-ADUser rufr -Properties * | Select *
 
+$MSOLSKU = (Get-MsolUser -UserPrincipalName "rufrsharedm_u@dksund.dk").Licenses.AccountSkuId
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
 
- $ADuser = "epiMRSA"
- Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
-    if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
-    {
-		    $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPACK" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "OFFICESUBSCRIPTION", "SWAY", "RMS_S_ENTERPRISE"
- 		    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPACK
-		    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
-        
-            Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-            sleep 300
-        
-    }
-    Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fï¿½llespostkasse/bruger" }
+$ADuser = "rufrsharedm_u"
+Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
+if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
+{
+	    #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "OFFICESUBSCRIPTION", "SWAY", "RMS_S_ENTERPRISE"
+	    Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
+	    Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
+	    #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
+    
+        Write-Host "Time out 5 min..." -foregroundcolor Yellow 
+        sleep 300
+    
+}
+Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fï¿½llespostkasse/bruger" }
+
+
+Write-host -Object $("Removing Licens for SharedMailBox User: {0}" -f  $ADuser) -ForegroundColor Cyan
+#Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
+$MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
+Set-MsolUserLicenseÂ -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
 
 
 #true or False - filter
@@ -47,15 +55,17 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))   {}
 
 
 #view type of mailboxs - SSI
-Get-o365Mailbox adm-rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
-Get-exoMailbox rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
+Get-Mailbox adm-rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
+Get-exoMailbox afkh | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
 
 #convert to other type
-Set-o365Mailbox 207-3-vku -Type Room
-Set-o365Mailbox 207-3-vku -Type Equipment
+$ADuser = "rufrsharedm_u"
+Set-Mailbox 207-3-vku -Type Room
+Set-Mailbox 207-3-vku -Type Equipment
 
+Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type Shared
 
-Get-EXOMailbox rufr
+get-command *set*
 
 
 #unhide from adresse book
@@ -75,11 +85,11 @@ $GroupSourceMembers.SamAccountName |measure
 #Add members
 Add-ADGroupMember -Identity $GroupTarget -Member ($GroupSourceMembers.SamAccountName)
 
-$Email = Get-o365Mailbox rufr | select PrimarySmtpAddress 
+$Email = Get-Mailbox rufr | select PrimarySmtpAddress 
 
 $Email.PrimarySmtpAddress
 
-$Email = Get-o365Group 'RUFR test pære og æbler' | select WindowsEmailAddress
+$Email = Get-Group 'RUFR test pï¿½re og ï¿½bler' | select WindowsEmailAddress
 $Email.WindowsEmailAddress
 
 
@@ -96,7 +106,7 @@ cls
 Get-EXOMailbox -Identity $ADuser -PropertySets Delivery |fl Message*
 #Get-EXOMailbox -Identity $ADuser -PropertySets All
 
-Get-o365Mailbox -Identity $ADuser | FL message*
+Get-Mailbox -Identity $ADuser | FL message*
 
 Set-Mailbox -Identity
 
@@ -105,7 +115,7 @@ Set-Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $false -Message
 Get-Mailbox -Identity $ADuser | FL message*
 
 Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fï¿½llespostkasse." -foregroundcolor Cyan 
-Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
+Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
 
 
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
@@ -122,30 +132,19 @@ Enable-ADAccount -Identity JMAD
 
 
 #see and export from dynamic distribution liste
-$dynamicgroup= Get-o365DynamicDistributionGroup SSI-Alle-Mailbokse
+$dynamicgroup= Get-DynamicDistributionGroup SSI-Alle-Mailbokse
 
 $dynamicgroup.RecipientContainer
 $dynamicgroup.RecipientFilter
 
-Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgroup.RecipientFilter -OrganizationalUnit $dynamicgroup.RecipientContainer | Format-Table Name,Primary*
+Get-Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgroup.RecipientFilter -OrganizationalUnit $dynamicgroup.RecipientContainer | Format-Table Name,Primary*
 
-Get-o365Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
-
-
+Get-Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
 
 
-#Import-Module exhcnage online & Azure AD
-Import-Module ExchangeOnlineManagement
-
-Import-Module AzureAD
-$Global:UserCredDksund = Get-Credential adm-rufr@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
-Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
-Connect-AzureAD -Credential $Global:UserCredDksund
-#Connect-ExchangeOnlineShell -Credential $Global:UserCredDksund
 
 get-command *exo*
 
 
 IF([bool](Get-AzureADUser -SearchString "balalaika")){}
 
-Get-SSIMailbox rufr
