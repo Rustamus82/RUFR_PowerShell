@@ -2,12 +2,12 @@
 function Show-Menu
  {
       param (
-            [string]$Title = 'Sundhedsdatastyrelsen - Servicedesk - Brugeradm@RUFR'
+            [string]$Title = 'Sundhedsdatastyrelsen - Servicedesk - Rust@m'
       )
       cls
-      Write-Host "*********************** $Title *******************************************"  -foregroundcolor DarkYellow
-      Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor DarkYellow
-      Write-Host "==================================== Vælg en af de følgende logins ====================================================="  -foregroundcolor Yellow
+      Write-Host "******************************** $Title ******************************************"  -backgroundcolor Red -foregroundcolor Black
+     Write-Host "==================================== Vælg en af de følgende logins ====================================================="  -backgroundcolor Red -foregroundcolor Black
+     Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
       Write-Host "	Skriv 'bae' for at logge på som BAE                                                                             " -foregroundcolor Cyan
       Write-Host
       Write-Host "	Skriv 'jomh' for at logge på som JOMH                                                                           " -foregroundcolor Cyan
@@ -24,10 +24,11 @@ function Show-Menu
       Write-Host
       Write-Host "	Skriv 'tije' for at logge på som TIJE                                                                           " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'admin' for at logge med adm-konti variabler                                                              " -foregroundcolor Green 
-      Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor DarkYellow
-      Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -foregroundcolor Yellow
-      Write-Host "*** Bruger ***" -foregroundcolor Yellow
+      Write-Host "	Skriv 'admin' for at logge med adm-konti variabler                                                              " -foregroundcolor Cyan 
+      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
+      Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -backgroundcolor Red -foregroundcolor Black
+      Write-Host
+      Write-Host "*** Bruger ***" -foregroundcolor Green
       Write-Host
       Write-Host " Skriv 'b' for at oprette bruger SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -35,7 +36,7 @@ function Show-Menu
       Write-Host
       Write-Host " Skriv 'rights' forat  Liste brugerens Privilegier" -foregroundcolor Cyan
       Write-Host 
-      Write-Host "*** Fællespostkasse ***" -foregroundcolor Yellow
+      Write-Host "*** Fællespostkasse ***"  -foregroundcolor Green
       Write-Host
       Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -51,7 +52,7 @@ function Show-Menu
       Write-Host "          i tilhørende OU sikkermail, samt Tildele Licens i Office 365 SSI/SDS" -foregroundcolor Cyan
       Write-Host
       Write-Host
-      Write-Host "*** Gruppe / DIstributionslister ***" -foregroundcolor Yellow
+      Write-Host "*** Gruppe / DIstributionslister ***" -foregroundcolor Green
       Write-Host
       Write-Host " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -61,19 +62,20 @@ function Show-Menu
       Write-Host
       Write-Host " Skriv 'sstgrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse" -foregroundcolor Cyan
       Write-Host
-      Write-Host "*** Adm-Konti ifm. lokal admin rettigheder (Dispensation) ***" -foregroundcolor Yellow
+      Write-Host "*** Adm-Konti ifm. lokal admin rettigheder (Dispensation) ***"  -foregroundcolor Green
       Write-Host
       Write-Host " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST/DKSUND Domænet" -foregroundcolor Cyan
       Write-Host
       Write-Host
-      Write-Host "*** MødeLokaler ***"   -foregroundcolor  Yellow
+      Write-Host "*** MødeLokaler ***"   -foregroundcolor Green
       Write-Host
       Write-Host " Skriv 'roomssi' for at oprette Mødelokalle i SSI" -foregroundcolor Cyan
       Write-Host
       Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST" -foregroundcolor Cyan
       Write-Host
-      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Green
-      Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Red
+      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Cyan
+      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
+      Write-Host "========================================================================================================================"  -backgroundcolor Red -foregroundcolor Black
       Write-Host
       Write-Host
       Write-Host "	------------->  Press 'Q' to quit." -foregroundcolor red
