@@ -20,7 +20,7 @@ cls
 #Filter ways to do
 Get-ADuser -Filter  "sAMAccountName -eq 'rufr'"
 Get-ADuser -Filter  {SamAccountName -eq "rufr"}
-Get-ADUser rufr -Properties * | Select *
+Get-ADUser rufr -Properties * | Select-Object *
 
 $MSOLSKU = (Get-MsolUser -UserPrincipalName "rufrsharedm_u@dksund.dk").Licenses.AccountSkuId
 
@@ -37,7 +37,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 	    #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
     
         Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-        sleep 300
+        Start-Sleep 300
     
 }
 Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt f�llespostkasse/bruger" }
@@ -55,8 +55,8 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))   {}
 
 
 #view type of mailboxs - SSI
-Get-Mailbox adm-rufr | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
-Get-exoMailbox afkh | select PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
+Get-Mailbox adm-rufr | Select-Object PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
+Get-exoMailbox afkh | Select-Object PrimarySmtpAddress,  RecipientTypeDetails, UsageLocation
 
 #convert to other type
 $ADuser = "rufrsharedm_u"
@@ -79,17 +79,17 @@ $GroupSource ="grp-tmp"
 $GroupTarget ="GRP-kkdatabaser"
 
 #get members
-$GroupSourceMembers = Get-ADGroupMember "grp-tmp"
-$GroupSourceMembers.SamAccountName |measure
+$GroupSourceMembers = Get-ADGroupMember $GroupSource
+$GroupSourceMembers.SamAccountName |Measure-Object
 
 #Add members
 Add-ADGroupMember -Identity $GroupTarget -Member ($GroupSourceMembers.SamAccountName)
 
-$Email = Get-Mailbox rufr | select PrimarySmtpAddress 
+$Email = Get-Mailbox rufr | Select-Object PrimarySmtpAddress 
 
 $Email.PrimarySmtpAddress
 
-$Email = Get-Group 'RUFR test p�re og �bler' | select WindowsEmailAddress
+$Email = Get-Group 'RUFR test p�re og �bler' | Select-Object WindowsEmailAddress
 $Email.WindowsEmailAddress
 
 
@@ -102,17 +102,17 @@ Import-PSSession $Session
 
 Write-Host "Opretter reggel at Mail som er sendt fra postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve f�llespostkasse." -foregroundcolor Cyan 
 $ADuser = 'testservicedesk@sundhedsdata.dk'
-cls
-Get-EXOMailbox -Identity $ADuser -PropertySets Delivery |fl Message*
+Clear-Host
+Get-EXOMailbox -Identity $ADuser -PropertySets Delivery |Format-List Message*
 #Get-EXOMailbox -Identity $ADuser -PropertySets All
 
-Get-Mailbox -Identity $ADuser | FL message*
+Get-Mailbox -Identity $ADuser | Format-List message*
 
 Set-Mailbox -Identity
 
 Set-Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $true -MessageCopyForSentAsEnabled $true
 Set-Mailbox -Identity $ADuser -MessageCopyForSendOnBehalfEnabled $false -MessageCopyForSentAsEnabled $false
-Get-Mailbox -Identity $ADuser | FL message*
+Get-Mailbox -Identity $ADuser | Format-List message*
 
 Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve f�llespostkasse." -foregroundcolor Cyan 
 Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -122,7 +122,7 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
 
 Import-Module activedirectory
 
-Get-user JMAD | fl name, Linkedmasteraccount
+Get-user JMAD | Format-List name, Linkedmasteraccount
 
 Set-user JMAD -LinkedMasterAccount dksund\JMAD -LinkedDomainController s-ad-dc-01p.dksund.dk
 
