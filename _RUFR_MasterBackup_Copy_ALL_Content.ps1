@@ -24,4 +24,4 @@ Copy-Item $WorkingDir H:\IOS\ -Recurse -Force -Verbose
 #Remove-Item C:\Users\rufr\OneDrive\Dokumenter\Scripts\RUFR_PowerShell -Recurse -Force -Verbose
 Copy-Item $WorkingDir C:\Users\rufr\OneDrive\ -Recurse -Force -Verbose
 
-sleep 3
+Start-Sleep 3

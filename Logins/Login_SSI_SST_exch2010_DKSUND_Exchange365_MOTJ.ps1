@@ -1,6 +1,6 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 09-07-2020
-Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
-Write-Host "============================================ Du er ved at logge på ====================================================="  -foregroundcolor Cyan
+Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][][][][][][]" -foregroundcolor Cyan
+Write-Host "============================================ Du er ved at logge på =============================================================="  -foregroundcolor Cyan
 Write-Host
 Write-Host " Bemærk! du får 3 gange 'logins' popups!" -foregroundcolor Cyan -backgroundcolor DarkCyan
 Write-Host
@@ -12,7 +12,7 @@ Write-Host
 #Write-Host
 Write-Host " 3d 'login' er til SSI AD. Benyt SSI\admin-XXXX" -foregroundcolor Yellow
 Write-Host
-Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Cyan
+Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][][][][][][]" -foregroundcolor Cyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
