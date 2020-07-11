@@ -4,7 +4,7 @@ function Show-Menu
       param (
             [string]$Title = 'Sundhedsdatastyrelsen - Servicedesk - Rust@m'
       )
-      cls
+      Clear-Host
       Write-Host "******************************** $Title ******************************************"  -backgroundcolor Red -foregroundcolor Black
      Write-Host "==================================== Vælg en af de følgende logins ====================================================="  -backgroundcolor Red -foregroundcolor Black
      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
@@ -74,9 +74,9 @@ function Show-Menu
       Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST" -foregroundcolor Cyan
       Write-Host
       Write-Host " Skriv 'licensfri' convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Cyan
+      Write-Host
       Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
       Write-Host "========================================================================================================================"  -backgroundcolor Red -foregroundcolor Black
-      Write-Host
       Write-Host
       Write-Host "	------------->  Press 'Q' to quit." -foregroundcolor red
       Write-Host
@@ -92,142 +92,142 @@ do
       {
             
             'bae' {
-                 cls
+                 Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_BAE.ps1"
 		  }
             'jomh' {
-                 cls
+                 Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JOMH.ps1"
 		  }
             'snt' {
-                 cls
+                 Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_snt.ps1"
 		  }
             'motj' {
-                 cls
+                 Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_MOTJ.ps1"
 		  }
             'rufr' {
-                 cls
+                 Clear-Host
 	         
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_RUFR.ps1"
 		  }
 
 
             'krle' {
-                 cls
+                 Clear-Host
 	         
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_krle.ps1"
 		  }
 
             'dacj' {
-                 cls
+                 Clear-Host
 	         
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_dacj.ps1"
 		  }
 
             'tije' {
-                 cls
+                 Clear-Host
 	         
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIJE.ps1"
 		  }
 
              'admin' {
-                 cls
+                 Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ANY.ps1"
 		  }
             
             
              '1' {
-                 cls
+                 Clear-Host
                  # " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI"
 	             & "$PSScriptRoot\PS_scripts\SSI\OpretFællespostkasseSSI.ps1"
 		  }
 
              '1sst' {
-                 cls
+                 Clear-Host
                  # " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI"
 	             & "$PSScriptRoot\PS_scripts\SST\OpretFællespostkasseSST.ps1"
 		  }
           
             '2' {
-                 cls
+                 Clear-Host
                  # "Tryk '2' for at konverter eksisterende fællespostkasse af type 'Shared' til 'Regular'(Normal user), samt tildele Licens i office365 SSI"
       	         & "$PSScriptRoot\PS_scripts\SSI\Convert_fra_Shared_to_RegularlUser_plusLicensSSI.ps1"
 		  }
            
             '3' {
-                 cls
+                 Clear-Host
                  # " Tryk '3' for at konverter eksisterende fællespostkasse af type 'Regular'(Normal user) til type 'Shared', samt. fjern Licensen SSI"
                     & "$PSScriptRoot\PS_scripts\SSI\Convert_fra_Regular_to_SharedMail_removeLicensSSI.ps1"
 		  }
            
             '4' {
-                 cls
+                 Clear-Host
                  # " Tryk '4' for at konverter eksisterende fællespostkasse af type 'Shared' til 'Regual' (Normal user i OU sikkermail) for sikkermail løsning, samt tildele Licens i Office 365 SSI "
                     & "$PSScriptRoot\PS_scripts\SSI\Convert_fra_Shared_to_SecureRegularUser_PlusLicens_SSI.ps1"
 		  }
 
 
             '5' {
-                 cls
+                 Clear-Host
                  # " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI"
 	             & "$PSScriptRoot\PS_scripts\SSI\OpretDistributionsGruppeSSI_udenHak_iManagerSSI.ps1"
 		  }
             
             '5sst' {
-                 cls
+                 Clear-Host
                  # " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI"
 	             & "$PSScriptRoot\PS_scripts\SST\OpretDistributionsgruppeSST.ps1"
 		  }
            
 
            'ssigrp' {
-                 cls
+                 Clear-Host
                  # "Skriv 'grpssi' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse"
 	             & "$PSScriptRoot\PS_scripts\SSI\OpretSikkerhedGruppeSSI_udenHak_iManagerSSI.ps1"
 		  }
 
            'sstgrp' {
-                 cls
+                 Clear-Host
                  # "Skriv 'grpssi' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse"
 	             & "$PSScriptRoot\PS_scripts\SST\OpretSikkerhedGruppeSST.ps1"
 		  }
             
             '6' {
-                 cls
+                 Clear-Host
                  # " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST Domænet"
 	             & "$PSScriptRoot\PS_scripts\Create_ADM-KONTO_forExisting_ADuser_SST_SSI_DKSUND.ps1"
 		  }
            
             
             'roomssi' {
-                 cls
+                 Clear-Host
                  #Skriv 'room' at oprette Mødelokalle i SSI
 	             & "$PSScriptRoot\PS_scripts\SSI\OpretMødelokalleSSI.ps1"
 		  }
 
             'roomsst' {
-                 cls
+                 Clear-Host
                  #Skriv 'room' at oprette Mødelokalle i SSI
 	             & "$PSScriptRoot\PS_scripts\SST\OpretMødelokaleSST.ps1"
 		  }
 
 
             'b' {
-                 cls
+                 Clear-Host
                  #Tryk 'b' at OpretBrugerSSI i SSI
 	             #& "$PSScriptRoot\PS_scripts\SSI\OpretBrugerSSI.ps1"
                   & "$PSScriptRoot\PS_scripts\SSI\OpretBrugerSSI.ps1"
 		  }
             'u' {
-                 cls
+                 Clear-Host
                  #Tryk 'um' Aktivere UM i SSI/SDS
 	              & "$PSScriptRoot\PS_scripts\SSI\Activate_UM_On_User_SSI.ps1"
 		  }
 
             'rights' {
-                 cls
+                 Clear-Host
                  #Tryk 'b' at OpretBrugerSSI i SSI
 	             #& "$PSScriptRoot\PS_scripts\SSI\OpretBrugerSSI.ps1"
                   & "$PSScriptRoot\PS_scripts\Get-ADUserMembership.ps1"
@@ -235,13 +235,13 @@ do
 
 
              'licensfri' {
-                 cls
+                 Clear-Host
                  #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
 	             & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1" 
 		  }
             
               'test' {
-                 cls
+                 Clear-Host
                  #Skriv 'test' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
 	         & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1"
 		  }
