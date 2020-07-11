@@ -56,8 +56,11 @@ Start-Sleep 4;
 #Import-Module exhcnage online & Azure AD
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
-$Global:UserCredDksund = Get-Credential "sst.dk\adm-$env:USERNAME" -Message "DKSUND AD login, Exchange Online & Hybrid"
+$MFAExchangeModule = ((Get-ChildItem -Path $($env:LOCALAPPDATA+"\Apps\2.0\") -Filter CreateExoPSSession.ps1 -Recurse ).FullName | Select-Object -Last 1); "$MFAExchangeModule"
+Import-Module "$MFAExchangeModule"
+$Global:UserCredDksund = Get-Credential "adm-$env:USERNAME@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
 Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
+Connect-EXOPSSession -UserPrincipalName "adm-$env:USERNAME@dksund.dk" -ConnectionUri https://outlook.office.com/PowerShell-LiveID -AzureADAuthorizationEndPointUri https://login.microsoftonline.com/common -DelegatedOrganization dksund.onmicrosoft.com
 Connect-AzureAD -Credential $Global:UserCredDksund
 #$Global:UserCredDksund = Get-Credential "adm-$env:USERNAME@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
 #Connect-ExchangeOnline -UserPrincipalName "adm-$env:USERNAME@dksund.dk" -ShowProgress $true -ShowBanner:$false

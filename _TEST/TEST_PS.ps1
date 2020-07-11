@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by Rust@m 02-05-2018
+﻿#PSVersion 5 Script made/assembled by Rust@m 10-07-2020
 <#Login RUFR all AD login, Hybrid and EXO
 $CommandPath = (Get-Location).Path | Split-Path -Parent; $script = "$CommandPath\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_RUFR.ps1"; & $script
 
@@ -145,6 +145,9 @@ Get-Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
 
 get-command *exo*
 
-
 IF([bool](Get-AzureADUser -SearchString "balalaika")){}
-
+IF([bool](Get-AzureADUser -SearchString "$ADuser")){Write-Host "Found!"}
+IF([bool](Get-EXOMailbox  "Testcenter-IT")){Write-Host "Found!"}
+IF([bool](Get-EXOMailbox  "balalajka")){Write-Host "Found!"}
+IF([bool](Get-MSOLUser -UserPrincipalName "afkh@dksund.dk" |  Where-Object { $_.isLicensed -eq $true })){Write-Host "do something"}
+IF([bool](Get-MSOLUser -UserPrincipalName "$ADuser@dksund.dk" |  Where-Object { $_.isLicensed -eq $true })){Write-Host "Do something"}

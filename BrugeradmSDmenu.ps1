@@ -72,7 +72,7 @@ function Show-Menu
       Write-Host
       Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST" -foregroundcolor Cyan
       Write-Host
-      #Write-Host " Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner..." -foregroundcolor Green
+      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Green
       Write-Host "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" -foregroundcolor Red
       Write-Host
       Write-Host
@@ -232,16 +232,16 @@ do
 		  }
 
 
-             'ps1' {
+             'licensfri' {
                  cls
                  #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
-	         Start-Process powershell.exe
+	             & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1" 
 		  }
             
               'test' {
                  cls
                  #Skriv 'test' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
-	         & "$PSScriptRoot\PS_scripts\SSI\path.ps1"
+	         & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1"
 		  }
               
                       
