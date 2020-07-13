@@ -37,6 +37,11 @@ Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnl*
 Import-Module ExchangeOnlineShell; Get-Module ExchangeOnlineShell
 Import-Module AzureAD; Get-Module AzureAD
 
+
+#don't know if needed this is seems for a basic one:
+$MFAExchangeModule = ((Get-ChildItem -Path $($env:LOCALAPPDATA+"\Apps\2.0\") -Filter CreateExoPSSession.ps1 -Recurse ).FullName | Select-Object -Last 1); "$MFAExchangeModule"
+Import-Module "$MFAExchangeModule"
+
 CLS
 #In this example, modules with a name that starts with Msonline that are found by Find-Module in the online gallery are #installed to the default folder, C:\Program Files\WindowsPowerShell\Modules
 
@@ -61,11 +66,19 @@ To get additional information, run: Get-Help Connect-ExchangeOnline
 Please send your feedback and suggestions to exocmdletpreview@service.microsoft.com
 ----------------------------------------------------------------------------#>
 
+#Load module:
+#Import and check
+Get-InstalledModule
+Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnl*
+Import-Module ExchangeOnlineShell; Get-Module ExchangeOnlineShell
+Import-Module AzureAD; Get-Module AzureAD
 
 #Connect exchange online v2 mfa enabled
-Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
+#Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowProgress $true
 Connect-ExchangeOnline -UserPrincipalName adm-rufr@dksund.dk -ShowBanner:$false -ShowProgress $true
 
+#Get-PSSession | Remove-PSSession
+Disconnect-ExchangeOnline
 Get-EXOMailbox rufr
 Get-Help Connect-ExchangeOnline
 get-help Connect-ExchangeOnline -examples
