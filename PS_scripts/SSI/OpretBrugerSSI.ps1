@@ -77,13 +77,12 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
 Else { Write-Warning "Mislykkedes at Tildele Kintra Privilegier, bruger muligvis findes ikke i DKSUND AD, skifter til hoved menu"; & "$PSScriptRoot\BrugeradmSDmenu.ps1"}
 
 
-Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016" -foregroundcolor Cyan       
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 {
+    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+        
     Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     Start-Sleep 60
@@ -92,14 +91,11 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, skifter til hoved menu"; & "$PSScriptRoot\BrugeradmSDmenu.ps1"}
 
 
-Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-
 Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 {
-		#Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
+		
+        #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
         #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
         
         $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
@@ -130,11 +126,11 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
-Get-o365Mailbox $ADuser | set-o365Clutter -Enable $false
+Get-Mailbox $ADuser | set-Clutter -Enable $false
 
 
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
-Set-o365MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+Set-MailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
 
 Start-Sleep 180
@@ -144,26 +140,26 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 Write-Host "Ændre kalender rettighed for $ADuser til 'LimitedDetails' og tilføjer 'ConciergeMobile' som kalender 'editor' " -foregroundcolor Cyan 
 $MailCalenderPath = "$ADuser" + ":\Kalender"
-Set-o365mailboxfolderpermission –identity  $MailCalenderPath –user Default –Accessrights LimitedDetails
+Set-mailboxfolderpermission –identity  $MailCalenderPath –user Default –Accessrights LimitedDetails
 Start-Sleep 1 
-Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
 Start-Sleep 1 
-Add-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
 Start-Sleep 1 
-Set-o365MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
+Set-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
 Start-Sleep 1 
-Get-o365MailboxFolderPermission -Identity $MailCalenderPath
+Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-$ResultADuser = (Get-o365Mailbox "$ADuser").PrimarySmtpAddress
+$ResultADuser = (Get-Mailbox "$ADuser").PrimarySmtpAddress
 Write-Host "Bruger oprettet: $ResultADuser" -foregroundcolor Green -backgroundcolor DarkCyan
 Pause
 
 #Fejlfinding
-#Get-o365Mailbox $ADuser | fl
+#Get-Mailbox $ADuser | fl
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Server $ServerNameDKSUND #http://stackoverflow.com/questions/6307127/hiding-errors-when-using-get-adgroup
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Credential $UserCredDksund -AuthType Negotiate -Server $ServerNameDKSUND
