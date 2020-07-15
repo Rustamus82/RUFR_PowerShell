@@ -1,5 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
-Write-Host "Du har valgt OpretBrugerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
+cls; Write-Host "Du har valgt OpretBrugerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
@@ -20,8 +20,7 @@ function Start-Sleep($seconds) {
 $ADuser = Read-Host -Prompt "Tast Initialer for Bruger, som skal oprettes:"
 $UPN = "$ADuser@ssi.dk"
 
-
-cls;Write-Host "ADobjekt angive ti $ADuserl " -foregroundcolor Yellow
+Write-Host "ADobjekt angive til $ADuser" -foregroundcolor Yellow
 
 <# G drev kopiering som aftalt kopiere vi ikke mere.... for vi mener det ikke bliver brugt.
 Write-Host "Kopiere skabeloner til G drev" -foregroundcolor Cyan

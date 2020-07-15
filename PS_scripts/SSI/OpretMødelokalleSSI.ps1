@@ -1,5 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
-Write-Host "Du har valgt OpretMødelokalleSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
+cls; Write-Host "Du har valgt OpretMødelokalleSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
@@ -51,7 +51,7 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
 #****************
 #script execution 
 #****************
-cls;Write-Host "Ab objekt angived - $ADuser" -foregroundcolor Yellow
+Write-Host "AdObjekt angivet til $ADuser" -foregroundcolor Yellow
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'

@@ -1,5 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 09-07-2020
-Write-Host "RemoveDirectLicens for OU.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
+cls; Write-Host "RemoveDirectLicens for OU.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
@@ -20,6 +20,7 @@ function Start-Sleep($seconds) {
 #ssi.ad/SSI/DisabledUsers/
 $OUPathDisabledUsersSSI = 'OU=DisabledUsers,OU=SSI,DC=SSI,DC=ad'
 
+Write-Host "Konverting to type SharedMailBox & Removing all licenses from ssi.ad/SSI/DisabledUsers/" -foregroundcolor Yellow 
 
 Write-Host "Skifter til SSI AD." -foregroundcolor Cyan  
 Set-Location -Path 'SSIAD:'
@@ -50,6 +51,6 @@ foreach ($ADuser in $ADusers){
 #Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
-Write-Host "Users converted to -type Shared and Licens removed for all user in OU ssi.ad/SSI/DisabledUsers/" -foregroundcolor Yellow -backgroundcolor DarkCyan
+Write-Host "Users converted to type SharedMailBox and Licens removed for all user in OU ssi.ad/SSI/DisabledUsers/" -foregroundcolor Yellow -backgroundcolor DarkCyan
 Write-Host "Licens removed processed on  Disabled users: $Total" -foregroundcolor Green -backgroundcolor white
 Pause

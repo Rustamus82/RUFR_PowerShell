@@ -1,5 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
-Write-Host "Du har valgt OpretSikkerhedGruppeSSI_udenHak_iManagerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
+cls; Write-Host "Du har valgt OpretSikkerhedGruppeSSI_udenHak_iManagerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
@@ -23,6 +23,8 @@ $OUPathForExchangeSikkerhedsgrupperSDS = 'OU=Exchange Sikkerhedsgrupper,OU=Sundh
 [string]$Manager = Read-Host -Prompt 'Angiv Ejers INITIALER til Sikkerhedsgruppe'
 [string]$company = Read-Host "Tast 1 for SSI eller 2 for Sundhedsdatastyrelsen (så får den @ssi.dk eller @sundhedsdata.dk)"
 [string]$ADgroupDescription = "Giver fuld adgang til fællespostkasse"
+
+Write-Host "AdObjekt angivet til $ADgroup" -foregroundcolor Yellow
 
 ##Check for illegald Characters
 if($ADgroup -match  '[^a-zA-Z0-9\-_\.]'){
@@ -207,7 +209,7 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Obs! Husk at sætte hak i Manager kan opdatere medlemskabsliste, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-$ResultGroup = (Get-o365Group $ADgroup).WindowsEmailAddress
+$ResultGroup = (Get-Group $ADgroup).WindowsEmailAddress
 Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
 Pause

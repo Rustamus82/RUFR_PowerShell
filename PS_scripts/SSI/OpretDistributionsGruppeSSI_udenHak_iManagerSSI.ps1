@@ -1,5 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
-Write-Host "Du har valgt OpretDistributionsGruppeSSI_udenHak_iManagerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
+cls; Write-Host "Du har valgt OpretDistributionsGruppeSSI_udenHak_iManagerSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
@@ -23,6 +23,8 @@ $OUPathDistrubutionslisterSSI = 'OU=Distribution lists,DC=SSI,DC=ad'
 [string]$Manager = Read-Host -Prompt 'Angiv distributionsliste Ejer'
 [string]$company = Read-Host "Tast 1 for SSI eller 2 for Sundhedsdatastyrelsen (så får den @ssi.dk eller @sundhedsdata.dk)"
 [string]$ADgroupDescription = Read-Host -Prompt "Angiv beskrivelse af hvad vil den bruger til? (eller skriv '.' til at springe over N/A)"
+
+Write-Host "AdObjekt angivet til $ADgroup, $GroupDispName " -foregroundcolor Cyan
 
 ##Check for illegal Characters i email alias
 if($ADgroup -match  '[^a-zA-Z0-9\-_\.]'){
@@ -183,9 +185,9 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Obs! Husk at sætte hak i Manager kan opdatere medlemskabsliste, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
 
 Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-$ResultGroupName = (Get-o365Group $GroupDispName).DisplayName
+$ResultGroupName = (Get-Group $GroupDispName).DisplayName
 Write-Host "Distrubutionsgruppe Display Name: $ResultGroupName" -foregroundcolor Green -backgroundcolor DarkCyan
-$ResultGroupAlias = (Get-o365Group $GroupDispName).WindowsEmailAddress
+$ResultGroupAlias = (Get-Group $GroupDispName).WindowsEmailAddress
 Write-Host "Distrubutionsgruppe oprettet: $ResultGroupAlias" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
 Pause
