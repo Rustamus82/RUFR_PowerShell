@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by Rust@m 15-07-2020
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2018
 Write-Host "Du har valgt OpretFællespostkasseSSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -219,10 +219,10 @@ else {
     
     Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
 
-    
-    Write-Host "Opretter AD objekt Sikkerhedsgruppe: $ExchangeSikkerhedsgruppe i SSI AD" -foregroundcolor Cyan
+       
+    Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
+    Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SSI AD" -foregroundcolor Cyan
         Set-Location -Path 'SSIAD:'
-    <#
     if ($company -eq "1"){
     
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
@@ -244,41 +244,6 @@ else {
     }
     Else 
     { Write-Warning "Mislykkedes at oprette $ExchangeSikkerhedsgruppe, Noget gik galt..."}
-    #>
-
-    [string]$company = Read-Host -Prompt "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk til at vælge passende adresse."
-    do
-    {
-          switch ($company)
-          {
-                 '1' {
-                        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
-                        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-                        sleep 20
-    
-                        Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
-                        $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
-                        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Statens Serum Institut";mail="$GroupMail"}
-    		  }
-              
-                '2' {
-                        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSDS
-                        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-                        sleep 20
-    
-                        Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
-                        $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
-                        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundhedsdatastyrelsen";mail="$GroupMail"}
-    		  }
-                Default {
-                        $company = Read-Host -Prompt "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk til at vælge passende adresse."
-                
-                }
-          }
-    
-     }
-     until (($company -eq '1') -or ($company -eq '2'))
-
 
 
     Write-Host "Tilføjer $Manager til  gruppen $ExchangeSikkerhedsgruppe medlemskab." -foregroundcolor Cyan
@@ -296,7 +261,7 @@ else {
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSDS
     }
     Else 
-    { Write-Warning "Mislykkedes at oprette AD objekt: $ADuser."; Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan; pause;exit }
+    { Write-Warning "Mislykkedes at oprette AD objekt: $ADuser."}
 
 
     Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
@@ -314,40 +279,14 @@ else {
         Set-ADUser $ADuser -SamAccountName $ADuser -EmailAddress $ADuser'@sundhedsdata.dk' -Company 'Sundhedsdatastyrelsen' 
         }
     }
-    Else { Write-Warning "Mislykkedes at tilføker 'samaccount' op opdatere 'company' felt for AD bruger $ADuser, Muligvis fordi den ikke findes i AD." ; Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan; pause;exit }
-
-    <#Venter Synkronisering til DKSUND
-    Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
-    Start-Sleep 10800
-    #>
+    Else
+    {
+        Write-Warning "Mislykkedes at tilføker 'samaccount' op opdatere 'company' felt for AD bruger $ADuser, Muligvis fordi den ikke findes i AD."
+    }
 
     #Venter Synkronisering til DKSUND
-    Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
-    Set-Location -Path 'DKSUNDAD:'
-
-    do
-    {
-        
-        sleep 1800
-        $i++
-        if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
-        {
-        Write-Host "forsøger at E-Mail aktivere gruppen i Exchange 2016" -foregroundcolor Cyan
-        Enable-SSIDistributionGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
-        
-        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016" -foregroundcolor Cyan
-        $new = $ExchangeSikkerhedsgruppe + "@ssi.dk"
-        Set-SSIDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
-        }
-     
-        if ($i -eq 8) {
-        Write-Warning "Kunne ikke e-mail aktivere $ExchangeSikkerhedsgruppe, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt."
-        Pause
-        exit
-        }
-    
-    }
-    until ((Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}) -or ($i -ge 8 ) )
+    Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
+    Start-Sleep 10800
 
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
