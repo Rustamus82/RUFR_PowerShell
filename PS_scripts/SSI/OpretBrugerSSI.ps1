@@ -20,6 +20,9 @@ function Start-Sleep($seconds) {
 $ADuser = Read-Host -Prompt "Tast Initialer for Bruger, som skal oprettes:"
 $UPN = "$ADuser@ssi.dk"
 
+
+cls;Write-Host "ADobjekt angive ti $ADuserl " -foregroundcolor Yellow
+
 <# G drev kopiering som aftalt kopiere vi ikke mere.... for vi mener det ikke bliver brugt.
 Write-Host "Kopiere skabeloner til G drev" -foregroundcolor Cyan
 Set-Location $PSScriptRoot

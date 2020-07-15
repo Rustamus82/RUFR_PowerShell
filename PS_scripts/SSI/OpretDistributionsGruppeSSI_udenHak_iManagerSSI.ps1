@@ -128,7 +128,7 @@ Write-Host "Forsøger at E-Mail aktivere Sikkerhedsgruppe $ADgroup  i Exchange 2
 do
 {
     
-    Start-Sleep 1800
+    Start-Sleep 600
     $i++
     IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'"))
     {
@@ -167,11 +167,11 @@ do
 
     }
  
-    if ($i -eq 8) {
+    if ($i -eq 18) {
     Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt."}
 
 }
-until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 8 ) )
+until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 18 ) )
 
 Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
 Start-Sleep 20

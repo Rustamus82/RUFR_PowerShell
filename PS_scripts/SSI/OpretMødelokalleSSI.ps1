@@ -51,6 +51,8 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
 #****************
 #script execution 
 #****************
+cls;Write-Host "Ab objekt angived - $ADuser" -foregroundcolor Yellow
+
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
 
@@ -101,7 +103,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     do
     {
         
-        Start-Sleep 1800
+        Start-Sleep 120
         $i++
         IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'"))
         {
@@ -140,11 +142,11 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
 
         }
      
-        if ($i -eq 8) {
+        if ($i -eq 20) {
         Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt."}
     
     }
-    until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 8 ) )
+    until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 20 ) )
 
 
     Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016" -foregroundcolor Cyan       
@@ -173,7 +175,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     do
     {
         
-        Start-Sleep 600
+        Start-Sleep 120
         #Start-Sleep 3
         $i++
         IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
@@ -191,10 +193,10 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         }
      
-        if ($i -eq 18) {
+        if ($i -eq 20) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 18 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )
 
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
