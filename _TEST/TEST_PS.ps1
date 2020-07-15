@@ -148,9 +148,11 @@ Clear-Host
 $ADuser = "rufrsharedm_u"
 $ADuser = "Nonexistent"
 $ADgroup = "grp-rufrsharedm_u"
+$ADgroup = "grp-Nonexistent"
 
 IF([bool](Get-AzureADUser -SearchString "$ADuser")){Write-Host "Found!"}
 IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk")){Write-Host "Found!"}
+IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'")){Write-Host "Found!"}
 IF([bool](Get-AzureADGroup -SearchString "$ADgroup")){Write-Host "Found!"}
 IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'")){Write-Host "Found!"}
 

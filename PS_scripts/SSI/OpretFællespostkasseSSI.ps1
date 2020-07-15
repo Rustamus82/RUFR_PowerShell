@@ -46,7 +46,7 @@ Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
 
 Write-Host "Checker om ADobjekt findes i forvejen i DKSUND AD...." -foregroundcolor Cyan
-IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
+IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
 {   
     $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
     Write-Host "Bruger findes i DKSUND AD:" -foregroundcolor Green
@@ -88,7 +88,7 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
     
-    Write-Host "forsøger at E-Mail aktivere gruppen i Exchange 2016" -foregroundcolor Yellow
+    Write-Host "Forsøger at E-Mail aktivere Sikkerhedsgruppe $ADgroup  i Exchange 2016" -foregroundcolor Yellow
     do
     {
         
@@ -96,16 +96,39 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
         $i++
         IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'"))
         {
-    
-        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-        
-        Write-Host "forsøger at E-Mail aktivere gruppen i Exchange 2016" -foregroundcolor Cyan
-        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
-        
-        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
-        $new = $ADgroup + "@ssi.dk"
-        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+
+            switch ($company)
+            {
+                '1' {
+            
+                        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+                        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+                        
+                        Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
+                        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
+                        
+                        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
+                        $new = $ADgroup + "@ssi.dk"
+                        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+            
+                    }
+                
+                '2' {
+            
+                        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+                        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+                        
+                        Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
+                        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
+                        
+                        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
+                        $new = $ADgroup + "@sundhedsdata.dk"
+                        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+            
+                    }
+                 Default {$company = Read-Host -Prompt "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk til at vælge passende adresse."}
+            }
+
         }
      
         if ($i -eq 8) {
@@ -113,49 +136,29 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
     
     }
     until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 8 ) )
-    
-    
-    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-    
+
+
     Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016" -foregroundcolor Cyan       
-    IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
+    IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     {
-    Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
-    Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    Start-Sleep 60
-    #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
+
+        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+        
+        Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
+        Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
+        Start-Sleep 60
+        #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
     Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
-    
-    
-    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-    
-    
-    Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
-    if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ADgroup})) 
-    {
-        Write-Host "E-Mail aktivering af gruppen i Exchange 2016" -foregroundcolor Cyan
-        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
-    
-        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
-        $new = $ADgroup + "@ssi.dk"
-        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-        Start-Sleep 60    
-    }
-    Else
-    {
-        Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
-    }
-    
-    
+
+
     #Fejlfinding
     #get-RemoteMailbox $ADuser
     #get-ADUser $ADuser
     #get-RemoteUserMailbox $ADuser
     #Disable-RemoteMailbox $ADuser
-    
+
     Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan 
     do
     {
@@ -163,7 +166,7 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
         Start-Sleep 1800
         #Start-Sleep 3
         $i++
-        IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
+        IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
         {
             Write-Host "Connecting to Sessions" -ForegroundColor Magenta
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
@@ -181,15 +184,15 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
     until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
-    
-    
+
+
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
     Get-Mailbox $ADuser | set-Clutter -Enable $false
-    
+
     Write-Host "Tilføjer sikkerhedsgruppe $ADgroup som 'FUll access, Send As and on behalf' på $ADuser" -foregroundcolor Cyan     
     $alias = $ADuser
     if (-not ($alias -eq "*" -or $alias -eq "")) {
-    
+
         Write-Host "Connecting to Sessions" -ForegroundColor Magenta
         $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"              
         
@@ -198,9 +201,9 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
         Set-Mailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
     }
     Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til fællespostkasse: $ADuser..." }
-    
-    
-    
+
+
+
     Write-Host "Forsøger at konvertere ADobjekt $ADuser " -foregroundcolor Cyan
     do
     {
@@ -222,8 +225,7 @@ IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
         Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
     
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
-    
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )    
     
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
     Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -393,7 +395,7 @@ else {
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
 
-    Write-Host "forsøger at E-Mail aktivere gruppen i Exchange 2016" -foregroundcolor Yellow
+    Write-Host "Forsøger at E-Mail aktivere Sikkerhedsgruppe $ADgroup  i Exchange 2016" -foregroundcolor Yellow
     do
     {
         
@@ -402,15 +404,38 @@ else {
         IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'"))
         {
 
-        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-        
-        Write-Host "forsøger at E-Mail aktivere gruppen i Exchange 2016" -foregroundcolor Cyan
-        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
-        
-        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
-        $new = $ADgroup + "@ssi.dk"
-        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+            switch ($company)
+            {
+                '1' {
+            
+                        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+                        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+                        
+                        Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
+                        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
+                        
+                        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
+                        $new = $ADgroup + "@ssi.dk"
+                        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+            
+                    }
+                
+                '2' {
+            
+                        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+                        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+                        
+                        Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
+                        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
+                        
+                        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
+                        $new = $ADgroup + "@sundhedsdata.dk"
+                        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false 
+            
+                    }
+                 Default {$company = Read-Host -Prompt "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk til at vælge passende adresse."}
+            }
+
         }
      
         if ($i -eq 8) {
@@ -420,39 +445,19 @@ else {
     until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 8 ) )
 
 
-    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
     Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016" -foregroundcolor Cyan       
-    IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
+    IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     {
-    Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
-    Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
-    Start-Sleep 60
-    #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
+
+        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+        
+        Enable-SSIRemoteMailbox "$ADuser" -RemoteRoutingAddress "$ADuser@dksund.mail.onmicrosoft.com"
+        Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
+        Start-Sleep 60
+        #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
     Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
-
-
-    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-
-    Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016" -foregroundcolor Cyan
-    if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ADgroup})) 
-    {
-        Write-Host "E-Mail aktivering af gruppen i Exchange 2016" -foregroundcolor Cyan
-        Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
-    
-        Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016" -foregroundcolor Cyan
-        $new = $ADgroup + "@ssi.dk"
-        Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-        Start-Sleep 60    
-    }
-    Else
-    {
-        Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
-    }
 
 
     #Fejlfinding
@@ -468,7 +473,7 @@ else {
         Start-Sleep 1800
         #Start-Sleep 3
         $i++
-        IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk"))
+        IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
         {
             Write-Host "Connecting to Sessions" -ForegroundColor Magenta
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
