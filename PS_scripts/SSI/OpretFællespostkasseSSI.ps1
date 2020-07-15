@@ -158,12 +158,13 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     #get-ADUser $ADuser
     #get-RemoteUserMailbox $ADuser
     #Disable-RemoteMailbox $ADuser
-
-    Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan 
+   
+    Write-Host "Tildeler licens for $ADuser forsøg første gang $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
+    
     do
     {
         
-        Start-Sleep 1800
+        Start-Sleep 600
         #Start-Sleep 3
         $i++
         IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
@@ -174,16 +175,17 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
             #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
             
+            Write-Host "Tildeler licens for $ADuser forsøg $i" -foregroundcolor Cyan
             Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
+            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK -ErrorAction SilentlyContinue
             #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
             #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         }
      
-        if ($i -eq 8) {
+        if ($i -eq 18) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 18 ) )
 
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
@@ -204,11 +206,11 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
 
 
 
-    Write-Host "Forsøger at konvertere ADobjekt $ADuser " -foregroundcolor Cyan
+    Write-Host "Forsøger at konvertere ADobjekt $ADuser $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
     do
     {
         
-        Start-Sleep 1800
+        Start-Sleep 120
         #Start-Sleep 3
         $i++
         IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
@@ -221,11 +223,11 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             #Set-Mailbox -Identity $ADuser -Type Shared
         }
      
-        if ($i -eq 8) {
+        if ($i -eq 20) {
         Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
     
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )    
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )    
     
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
     Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -246,11 +248,11 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     Get-MailboxFolderPermission -Identity $MailCalenderPath
     
     
-    Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan
+    Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' $ADuser $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
     do
     {
          
-         Start-Sleep 1800
+         Start-Sleep 120
          #Start-Sleep 3
          $i++
          IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
@@ -264,11 +266,11 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
          }
       
-         if ($i -eq 8) {
+         if ($i -eq 20) {
          Write-Warning "Kunne fjerne licens for $ADuser da den ikke eksistere ved forsøg $i "}
      
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )
     
     
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -466,11 +468,11 @@ else {
     #get-RemoteUserMailbox $ADuser
     #Disable-RemoteMailbox $ADuser
 
-    Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan 
+    Write-Host "Tildeler licens for $ADuser forsøg første gang $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
     do
     {
         
-        Start-Sleep 1800
+        Start-Sleep 600
         #Start-Sleep 3
         $i++
         IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
@@ -481,17 +483,17 @@ else {
             #Write-Host "Tilføjer $ADuser til  gruppen 'O365_E5STD_U' medlemskab." -foregroundcolor Cyan
             #Add-ADGroupMember -Identity 'O365_E5STD_U' -Members  $ADuser -ErrorAction SilentlyContinue
             
+            Write-Host "Tildeler licens for $ADuser forsøg $i" -foregroundcolor Cyan
             Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
-            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
+            Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK -ErrorAction SilentlyContinue
             #$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
             #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         }
      
-        if ($i -eq 8) {
+        if ($i -eq 18) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
-
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 18 ) )
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
     Get-Mailbox $ADuser | set-Clutter -Enable $false
@@ -511,11 +513,11 @@ else {
 
 
 
-    Write-Host "Forsøger at konvertere ADobjekt $ADuser " -foregroundcolor Cyan
+    Write-Host "Forsøger at konvertere ADobjekt $ADuser $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
     do
     {
         
-        Start-Sleep 1800
+        Start-Sleep 120
         #Start-Sleep 3
         $i++
         IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
@@ -528,11 +530,11 @@ else {
             #Set-Mailbox -Identity $ADuser -Type Shared
         }
      
-        if ($i -eq 8) {
+        if ($i -eq 20) {
         Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
     
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )  
     
     
     Write-Host "Opretter reggel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
@@ -554,11 +556,11 @@ else {
     Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 
-    Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' fællespostkasse..." -foregroundcolor Cyan
+    Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' $ADuser $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
     do
     {
          
-         Start-Sleep 1800
+         Start-Sleep 120
          #Start-Sleep 3
          $i++
          IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
@@ -572,11 +574,11 @@ else {
             Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -RemoveLicenses $MSOLSKU
          }
       
-         if ($i -eq 8) {
+         if ($i -eq 20) {
          Write-Warning "Kunne fjerne licens for $ADuser da den ikke eksistere ved forsøg $i "}
      
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 8 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )
   
     
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
