@@ -29,13 +29,16 @@ Import-Module -Name "AzureAD"; Get-Module AzureAD
 Update-Module -Name ExchangeOnlineManagement
 Update-Module -Name PowerShellGet
 Update-Module -Name AzureAD
+#Update-Module -Name ActiveDirectory
 
 
 #Import and check
+cls
 Get-InstalledModule
 Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnl*
 Import-Module ExchangeOnlineShell; Get-Module ExchangeOnlineShell
 Import-Module AzureAD; Get-Module AzureAD
+Import-Module ActiveDirectory; Get-Module ActiveDirectory
 
 
 #don't know if needed this is seems for a basic one:

@@ -144,9 +144,25 @@ Get-Recipient -ResultSize Unlimited -RecipientPreviewFilter $dynamicgrou
 
 
 get-command *exo*
+Clear-Host
+$ADuser = "rufrsharedm_u"
+$ADgroup = "grp-rufrsharedm_u"
 
-IF([bool](Get-AzureADUser -SearchString "balalaika")){}
 IF([bool](Get-AzureADUser -SearchString "$ADuser")){Write-Host "Found!"}
+IF([bool](Get-AzureADGroup -SearchString "$ADgroup")){Write-Host "Found!"}
+IF([bool](Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'")){Write-Host "Found!"}
+
+Get-AzureADUser -SearchString "$ADuser" | Select-Object -Property "*"
+Get-AzureADGroup -SearchString "$ADgroup" | Select-Object -Property "*"
+
+Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'"
+Get-AzureADGroup -Filter "DisplayName eq 'grp-rufrsharedm_u'"
+
+Get-AzureADUser -SearchString "$ADuser"
+Get-AzureADUser -Filter "MailNickName eq 'rufr'"
+
+IF([bool](Get-AzureADUser -ObjectId "$ADuser@dksund.dk")){Write-Host "Found!"}
+IF([bool](Get-AzureADUser -SearchString "balalaika")){}
 IF([bool](Get-EXOMailbox  "Testcenter-IT")){Write-Host "Found!"}
 IF([bool](Get-EXOMailbox  "balalajka")){Write-Host "Found!"}
 IF([bool](Get-MSOLUser -UserPrincipalName "afkh@dksund.dk" |  Where-Object { $_.isLicensed -eq $true })){Write-Host "do something"}
