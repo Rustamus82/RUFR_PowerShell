@@ -30,8 +30,8 @@ Copy-Item "\\msfc-pvs\pvl\install\stdpc\gdrev\*"  "$GdriverPath" -Recurse -Force
 Write-Host "Skifter til SSI AD." -foregroundcolor Cyan  
 Set-Location -Path 'SSIAD:'
 
-Write-Host "Checker om ADobjekt findes i Azure" -foregroundcolor Yellow
-IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
+Write-Host "Checker om ADobjekt findes i forvejen...." -foregroundcolor Cyan
+if ([bool](Get-ADUser -Filter  {SamAccountName -eq $ADuser})) 
 {   
     $ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
     Write-Host "Bruger findes i AD:" -foregroundcolor Green
@@ -42,8 +42,9 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
 } 
 else { 
     
-    Write-Host "Objekt $ADuser Findes ikke i Azure, script skifter til hoved menu" -foregroundcolor red
-    & "$PSScriptRoot\BrugeradmSDmenu.ps1"
+    Write-Host "Objekt $ADuser Findes ikke i AD eller konto i forvejen mailenablet, script afsluttes" -foregroundcolor red
+    pause
+    exit
 } 
 
 
@@ -74,7 +75,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     }
 
 }
-Else { Write-Warning "Mislykkedes at Tildele Kintra Privilegier, bruger muligvis findes ikke i DKSUND AD, skifter til hoved menu"; & "$PSScriptRoot\BrugeradmSDmenu.ps1"}
+Else { Write-Warning "Mislykkedes at Tildele Kintra Privilegier, bruger muligvis findes ikke i DKSUND AD"}
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -89,7 +90,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
     Start-Sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 }
-Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, skifter til hoved menu"; & "$PSScriptRoot\BrugeradmSDmenu.ps1"}
+Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
