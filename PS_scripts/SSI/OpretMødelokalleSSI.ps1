@@ -149,7 +149,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     until ((Get-AzureADGroup -Filter "DisplayName eq '$ADgroup'") -or ($i -ge 20 ) )
 
 
-    Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016" -foregroundcolor Cyan       
+    Write-Host "Forsøger at E-Mail aktivere AdObjekt $ADuser på Exchange 2016" -foregroundcolor Cyan       
     IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     {
 
@@ -161,7 +161,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
         Start-Sleep 60
         #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
-    Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
+    Else { Write-Warning "Fejlede at E-Mail aktivere AdObjekt: $ADuser, noget gik galt..." }
 
 
     #Fejlfinding
@@ -213,7 +213,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
         Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
         Set-Mailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
     }
-    Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til fællespostkasse: $ADuser..." }
+    Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til AdObjekt: $ADuser..." }
 
 
 
@@ -235,7 +235,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
         }
      
         if ($i -eq 20) {
-        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
+        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared' ved forsøg $i "}
     
     }
     until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )    
@@ -291,7 +291,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
-    Write-Host "Fællespostkasse oprettet: $ResultSharedmail" -foregroundcolor Green -backgroundcolor DarkCyan
+    Write-Host "$ResultMailboxType oprettet: $ResultSharedmail" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultGroup = (Get-Group $ADgroup).WindowsEmailAddress
     Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
     Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
@@ -369,7 +369,7 @@ else {
     Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manager -ErrorAction SilentlyContinue
 
 
-    Write-Host "Opretter Fællespostkasse/SharedMail i SSI AD." -foregroundcolor Cyan
+    Write-Host "Opretter AdObjekt i SSI AD." -foregroundcolor Cyan
     Set-Location -Path 'SSIAD:'
     if ($company -eq "1"){
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSSI 
@@ -469,7 +469,7 @@ else {
         Start-Sleep 60
         #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
     }
-    Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." }
+    Else { Write-Warning "Fejlede at E-Mail aktivere AdObjekt: $ADuser, noget gik galt..." }
 
 
     #Fejlfinding
@@ -521,7 +521,7 @@ else {
         Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
         Set-Mailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
     }
-    Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til fællespostkasse: $ADuser..." }
+    Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til AdObjekt: $ADuser..." }
 
 
 

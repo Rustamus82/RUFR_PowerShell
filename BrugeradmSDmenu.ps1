@@ -83,6 +83,7 @@ function Show-Menu
       Write-Host
  }
 
+cls
 do
 {
       Show-Menu

@@ -534,7 +534,7 @@ else {
         }
      
         if ($i -eq 20) {
-        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
+        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared' ved forsøg $i "}
     
     }
     until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )  
