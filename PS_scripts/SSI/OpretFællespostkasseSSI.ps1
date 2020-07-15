@@ -260,6 +260,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             Write-Host "Connecting to Sessions" -ForegroundColor Magenta
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"                 
             
+            Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' $ADuser" -foregroundcolor Cyan
             #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
             #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
             $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
@@ -568,6 +569,7 @@ else {
             Write-Host "Connecting to Sessions" -ForegroundColor Magenta
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"                 
             
+            Write-Host "Fjerner Licensen fra $ADuser, da den nu blevet konverteret til type 'shared' $ADuser" -foregroundcolor Cyan
             #Get-MsolUser -UserPrincipalName $ADuser@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
             #Remove-ADGroupMember -Identity 'O365_E5STD_U' -Members $ADuser -ErrorAction SilentlyContinue -Confirm:$false -Credential $Global:UserCredDksund
             $MSOLSKU = (Get-MsolUser -UserPrincipalName "$ADuser@dksund.dk").Licenses.AccountSkuId
