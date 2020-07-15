@@ -254,7 +254,7 @@ else {
                  '1' {
                         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
                         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-                        sleep 20
+                        Start-Sleep 20
     
                         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
                         $GroupMail = $ExchangeSikkerhedsgruppe+'@ssi.dk'
@@ -264,7 +264,7 @@ else {
                 '2' {
                         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSDS
                         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-                        sleep 20
+                        Start-Sleep 20
     
                         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
                         $GroupMail = $ExchangeSikkerhedsgruppe+'@sundhedsdata.dk'
@@ -328,7 +328,7 @@ else {
     do
     {
         
-        sleep 1800
+        Start-Sleep 1800
         $i++
         if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
         {
