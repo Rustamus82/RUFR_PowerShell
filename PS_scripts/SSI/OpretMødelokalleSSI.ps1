@@ -171,7 +171,6 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     #Disable-RemoteMailbox $ADuser
 
     Write-Host "Tildeler licens for $ADuser forsøg første gang $('[{0:yyyy/mm/dd} {0:HH:mm:ss}]' -f (Get-Date))" -foregroundcolor Yellow
-    
     do
     {
         
@@ -193,10 +192,10 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         }
      
-        if ($i -eq 20) {
+        if ($i -eq 67) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 67 ) )
 
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
@@ -230,12 +229,13 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
             
             Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
-            Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type room -ResourceCapacity $Capacity
-            Set-Mailbox -Identity $ADuser -Type room -ResourceCapacity $Capacity -ErrorAction stop    
+            Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type room -ResourceCapacity $Capacity -ErrorAction stop
+            Start-Sleep 60
+            Set-Mailbox -Identity $ADuser -Type room -ResourceCapacity $Capacity    
         }
      
         if ($i -eq 20) {
-        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared' ved forsøg $i "}
+        Write-Warning "Kunne ikke Konverterer $ADuser til type 'room' ved forsøg $i "}
     
     }
     until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )    
@@ -538,12 +538,13 @@ else {
             $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
             
             Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
-            Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type room -ResourceCapacity $Capacity
-            Set-Mailbox -Identity $ADuser -Type room -ResourceCapacity $Capacity -ErrorAction stop    
+            Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type room -ResourceCapacity $Capacity -ErrorAction stop
+            Start-Sleep 60
+            Set-Mailbox -Identity $ADuser -Type room -ResourceCapacity $Capacity
         }
      
         if ($i -eq 20) {
-        Write-Warning "Kunne ikke Konverterer $ADuser til type 'shared'ved forsøg $i "}
+        Write-Warning "Kunne ikke Konverterer $ADuser til type 'room' ved forsøg $i "}
     
     }
     until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )

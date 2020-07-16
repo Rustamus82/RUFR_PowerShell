@@ -184,10 +184,10 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             #Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
         }
      
-        if ($i -eq 20) {
+        if ($i -eq 67) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 20 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 67 ) )
 
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
@@ -222,7 +222,8 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
             
             Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan
             Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type Shared -ErrorAction stop
-            #Set-Mailbox -Identity $ADuser -Type Shared
+            Start-Sleep 60
+            Set-Mailbox -Identity $ADuser -Type Shared
         }
      
         if ($i -eq 20) {
@@ -530,7 +531,8 @@ else {
             
             Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan
             Set-Mailbox -Identity "$ADuser@dksund.onmicrosoft.com" -Type Shared -ErrorAction stop
-            #Set-Mailbox -Identity $ADuser -Type Shared
+            Start-Sleep 60
+            Set-Mailbox -Identity $ADuser -Type Shared
         }
      
         if ($i -eq 20) {
