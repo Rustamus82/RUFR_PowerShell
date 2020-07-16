@@ -2,6 +2,19 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+16-07-2020 RUFR_PowerShell_v2.00
+logins script Changed - ALL
+Call login 'admin' when on admin server. it will use your login profile user variables.
+
+New modules requred that also can use MFA marked with *
+Update-Module -Name ExchangeOnlineManagement*
+Update-Module -Name PowerShellGet*
+Update-Module -Name AzureAD*
+Update-Module -Name msonline (old)
+Update-Module -Name ActiveDirectory
+
+
+***********************************************************************************************************************************************************
 03-06-2020 RUFR_PowerShell_v1.72
 Fællespostkasse og mødelokale ændret timeout fra 15 til 20 efter licens tildeling.
 cosmeticn cange in meny and logins

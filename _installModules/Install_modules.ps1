@@ -9,15 +9,18 @@ Get-PSRepository
 Get-PSRepository
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 Register-PSRepository -Default -Verbose
+Get-PSRepository
 
 #Install the PowerShellGet module for the first time or run your current version of the PowerShellGet module side-by-side with the latest version:
 Install-Module PowershellGet -Force
+Install-Module PowershellGet -Force -Scope AllUsers -AllowClobber
 Get-Module -Name PowerShellGet
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted;Get-PSRepository
 
 #ExchangeOnline
 Find-Module -Name "ExchangeOnl*" | Install-Module
-Install-Module -Name "ExchangeOnlineManagement" -Scope AllUsers -AllowClobber 
+Install-Module -Name "ExchangeOnlineManagement" -Scope AllUsers -AllowClobber
+Install-Module -Name "ExchangeOnlineShell" -Scope AllUsers -AllowClobber 
 Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnlineManagement
 
 Find-Module -Name "AzureAD" | Install-Module
@@ -29,6 +32,7 @@ Import-Module -Name "AzureAD"; Get-Module AzureAD
 Update-Module -Name ExchangeOnlineManagement
 Update-Module -Name PowerShellGet
 Update-Module -Name AzureAD
+#Update-Module -Name msonline
 #Update-Module -Name ActiveDirectory
 
 

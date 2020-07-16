@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-07-2020
 Write-Host "Activate_UM_On_User_SSI.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -51,9 +51,9 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
     Write-Host "Enabling (UM) Unified Messaging funtion for Skype Enterprise" -foregroundcolor Cyan 
-    Enable-o365UMMailbox -Identity $ADuser -UMMailboxPolicy O365UM -SIPResourceIdentifier $sip
+    Enable-UMMailbox -Identity $ADuser -UMMailboxPolicy O365UM -SIPResourceIdentifier $sip
 
-    $ResultADuser = (Get-o365Mailbox "$ADuser").PrimarySmtpAddress
+    $ResultADuser = (Get-Mailbox "$ADuser").PrimarySmtpAddress
     Write-Host "UM var aktiveret på: $ResultADuser" -foregroundcolor Green -backgroundcolor DarkCyan
 
 }
@@ -62,6 +62,6 @@ Else { Write-Warning "Mislykkedes at Aktivere UM, bruger muligvis findes ikke i 
 Pause
 
 #Fejlfinding
-#Get-o365Mailbox $ADuser | fl
+#Get-Mailbox $ADuser | fl
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Server $ServerNameDKSUND #http://stackoverflow.com/questions/6307127/hiding-errors-when-using-get-adgroup
 #Get-ADGroup -Filter  {SamAccountName -eq 'samarbejdsogarbejdsmiljoeudvalget'} -Credential $UserCredDksund -AuthType Negotiate -Server $ServerNameDKSUND

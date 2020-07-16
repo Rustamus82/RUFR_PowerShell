@@ -1,4 +1,5 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 13-07-2017
+cls
 function Show-Menu
  {
       param (
@@ -83,7 +84,7 @@ function Show-Menu
       Write-Host
  }
 
-cls
+
 do
 {
       Show-Menu
@@ -100,6 +101,7 @@ do
                  Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JOMH.ps1"
 		  }
+            
             'snt' {
                  Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_snt.ps1"
@@ -240,15 +242,12 @@ do
                  #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
 	             & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1" 
 		  }
-            
-              'test' {
+            'path' {
                  Clear-Host
-                 #Skriv 'test' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
-	         & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1"
+	         & "$PSScriptRoot\PS_scripts\SSI\path.ps1"
 		  }
-              
-                      
-   
+            
+
 
 	      'q' {
                  return
