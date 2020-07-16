@@ -30,7 +30,7 @@ $OUPathSharedMailSDS_Sikkermail = 'OU=Sikkermail Postkasser,OU=Sundhedsdatastyre
 $SharedmailDescription = "Sikkermail  (skal have licens for sikkermail l�sning fungere, direkte login muligt)"
 
 Write-Host "Konverter F�llespostkasse '$SharedMail' til type Ikke Shared"
-set-o365Mailbox $SharedMail -Type Regular
+set-Mailbox $SharedMail -Type Regular
 
 Write-Host "Tildeler licens til kontoen"
 if (-not ($SharedMail -eq "*")) {
@@ -61,21 +61,21 @@ Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "Opdaterer reggel at email som er sendt fra shared postkasse, at 'sendt post' bliver i selve f�llespostkassen." -foregroundcolor Cyan
-Set-o365Mailbox $SharedMail -MessageCopyForSentAsEnabled $false
+Set-Mailbox $SharedMail -MessageCopyForSentAsEnabled $false
 Write-Host "S�tter standard sprog til DK" -foregroundcolor Cyan
-Set-o365MailboxRegionalConfiguration �identity $SharedMail �language da-dk -LocalizeDefaultFolderName
+Set-MailboxRegionalConfiguration �identity $SharedMail �language da-dk -LocalizeDefaultFolderName
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "�ndre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
-    Set-o365mailboxfolderpermission �identity $MailCalenderPath �user Default �Accessrights LimitedDetails
-    Add-o365MailboxFolderPermission �Identity $MailCalenderPath �User ConciergeMobile �AccessRights Editor
-    Get-o365MailboxFolderPermission -Identity $MailCalenderPath
+    Set-mailboxfolderpermission �identity $MailCalenderPath �user Default �Accessrights LimitedDetails
+    Add-MailboxFolderPermission �Identity $MailCalenderPath �User ConciergeMobile �AccessRights Editor
+    Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 
 Pause
 
-#get-o365mailbox Vaccinationsreminder
-#set-o365mailbox Vaccinationsreminder -MessageCopyForSentAsEnabled $false
+#get-mailbox Vaccinationsreminder
+#set-mailbox Vaccinationsreminder -MessageCopyForSentAsEnabled $false

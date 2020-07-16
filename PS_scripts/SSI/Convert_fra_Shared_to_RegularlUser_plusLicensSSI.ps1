@@ -31,7 +31,7 @@ $ADuserDescription = "F�llesbruger, direkte logine er mulig, skal have licens 
 
 if (-not ($ADuser -eq "*")) {
         Write-Host "Konverterer $ADuser f�llespostkasse af type 'shared'  til 'regular' Normal User..." -foregroundcolor Cyan
-        set-o365Mailbox $ADuser -Type Regular
+        set-Mailbox $ADuser -Type Regular
 		
         Start-Sleep 6
         Write-Host "Tildeler licens til kontoen..." -foregroundcolor Cyan
@@ -62,17 +62,17 @@ Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "Opdaterer reggel at email som er sendt fra shared postkasse, at 'sendt post' bliver i selve f�llespostkassen." -foregroundcolor Cyan
-Set-o365Mailbox $ADuser -MessageCopyForSentAsEnabled $false
+Set-Mailbox $ADuser -MessageCopyForSentAsEnabled $false
 Write-Host "S�tter standard sprog til DK" -foregroundcolor Cyan
-Set-o365MailboxRegionalConfiguration �identity $ADuser �language da-dk -LocalizeDefaultFolderName
+Set-MailboxRegionalConfiguration �identity $ADuser �language da-dk -LocalizeDefaultFolderName
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "�ndre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
-    Set-o365mailboxfolderpermission �identity $MailCalenderPath �user Default �Accessrights LimitedDetails
-    Add-o365MailboxFolderPermission �Identity $MailCalenderPath �User ConciergeMobile �AccessRights Editor
-    Get-o365MailboxFolderPermission -Identity $MailCalenderPath
+    Set-mailboxfolderpermission �identity $MailCalenderPath �user Default �Accessrights LimitedDetails
+    Add-MailboxFolderPermission �Identity $MailCalenderPath �User ConciergeMobile �AccessRights Editor
+    Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 Pause

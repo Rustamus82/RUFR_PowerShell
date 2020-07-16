@@ -33,7 +33,7 @@ $SharedmailDescription = "Fællespostkasse af type Shared, uden Office 365 licen
 
 if (-not ($SharedMail -eq "*")) {
 		Write-Host "Konverterer postkasse $SharedMail til type 'Shared'" -foregroundcolor Cyan
-        Set-o365Mailbox $SharedMail -Type Shared 
+        Set-Mailbox $SharedMail -Type Shared 
         
         Write-Host "Fjerner Licens fra $SharedMail" -foregroundcolor Cyan
         #Get-MsolUser -UserPrincipalName $SharedMail@dksund.dk |Select-Object UserPrincipalName, DisplayName, Department, {$_.Licenses.AccountSkuId}, WhenCreated
@@ -65,19 +65,19 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Opretter reggel at email som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan
-Set-o365Mailbox $SharedMail -MessageCopyForSentAsEnabled $True 
+Set-Mailbox $SharedMail -MessageCopyForSentAsEnabled $True 
 
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan
-Set-o365MailboxRegionalConfiguration –identity $SharedMail –language da-dk -LocalizeDefaultFolderName
+Set-MailboxRegionalConfiguration –identity $SharedMail –language da-dk -LocalizeDefaultFolderName
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
     $MailCalenderPath = "$ADuser" + ":\Kalender"
-    Set-o365mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
-    Add-o365MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
-    Get-o365MailboxFolderPermission -Identity $MailCalenderPath
+    Set-mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
+    Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
+    Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 
 pause
