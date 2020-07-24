@@ -15,6 +15,8 @@ function Start-Sleep($seconds) {
 
 #Copy rebuild scripts bats
 $WorkingDir = Convert-Path .
+New-Item -Path "Hyper-V" -ItemType Directory -Force
+New-Item -Path "$env:SystemDrive\Hyper-V" -ItemType Directory -ErrorAction SilentlyContinue
 Copy-Item -Path "$WorkingDir\ReBuildVM_3.ps1" -Destination "$env:SystemDrive\Hyper-V\" -Force
 Copy-Item -Path "$WorkingDir\HyperV-Setup-TestFrameWork_UIplusplus_AsAdmin.ps1" -Destination "$env:SystemDrive\Hyper-V\" -Force -Verbose
 Copy-Item -Path "$WorkingDir\HyperV-Setup-TestFrameWork_UIplusplus_AsAdmin.bat" -Destination "$env:SystemDrive\Hyper-V\" -Force -Verbose
