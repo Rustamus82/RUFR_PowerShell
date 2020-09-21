@@ -2,6 +2,18 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+21-09-2020 RUFR_PowerShell_v2.01
+Licens removed from create new user, sharedmail, convert to regular:
+dksund:WIN_DEF_ATP, dksund:EMSPREMIUM - EMS and defender ATP
+.\PS_scripts\SSI\OpretBrugerSSI.ps1
+.\PS_scripts\SSI\Convert_fra_Shared_to_RegularlUser_plusLicensSSI.ps1
+.\PS_scripts\SSI\Convert_fra_Shared_to_SecureRegularUser_PlusLicens_SSI.ps1
+
+
+***********************************************************************************************************************************************************
+16-07-2020 RUFR_PowerShell_v2.00
+
+***********************************************************************************************************************************************************
 16-07-2020 RUFR_PowerShell_v2.00
 logins script Changed - ALL
 Call login 'admin' when on admin server. it will use your login profile user variables for login promts.

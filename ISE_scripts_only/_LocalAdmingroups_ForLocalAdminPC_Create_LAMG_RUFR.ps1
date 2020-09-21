@@ -34,7 +34,7 @@ $credsSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’
 .\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName SSI -UserName 'adm-smr' -ComputerName SSI000248 -Credential $CredsSSI
 
 # 2 En pc ad gangen - DKSUND
-.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'adx_ufvi' -ComputerName SSI001236 -Credential $credsDKsund
+.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'rufr' -ComputerName normandy -Credential $credsDKsund
 .\
 
 # 2 En pc ad gangen - SST

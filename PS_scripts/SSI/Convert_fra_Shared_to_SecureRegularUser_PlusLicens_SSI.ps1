@@ -36,7 +36,8 @@ Write-Host "Tildeler licens til kontoen"
 if (-not ($SharedMail -eq "*")) {
 		 $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPACK" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "OFFICESUBSCRIPTION", "SWAY", "RMS_S_ENTERPRISE"
  		Set-MsolUser -UserPrincipalName $SharedMail@dksund.dk -UsageLocation DK
-		Set-MsolUserLicense -UserPrincipalName $SharedMail@dksund.dk -AddLicenses dksund:ENTERPRISEPACK
+		#Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:WIN_DEF_ATP, dksund:ENTERPRISEPREMIUM, dksund:EMSPREMIUM
+        Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:STANDARDPACK
 		Set-MsolUserLicense -UserPrincipalName $SharedMail@dksund.dk -LicenseOptions $x
 
         Set-Location -Path 'SSIAD:'
