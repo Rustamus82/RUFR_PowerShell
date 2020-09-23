@@ -2,6 +2,11 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+22-09-2020 RUFR_PowerShell_v2.02
+Corrected variable OU Path creation og distributions list in SSI.AD
+.\PS_scripts\SSI\OpretDistributionsGruppeSSI_udenHak_iManagerSSI.ps1
+
+***********************************************************************************************************************************************************
 21-09-2020 RUFR_PowerShell_v2.01
 Licens removed from create new user, sharedmail, convert to regular:
 dksund:WIN_DEF_ATP, dksund:EMSPREMIUM - EMS and defender ATP
@@ -9,6 +14,9 @@ dksund:WIN_DEF_ATP, dksund:EMSPREMIUM - EMS and defender ATP
 .\PS_scripts\SSI\Convert_fra_Shared_to_RegularlUser_plusLicensSSI.ps1
 .\PS_scripts\SSI\Convert_fra_Shared_to_SecureRegularUser_PlusLicens_SSI.ps1
 
+variable and encoding uft-8 with  bom corrected in:
+.\PS_scripts\SSI\Convert_fra_Shared_to_RegularlUser_plusLicensSSI.ps1
+.\PS_scripts\SSI\Convert_fra_Shared_to_SecureRegularUser_PlusLicens_SSI.ps1
 
 ***********************************************************************************************************************************************************
 16-07-2020 RUFR_PowerShell_v2.00

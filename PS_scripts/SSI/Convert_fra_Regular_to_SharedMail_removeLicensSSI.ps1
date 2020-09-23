@@ -74,7 +74,7 @@ Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "Ændre kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
-    $MailCalenderPath = "$ADuser" + ":\Kalender"
+    $MailCalenderPath = "$SharedMail" + ":\Kalender"
     Set-mailboxfolderpermission –identity $MailCalenderPath –user Default –Accessrights LimitedDetails
     Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
     Get-MailboxFolderPermission -Identity $MailCalenderPath

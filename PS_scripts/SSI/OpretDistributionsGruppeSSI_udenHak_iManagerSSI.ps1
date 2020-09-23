@@ -80,7 +80,7 @@ do
     switch ($company)
     {
            '1' {
-                  New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathForExchangeSikkerhedsgrupperSSI
+                  New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathDistrubutionslisterSSI
                   Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
                   Start-Sleep 20
 
@@ -91,7 +91,7 @@ do
 	  }
         
           '2' {
-                  New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathForExchangeSikkerhedsgrupperSDS
+                  New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathDistrubutionslisterSSI
                   Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
                   Start-Sleep 20
 
