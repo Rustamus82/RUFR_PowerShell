@@ -15,11 +15,14 @@ cls
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010
 
 Import-Module activedirectory
- 
+
+#remove linked account:
+#Set-user KMLR -LinkedMasterAccount $null
+
 Get-user KMLR | fl name, Linkedmasteraccount
 
 Set-user KMLR -LinkedMasterAccount dksund\KMLR -LinkedDomainController s-ad-dc-01p.dksund.dk
 
 Enable-ADAccount -Identity KMLR
- 
-#Get-user -ResultSize unlimited | ft name, Linkedmasteraccount  
+
+#Get-user -ResultSize unlimited | ft name, Linkedmasteraccountï¿½ 

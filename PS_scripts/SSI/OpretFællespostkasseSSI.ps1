@@ -255,7 +255,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     do
     {
          
-         Start-Sleep 120
+         Start-Sleep 1000
          #Start-Sleep 3
          $i++
          IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
@@ -565,7 +565,7 @@ else {
     do
     {
          
-         Start-Sleep 120
+         Start-Sleep 1000
          #Start-Sleep 3
          $i++
          IF([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue))
