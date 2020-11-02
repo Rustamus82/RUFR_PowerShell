@@ -2,6 +2,7 @@
 
 #Requires -Version 5 - $PSVersionTable
 #Requires -Module Hyper-V
+Import-Module -Name Hyper-v 
 #Requires -RunAsAdministrator
 cls
 #>
@@ -11,12 +12,17 @@ cls
 
 
 # Install the Hyper-V management tool pack (Hyper-V Manager and the Hyper-V PowerShell module)
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Tools-All
+#Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Tools-All
 #Enable Hyper-V
 #Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+#instal the Hyper-V on Windows server core 2019
+#Install-WindowsFeature -Name Hyper-V -IncludeAllSubFeature -IncludeManagementTools
+#Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V
+Import-Module -Name Hyper-v -ErrorAction SilentlyContinue
+Get-Module -Name Hyper-V
 
 #Adding ad user for local group for administrative purpose and to get access to Hyper V Console from other PC's
-$Users = @("adm-rufr","adm-nise","adm-mam","adm-lamg")
+$Users = @("adm-rufr","adm-nise")
 
 foreach ($User in $Users)
 {
@@ -44,19 +50,16 @@ Get-VMSwitch | Remove-VMSwitch -Force -Verbose
 # Set VM Folders
 New-Item -Path "\Hyper-V\" -ItemType Directory -Verbose
 New-Item -Path "\Hyper-V\Virtual Hard Disks" -ItemType Directory -Verbose
-New-Item -Path ":\Hyper-V\Virtual Machines" -ItemType Directory -Verbose
+New-Item -Path "\Hyper-V\Virtual Machines" -ItemType Directory -Verbose
 
 Set-VMHost -VirtualHardDiskPath "\Hyper-V\Virtual Hard Disks" -Verbose
-Set-VMHost -VirtualMachinePath ":\Hyper-V\Virtual Machines" -Verbose
+Set-VMHost -VirtualMachinePath "\Hyper-V\Virtual Machines" -Verbose
 
 #Copy rebuild scripts bats
-$WorkingDir = Convert-Path .
 New-Item -Path "Hyper-V" -ItemType Directory -Force
-Copy-Item -Path "$WorkingDir\ReBuildVM_3.ps1" -Destination "\Hyper-V\" -Force -Verbose
-Copy-Item -Path "$WorkingDir\HyperV-Setup-TestFrameWork_UIplusplus_AsAdmin.ps1" -Destination "\Hyper-V\" -Force -Verbose
-Copy-Item -Path "$WorkingDir\HyperV-Setup-TestFrameWork_UIplusplus_AsAdmin.bat" -Destination "\Hyper-V\" -Force -Verbose
-Copy-Item -Path "$WorkingDir\Call_rebuild_script_AsAdmin.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
-Copy-Item -Path "$WorkingDir\Call_rebuild_script_AsAdmin.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\ReBuildVM_3.ps1" -Destination "\Hyper-V\" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
 
 #Create a virtual switch by using Windows PowerShell - https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines
 #Get-NetAdapter
@@ -91,7 +94,7 @@ Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" 
 #$VMs = @("VM01-WXU","VM02-WXU","VM03-WXU","VM04-WXU","VM05-WXU","VM06-WXU","VM07-WXU","VM08-WXU","VM09-WXU","VM10-WXU","VM11-WXU","VM12-WXU");cls
 
 
-$VMs = for ($i = 1; $i -lt 15; $i++)
+$VMs = for ($i = 1; $i -lt 21; $i++)
 { 
     "VM{0:D2}" -f $i
 }
@@ -128,6 +131,7 @@ foreach ($VM in $VMs)
   
 }
 
+<#
 foreach ($VM in $win10Dev)
 {
   Write-Host "Creating Virtual Machine - $VM" -ForegroundColor Yellow -Verbose
@@ -148,6 +152,7 @@ foreach ($VM in $win7)
   New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 40GB -Generation 1 -Switch ExternalSwitch
   
 }
+#>
 
 #Configuration of VM's for generation 2 windows 10
 foreach ($VM in $VMs)

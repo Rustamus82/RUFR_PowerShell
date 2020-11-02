@@ -18,13 +18,13 @@ Copy-Item \\s-inf-fil03p\hvl\SFNSI\IOSAFD\LocalAdminGroups\ .\ -recurse -Force -
 
 #login & importer AD modul cmdlets
 # 1 Log på SSI
-$credsSSI = Get-Credential -Message "Angiv brugernavn og password" -UserName ’ssi\adm-rufr’;Remove-Module -Name ActiveDirectory; Import-Module -Name ActiveDirectory 
+$credsSSI = Get-Credential -Message "Angiv brugernavn og password" -UserName ’ssi\adm-rufr’;Remove-Module -Name ActiveDirectory -ErrorAction SilentlyContinue; Import-Module -Name ActiveDirectory 
 
 # 1 Log på DKSUND
-$credsDKsund = Get-Credential -Message "Angiv brugernavn og password" -UserName ’dksund\adm-rufr’ ;Remove-Module -Name ActiveDirectory; Import-Module -Name ActiveDirectory 
+$credsDKsund = Get-Credential -Message "Angiv brugernavn og password" -UserName ’dksund\adm-rufr’ ;Remove-Module -Name ActiveDirectory -ErrorAction SilentlyContinue; Import-Module -Name ActiveDirectory 
 
 # 1 Log på SST
-$credsSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’sst.dk\adm-rufr’ ;Remove-Module -Name ActiveDirectory; Import-Module -Name ActiveDirectory 
+$credsSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’sst.dk\adm-rufr’ ;Remove-Module -Name ActiveDirectory -ErrorAction SilentlyContinue; Import-Module -Name ActiveDirectory 
 
 
 #********************************
@@ -34,8 +34,8 @@ $credsSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’
 .\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName SSI -UserName 'adm-smr' -ComputerName SSI000248 -Credential $CredsSSI
 
 # 2 En pc ad gangen - DKSUND
-.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'rufr' -ComputerName normandy -Credential $credsDKsund
-.\
+.\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName DKSUND -UserName 'jebn' -ComputerName HEIMDALL -Credential $credsDKsund
+
 
 # 2 En pc ad gangen - SST
 .\LocalAdminGroups\Create-LocaladminGroups.ps1 -DomainName SST -UserName 'adm-asp' -ComputerName SST09902 -Credential $credsSST
@@ -57,6 +57,7 @@ cls
 #********************************************** se logs **************************************************************************************************************
 # Locale gruppe skulle være her: sst.dk/Sikkerhedsgrupper/Local Administrator Groups
 #Se logs her via stifinder/KØR: C:\Users\%username%\AppData\Local\Temp\Create-LocalAdminGroups.log
-& "C:\Users\$([Environment]::UserName)\AppData\Local\Temp\Create-LocalAdminGroups.log"
+& "C:\Users\$env:USERNAME\AppData\Local\Temp\Create-LocalAdminGroups.log"
+
 
 cls

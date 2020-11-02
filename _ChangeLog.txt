@@ -2,9 +2,9 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
-22-09-2020 RUFR_PowerShell_v2.03
+16-10-2020 RUFR_PowerShell_v2.03
 
-Før den fjerner tildel licens venter den 1000 sekunder.
+Før den fjerner tildelt licens venter den 1000 sekunder.
 .\PS_scripts\SSI\OpretFællespostkasseSSI.ps1
 .\PS_scripts\SSI\OpretMødelokalleSSI.ps1
 
