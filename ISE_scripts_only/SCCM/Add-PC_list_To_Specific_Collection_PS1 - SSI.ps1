@@ -39,7 +39,7 @@ Get-Content "C:\RUFR_PowerShell\ISE_scripts_only\SCCM\DeviceCollectionMembers.tx
 cls
 #(Get-CMDevice -Name 'SST000545').ResourceID 
 <#
-Get-CMDeviceCollection -Name "RUFR PCer med defekt SCCM klient" |select name,CollectionID
+Get-CMDeviceCollection -Name "RUFR PCer med defekt SCCM klient need to be fixed" |select name,CollectionID
 Get-CMDeviceCollection -Id "PS1005D0" |select name,CollectionID
 #> 
 
