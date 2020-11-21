@@ -157,7 +157,7 @@ foreach ($VM in $win7)
 #Configuration of VM's for generation 2 windows 10
 foreach ($VM in $VMs)
 {
-  Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  COMPANY:  AD:  -PreProd" -SnapshotFileLocation "\Hyper-V\Virtual Hard Disks\$VM\Snapshot" -SmartPagingFilePath "\Hyper-V\Virtual Machines\$VM" -CheckpointType Production -AutomaticCheckpointsEnabled $False -Verbose
+  Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  PC:  XXX.dksund.dk  -PreProd" -SnapshotFileLocation "\Hyper-V\Virtual Hard Disks\$VM\Snapshot" -SmartPagingFilePath "\Hyper-V\Virtual Machines\$VM" -CheckpointType Production -AutomaticCheckpointsEnabled $False -Verbose
   Set-VMMemory $VM -Buffer 5 -Priority 10 -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Guest Service Interface" -ErrorAction SilentlyContinue -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" -ErrorAction SilentlyContinue -Verbose
