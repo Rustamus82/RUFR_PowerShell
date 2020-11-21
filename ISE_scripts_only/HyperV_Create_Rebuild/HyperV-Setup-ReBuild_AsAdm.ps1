@@ -67,6 +67,8 @@ New-VMSwitch -name ExternalSwitch  -NetAdapterName Ethernet -AllowManagementOS $
 New-VMSwitch -name InternalSwitch -SwitchType Internal -ErrorAction SilentlyContinue -Verbose
 New-VMSwitch -name PrivateSwitch -SwitchType Private -ErrorAction SilentlyContinue -Verbose
 
+# Allow enhanced Session Mode set on HyperV server settings - https://www.niallbrady.com/2019/02/18/hyper-v-enhanced-session-greyed-out-on-windows-server-2019-gen-2-virtual-machines/#:~:text=You%20need%20to%20click%20on,Session%20Mode%20as%20shown%20here.
+
 ## https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-machine-in-hyper-v
 ## Create a virtual machine in Hyper-V
 # example: New-VM -Name <Name> -MemoryStartupBytes <Memory> -BootDevice <BootDevice> -VHDPath <VHDPath> -Path <Path> -Generation <Generation> -Switch <SwitchName>

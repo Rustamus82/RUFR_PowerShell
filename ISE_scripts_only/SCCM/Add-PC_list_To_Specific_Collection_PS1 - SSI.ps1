@@ -35,6 +35,20 @@ if((Get-PSDrive -Name $SiteCode -PSProvider CMSite -ErrorAction SilentlyContinue
 Set-Location "$($SiteCode):\" @initParams
 
 #add list of Computers to DeviceCollection - need to be correclt path to files Get-Content ".\CollectionDeviceMembers.txt" - -CollectionID "Se in Properties on Collection"
-Get-Content "C:\RUFR_PowerShell_v1.58\ISE_scripts_only\SCCM\DeviceCollectionMembers.txt" | foreach { Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS1005D0" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }
+Get-Content "C:\RUFR_PowerShell\ISE_scripts_only\SCCM\DeviceCollectionMembers.txt" | foreach { Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS10050A" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }
 cls
-#(Get-CMDevice -Name 'SSI000592').ResourceID 
+#(Get-CMDevice -Name 'SST000545').ResourceID 
+<#
+Get-CMDeviceCollection -Name "RUFR PCer med defekt SCCM klient" |select name,CollectionID
+Get-CMDeviceCollection -Id "PS1005D0" |select name,CollectionID
+#> 
+
+<#
+$CollMem = Get-CMCollectionMember -CollectionName "RUFR PCer med defekt SCCM klient"
+
+$MemberInfo = foreach ($item in $CollMem)
+{
+    "CompuerName: " + $item.Name + " Domain: " + $item.Domain  + " PrimaryUser: " + $item.PrimaryUser + ", Last logged on user: " + $item.UserName + " CurrentLogonUser: " + $item.CurrentLogonUser
+}; $MemberInfo
+
+#>
