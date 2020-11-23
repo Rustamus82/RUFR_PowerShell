@@ -37,7 +37,7 @@ Update-Module -Name AzureAD
 
 
 #Import and check
-cls
+Clear-Host
 Get-InstalledModule
 Import-Module ExchangeOnlineManagement; Get-Module ExchangeOnl*
 Import-Module ExchangeOnlineShell; Get-Module ExchangeOnlineShell
@@ -49,7 +49,7 @@ Import-Module ActiveDirectory; Get-Module ActiveDirectory
 $MFAExchangeModule = ((Get-ChildItem -Path $($env:LOCALAPPDATA+"\Apps\2.0\") -Filter CreateExoPSSession.ps1 -Recurse ).FullName | Select-Object -Last 1); "$MFAExchangeModule"
 Import-Module "$MFAExchangeModule"
 
-CLS
+Clear-Host
 #In this example, modules with a name that starts with Msonline that are found by Find-Module in the online gallery are #installed to the default folder, C:\Program Files\WindowsPowerShell\Modules
 
 <#----------------------------------------------------------------------------
