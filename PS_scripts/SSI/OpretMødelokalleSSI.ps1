@@ -33,7 +33,7 @@ $OUPathForExchangeSikkerhedsgrupperSSI = 'OU=ResourceGroups,OU=Exchange,OU=Group
 [string]$ADgroup = 'GRP-'+$ADuser
 Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
 
-#$company = "1"
+$company = "1"
 #Read-Host "Tast 1 for @ssi.dk eller 2 for @sundhedsdata.dk for den nye postkasse"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til Mødelokalle $ADuser"
 
@@ -372,10 +372,10 @@ else {
     Write-Host "Opretter AdObjekt i SSI AD." -foregroundcolor Cyan
     Set-Location -Path 'SSIAD:'
     if ($company -eq "1"){
-        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSSI 
+        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSSI
     }
     Elseif ($company -eq "2") {
-        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSDS
+        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSDS
     }
     Else 
     { Write-Warning "Mislykkedes at oprette AD objekt: $ADuser."; Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan; pause;exit }
@@ -386,7 +386,7 @@ else {
 
 
     Write-Host "Tilføjer 'sammacount' email og opdatere 'comapny' felt field in AD for $ADuser." -foregroundcolor Cyan
-    If (Get-ADUser -Filter  {Name -eq $ADuser}) 
+    If ([bool](Get-ADUser -Filter  {Name -eq $ADuser})) 
     {
     
         If ($company -eq "1") {
@@ -504,7 +504,7 @@ else {
         if ($i -eq 18) {
         Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
     }
-    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 18 ) )
+    until ([bool](Get-EXOMailbox  "$ADuser@dksund.dk" -ErrorAction SilentlyContinue) -or ($i -ge 18) )
 
 
     Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 

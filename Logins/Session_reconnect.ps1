@@ -12,10 +12,13 @@ Get-PSSession | Where-Object{$_.ComputerName -like "SRV-LYNC-FE0*"} | Remove-PSS
 $Global:sessionLync = New-PSSession -ConnectionURI “https://srv-Lync-FE03.SSI.AD/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
 Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
 
-#connect to cloud
-#Connect-MsolService -Credential $Global:UserCredDksund
-#Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
-#Connect-AzureAD -Credential $Global:UserCredDksund
+
+Write-Host "reconnecting to ExchangeOnline session" -foregroundcolor Cyan
+Get-PSSession | ?{$_.ComputerName -like "*office365.com"} | Remove-PSSession
+Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
+Connect-AzureAD -Credential $Global:UserCredDksund
+Connect-MsolService -Credential $Global:UserCredDksund
+#Get-PSSession | select name, ComputerName,state
 
 <#
 Write-Host "reconnect Office 365 session i skyen" -foregroundcolor Cyan 

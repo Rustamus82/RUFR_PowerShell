@@ -25,6 +25,14 @@ function Show-Menu
       Write-Host
       Write-Host "	Skriv 'tije' for at logge på som TIJE                                                                           " -foregroundcolor Cyan
       Write-Host
+      Write-Host "	Skriv 'tije' for at logge på som TIBE                                                                           " -foregroundcolor Cyan
+      Write-Host
+      Write-Host "	Skriv 'tije' for at logge på som JEBN                                                                           " -foregroundcolor Cyan
+      Write-Host
+      Write-Host "	Skriv 'tije' for at logge på som ANVM                                                                           " -foregroundcolor Cyan
+      Write-Host
+      Write-Host "	Skriv 'tije' for at logge på som LOWG                                                                           " -foregroundcolor Cyan
+      Write-Host
       Write-Host "	Skriv 'admin' for at logge med adm-konti variabler                                                              " -foregroundcolor Cyan 
       Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
       Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -backgroundcolor Red -foregroundcolor Black
@@ -134,10 +142,30 @@ do
 	         
             & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIJE.ps1"
 		  }
+            'tibe' {
+                 Clear-Host
+	         
+            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIBE.ps1"
+		  }
+            'jebn' {
+                 Clear-Host
+	         
+            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JEBN.ps1"
+		  }
+            'anvm' {
+                 Clear-Host
+	         
+            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ANVM.ps1"
+		  }
+            'lowg' {
+                 Clear-Host
+	         
+            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_LOWG.ps1"
+		  }
 
              'admin' {
                  Clear-Host
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ANY.ps1"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ADMIN.ps1"
 		  }
             
             

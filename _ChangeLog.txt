@@ -2,6 +2,18 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+01-12-2020 RUFR_PowerShell_v2.04
+
+Bugfix OU variable og bool test for Rooms
+.\PS_scripts\SSI\OpretMødelokalleSSI.ps1
+
+All logins updated to new ExchangeOnline and added for new collegues.
+.\Logins
+
+remove pssession added on reconnects for cloud sessions.
+.\Logins\Session_reconnect.ps1
+
+***********************************************************************************************************************************************************
 16-10-2020 RUFR_PowerShell_v2.03
 
 Før den fjerner tildelt licens venter den 1000 sekunder.

@@ -35,7 +35,7 @@ $Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  180000  -OperationTi
 #LOGIN
 #*********************************************************************************************************************************************
 #SST AD login og import af AD modulet.
-$Global:UserCredSST = Get-Credential sst.dk\adm-tije -Message "SST AD login og import af AD modulet"
+$Global:UserCredSST = Get-Credential "sst.dk\adm-tije" -Message "SST AD login og import af AD modulet"
 
 #exchange 2010
 $Global:Exchange2010_SST = "S-EXC-MBX01-P.sst.dk"
@@ -48,7 +48,7 @@ Start-Sleep 4;
 
 #login til  Office 365 og session.
 # Save credential to a file
-#Get-Credential adm-tije@dksund.dk | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
+#Get-Credential "adm-tije@dksund.dk" | Export-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
 #Save credential with password to vairable.
 # Load credential from file
 #$credo365 =  Import-Clixml C:\RUFR_PowerShell\Logins\xml\rufr_o365.xml
@@ -57,30 +57,35 @@ Start-Sleep 4;
 #Import-Module exhcnage online & Azure AD
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
-$Global:UserCredDksund = Get-Credential adm-tije@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
-Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
-Connect-AzureAD -Credential $Global:UserCredDksund
-#$Global:UserCredDksund = Get-Credential adm-tije@dksund.dk -Message "DKSUND AD login, Exchange Online & Hybrid"
-#Connect-ExchangeOnline -UserPrincipalName adm-tije@dksund.dk -ShowProgress $true -ShowBanner:$false
-#Connect-ExchangeOnline -UserPrincipalName adm-tije@dksund.dk -ShowProgress $true 
+$Global:UserCredDksund = Get-Credential "adm-tije@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
+Connect-ExchangeOnline -UserPrincipalName "adm-tije@dksund.dk" -ShowProgress $true -ShowBanner:$false
+#Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
+#Connect-ExchangeOnline -UserPrincipalName "adm-tije@dksund.dk" -ShowProgress $true 
+Connect-AzureAD -AccountId "adm-tije@dksund.dk"
+#Connect-AzureAD -Credential $Global:UserCredDksund
+<#
+Get-AzureADUser -ObjectId rufr@dksund.dk
+#>
 
 ##Import-Module MSOnline - Depricated soon.....
 #Import-Module MSOnline
 #$Global:sessiono365 = New-PSSession -ConfigurationName Microsoft.Exchange -Authentication Basic -ConnectionUri https://ps.outlook.com/powershell -AllowRedirection:$true  -Credential $Global:UserCredDksund
 #Import-PSSession $Global:sessiono365 -AllowClobber
 Connect-MsolService -Credential $Global:UserCredDksund
-
+<#
+Get-MsolUser -UserPrincipalName rufr@dksund.dk
+#>
 
 
 #DKSUND AD login og session til Exchange ON Premises (Hvis installeret opdatering KB3134758  giver fejl ved forbindelse til HybridServere.)
-#$Global:UserCredDksund = Get-Credential dksund\adm-tije -Message "DKSUND AD login, Exchange Online & Hybrid"
+#$Global:UserCredDksund = Get-Credential "adm-tije@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
 $Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-02p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 #$Global:SessionHyb = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://s-exc-hyb-01p.dksund.dk/PowerShell/ -Authentication Kerberos -SessionOption $Global:PSSessionOption -Credential $Global:UserCredDksund
 Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 
 
 #SSI AD login og import af AD modulet og Lync session.
-$Global:UserCredSSI = Get-Credential ssi\adm-tije -Message "SSI AD login"
+$Global:UserCredSSI = Get-Credential "ssi\adm-tije" -Message "SSI AD login"
 $Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
 $Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe03.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
 Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
@@ -111,8 +116,8 @@ $Global:ServerNameSST = (Get-ADDomainController -DomainName sst.dk -Discover -Ne
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til SSI AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive -Name 'SSIAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI -Root '//RootDSE/' -Scope 'Global'
-    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-tije') 
+    New-PSDrive -Name 'SSIAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI -Root '//RootDSE/' -Scope Global
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "ssi\adm-tije") 
      
 } Else {
     Write-Output -InputObject "PSDrive SSIAD already exists"
@@ -121,8 +126,8 @@ if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
 #PSdrive blev oprettet ved login script, som er ikke en del af den her execution.
 Write-Host " Opretter PSdrive til DKSUND AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
-    New-PSDrive -Name 'DKSUNDAD' -PSProvider 'ActiveDirectory' -Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund -Root '//RootDSE/' -Scope Global
-    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-tije') 
+    New-PSDrive -Name 'DKSUNDAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund -Root '//RootDSE/' -Scope Global
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "sst.dk\adm-tije"') 
      
 } Else {
     Write-Output -InputObject "PSDrive DKSUNDAD already exists"
@@ -133,7 +138,7 @@ if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
 Write-Host " Opretter PSdrive til SST AD" -foregroundcolor Cyan
 if (-not(Get-PSDrive 'SSTAD' -ErrorAction SilentlyContinue)) {
     New-PSDrive -Name 'SSTAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSST" -Credential $Global:UserCredSST -Root '//RootDSE/' -Scope Global
-    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName 'SST.DK\adm-tije') 
+    #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "adm-tije@dksund.dk") 
      
 } Else {
     Write-Output -InputObject "PSDrive SSTAD already exists"
