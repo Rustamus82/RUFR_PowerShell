@@ -17,7 +17,22 @@ function Start-Sleep($seconds) {
 $WorkingDir = Convert-Path .
 New-Item -Path "Hyper-V" -ItemType Directory -Force
 New-Item -Path "$env:SystemDrive\Hyper-V" -ItemType Directory -ErrorAction SilentlyContinue
-Copy-Item -Path "$PSScriptRoot\ReBuildVM_3.ps1" -Destination "\Hyper-V\" -Force -Verbose
-Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
-Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+#Copy-Item -Path "$PSScriptRoot\ReBuildVM_3.ps1" -Destination "\Hyper-V\" -Force -Verbose
+#Copy-Item -Path "$PSScriptRoot\Reinstall_VM_script_AsAdmin.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+#Copy-Item -Path "$PSScriptRoot\Reinstall_VM_script_AsAdmin.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+#Copy-Item -Path "$PSScriptRoot\HyperV-RemoteService-WinRM.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+#Copy-Item -Path "$PSScriptRoot\HyperV-RemoteService-WinRM.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+
+
+Copy-Item -Path "$PSScriptRoot\Reinstall_VM_script_AsAdmin.ps1" -Destination "$Env:PUBLIC" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\Reinstall_VM_script_AsAdmin.bat" -Destination "$Env:PUBLIC" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\HyperV-RemoteService-WinRM.bat" -Destination "$Env:PUBLIC" -Force -Verbose
+Copy-Item -Path "$PSScriptRoot\HyperV-RemoteService-WinRM.ps1" -Destination "$Env:PUBLIC" -Force -Verbose
+
+
+Copy-Item -Path "$env:SystemDrive\HyperV_Create_Rebuild\Reinstall_VM_script_AsAdmin.ps1" -Destination "$env:USERPROFILE" -Force -Verbose
+Copy-Item -Path "$env:SystemDrive\HyperV_Create_Rebuild\Reinstall_VM_script_AsAdmin.bat" -Destination "$env:USERPROFILE" -Force -Verbose
+Copy-Item -Path "$env:SystemDrive\HyperV_Create_Rebuild\HyperV-RemoteService-WinRM.bat" -Destination "$env:USERPROFILE" -Force -Verbose
+Copy-Item -Path "$env:SystemDrive\HyperV_Create_Rebuild\HyperV-RemoteService-WinRM.ps1" -Destination "$env:USERPROFILE" -Force -Verbose
+
 sleep 4
