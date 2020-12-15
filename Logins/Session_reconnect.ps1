@@ -9,7 +9,9 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 Write-Host "Reconnecting to Lync server i SSI" -foregroundcolor Cyan 
 #reconnect Lync servere session to avoid connectivetty and exparation issues.
 Get-PSSession | Where-Object{$_.ComputerName -like "SRV-LYNC-FE0*"} | Remove-PSSession
-$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-Lync-FE03.SSI.AD/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
+#$Global:sessionLync = New-PSSession -ConnectionURI “https://srv-Lync-FE03.SSI.AD/OcsPowershell” -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
+$Global:sessionLync = New-PSSession -ConnectionURI "https://srv-lync-fe07.ssi.ad/OcsPowershell" -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync
+#$Global:sessionLync = New-PSSession -ConnectionURI "https://srv-lync-fe08.ssi.ad/OcsPowershell" -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
 Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
 
 
