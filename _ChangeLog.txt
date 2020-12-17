@@ -2,6 +2,18 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+17-12-2020 RUFR_PowerShell_v2.05
+All logins updated with new servers:
+
+.\Logins   and .\Logins\Session_reconnect.ps1
+-ConnectionURI https://srv-lync-fe07.ssi.ad/OcsPowershell  WMF 5.1 installed so it is possible to establish session.
+#-ConnectionURI https://srv-lync-fe08.ssi.ad/OcsPowershell
+
+.\PS_scripts\SSI\OpretBrugerSSI.ps1
+Lync 'pool02.ssi.ad' changed to 'pool03.ssi.ad'
+
+
+***********************************************************************************************************************************************************
 01-12-2020 RUFR_PowerShell_v2.04
 
 Bugfix OU variable og bool test for Rooms
