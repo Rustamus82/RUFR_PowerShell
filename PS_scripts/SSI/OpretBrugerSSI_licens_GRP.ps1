@@ -120,7 +120,7 @@ Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er ko
 #(Get-ADGroup -SearchBase "$GroupLicensesOU" -Filter *).count
 
 Write-Host "Vælger licens for Bruger $ADuser" -foregroundcolor Cyan 
-$Licens = Get-ADGroup -filter {name -like "*M365*"} -Properties *| select Name,Description | ogv -PassThru
+$Licens = Get-ADGroup -filter {name -like "*M365_LIC_U_Full*"} -Properties *| select Name,Description | ogv -PassThru
 #$GroupLicenses.Count
 $LicensName = $Licens.Name
 #$ADuser = "ssiprep"
