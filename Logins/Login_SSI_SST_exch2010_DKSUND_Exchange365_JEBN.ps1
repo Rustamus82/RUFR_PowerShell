@@ -38,11 +38,11 @@ $Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  180000  -OperationTi
 $Global:UserCredSST = Get-Credential "sst.dk\adm_jebn" -Message "SST AD login og import af AD modulet"
 
 #exchange 2010
-$Global:Exchange2010_SST = "S-EXC-MBX01-P.sst.dk"
-$Global:SessionExchangeSST= New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://S-EXC-MBX01-P.sst.dk/PowerShell/ -Authentication Kerberos -Credential $Global:UserCredSST
-Import-PSSession $Global:SessionExchangeSST -Prefix SST
-#Write-Verbose "Loading the Exchange snapin (module)"
-Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction SilentlyContinue
+# $Global:Exchange2010_SST = "S-EXC-MBX01-P.sst.dk"
+# $Global:SessionExchangeSST= New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://S-EXC-MBX01-P.sst.dk/PowerShell/ -Authentication Kerberos -Credential $Global:UserCredSST
+# Import-PSSession $Global:SessionExchangeSST -Prefix SST
+# Write-Verbose "Loading the Exchange snapin (module)"
+# Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction SilentlyContinue
 
 Start-Sleep 4;
 
@@ -58,7 +58,7 @@ Start-Sleep 4;
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
 $Global:UserCredDksund = Get-Credential "adm_jebn@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
-Connect-ExchangeOnline -UserPrincipalName "adm_jebn@dksund.dk" -ShowProgress $true -ShowBanner:$false
+#Connect-ExchangeOnline -UserPrincipalName "adm_jebn@dksund.dk" -ShowProgress $true -ShowBanner:$false
 #Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
 #Connect-ExchangeOnline -UserPrincipalName "adm_jebn@dksund.dk" -ShowProgress $true 
 Connect-AzureAD -AccountId "adm_jebn@dksund.dk"
@@ -86,11 +86,11 @@ Import-PSSession $Global:SessionHyb -Prefix SSI -AllowClobber
 
 #SSI AD login og import af AD modulet og Lync session.
 $Global:UserCredSSI = Get-Credential "ssi\adm_jebn" -Message "SSI AD login"
-$Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
-$Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe07.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
-#$Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe08.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
-Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
-#eksemmel Get-LYNCCsUser
+# $Global:sessionOptionLync = New-PSSessionOption -SkipCACheck -SkipRevocationCheck -SkipCNCheck
+# $Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe07.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
+# $Global:sessionLync = New-PSSession -ConnectionURI https://srv-lync-fe08.ssi.ad/OcsPowershell -Credential $Global:UserCredSSI -SessionOption $Global:sessionOptionLync -ErrorAction SilentlyContinue
+# Import-PSSession $Global:sessionLync -Prefix LYNC -AllowClobber -ErrorAction SilentlyContinue
+# eksemmel Get-LYNCCsUser
 
 
 #*********************************************************************************************************************************************

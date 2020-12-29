@@ -43,7 +43,9 @@ function Show-Menu
       Write-Host
       Write-Host " Skriv 'u' for at aktivere (UM) Unified Messaging på bruger SSI/SDS" -foregroundcolor Cyan
       Write-Host
-      Write-Host " Skriv 'rights' forat  Liste brugerens Privilegier" -foregroundcolor Cyan
+      Write-Host " Skriv 'rights' for at  Liste brugerens Privilegier" -foregroundcolor Cyan
+      Write-Host
+      Write-Host " Skriv 'jonstrup' for at oprette jonstrup brugere" -foregroundcolor Cyan
       Write-Host 
       Write-Host "*** Fællespostkasse ***"  -foregroundcolor Green
       Write-Host
@@ -269,7 +271,12 @@ do
                  Clear-Host
                  #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
 	             & "$PSScriptRoot\PS_scripts\SSI\RemoveDirectLicens_for_OU.ps1" 
-		  }
+            }
+             'jonstrup' {
+               Clear-Host
+               #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
+                & "$PSScriptRoot\PS_scripts\JohnstrupOprettelseFraExcel.ps1" 
+          }            
             'path' {
                  Clear-Host
 	         & "$PSScriptRoot\PS_scripts\SSI\path.ps1"
