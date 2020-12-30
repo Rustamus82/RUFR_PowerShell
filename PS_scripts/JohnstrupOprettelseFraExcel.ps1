@@ -182,4 +182,4 @@ Set-Location -Path 'DKSUNDAD:'
 
 New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName 
 
-#-CaseID $CaseID -Filename $FileName 
+
