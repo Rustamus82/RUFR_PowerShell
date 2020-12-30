@@ -164,6 +164,7 @@ until ($CaseID)
 
 write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Yellow
 
+# done to make sure a filepath is provided
 do {
     # Filepath for input
     Add-Type -AssemblyName System.Windows.Forms
