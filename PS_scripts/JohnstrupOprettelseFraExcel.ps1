@@ -162,7 +162,7 @@ do {
 }
 until ($CaseID)
 
-write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Yellow
+write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
 
 # done to make sure a filepath is provided
 do {
