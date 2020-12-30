@@ -17,6 +17,10 @@ Install-Module PowershellGet -Force -Scope AllUsers -AllowClobber
 Get-Module -Name PowerShellGet
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted;Get-PSRepository
 
+#installer manuelt som admin MS sign in assistant:
+#.\_installModules\Microsoft Online Services Sign-In Assistant
+#https://www.microsoft.com/en-us/download/details.aspx?id=41950
+
 #ExchangeOnline
 Find-Module -Name "ExchangeOnl*" | Install-Module
 Install-Module -Name "ExchangeOnlineManagement" -Scope AllUsers -AllowClobber

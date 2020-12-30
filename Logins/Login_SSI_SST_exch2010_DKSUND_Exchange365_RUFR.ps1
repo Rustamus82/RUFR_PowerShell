@@ -58,7 +58,7 @@ Start-Sleep 4;
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
 $Global:UserCredDksund = Get-Credential "adm-rufr@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
-Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true -ShowBanner:$false
+Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true -ShowBanner:$false 
 #Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
 #Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true 
 Connect-AzureAD -AccountId "adm-rufr@dksund.dk"
