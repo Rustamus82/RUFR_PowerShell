@@ -3,6 +3,8 @@
 #Legacy MSONLINE - msonline module deprecated
 Find-Module -Name "msonline*" | Install-Module
 Install-Module -Name "msonline" -Scope AllUsers -AllowClobber
+Import-Module -Name "msonline"
+Uninstall-Module -Name "msonline" -Force
 
 Get-PSRepository 
 #på server/PC hvor man magler psgallery: https://stackoverflow.com/questions/43323123/warning-unable-to-find-module-repositories
