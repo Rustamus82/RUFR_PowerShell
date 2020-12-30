@@ -162,8 +162,9 @@ do {
 }
 until ($CaseID)
 
-write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Yellow
+write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
 
+# done to make sure a filepath is provided
 do {
     # Filepath for input
     Add-Type -AssemblyName System.Windows.Forms
@@ -181,4 +182,4 @@ Set-Location -Path 'DKSUNDAD:'
 
 New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName 
 
-#-CaseID $CaseID -Filename $FileName 
+
