@@ -33,7 +33,7 @@ if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9\-_\.]'){
     Write-Host "Sikkerhedsgruppe, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 

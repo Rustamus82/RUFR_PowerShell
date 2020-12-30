@@ -45,7 +45,7 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
     Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213):" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 #****************
@@ -605,5 +605,5 @@ else {
     Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
     Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
     Pause 
-    exit
+    return
 } 

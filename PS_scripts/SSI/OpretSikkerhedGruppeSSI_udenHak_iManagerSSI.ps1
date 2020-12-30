@@ -31,9 +31,9 @@ if($ADgroup -match  '[^a-zA-Z0-9\-_\.]'){
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Sikkerhedsgruppe, Må kun indeholde [^a-zA-Z0-9\-_\.] (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
-    Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
+    Write-Host "Better luck next time, returning to manu" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 

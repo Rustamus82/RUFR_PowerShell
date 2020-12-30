@@ -32,7 +32,7 @@ if($ADgroup -match  '[^a-zA-Z0-9\-_\.]'){
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9-_.] (eksempel: itsupportere)" -ForegroundColor Yellow
     Write-Host "Better luck next time,, script skifter til hoved menu" -foregroundcolor red
-    & "$PSScriptRoot\BrugeradmSDmenu.ps1"
+    return
 }
 
 ##Check for illegal Characters
@@ -41,7 +41,7 @@ if($GroupDispName -match  '[^\sa-zA-Z0-9_\-ÆØÅæøå]'){
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Distributionsliste Display Name, Må kun indeholde [^\sa-zA-Z0-9_\-ÆØÅæøå] (eksempel: IT supportere)" -ForegroundColor Yellow
     Write-Host "Better luck next time,, script skifter til hoved menu" -foregroundcolor red
-    & "$PSScriptRoot\BrugeradmSDmenu.ps1"
+    return
 }
 
 
