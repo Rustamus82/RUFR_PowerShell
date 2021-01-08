@@ -87,6 +87,7 @@ enum company {
     Hjemmeværnet
     Moment
     Politiet
+    Beredskabsstyrelsen
 }
 
 if ( -not $kope) {
@@ -140,6 +141,7 @@ if ( -not $company) {
     $Options += "Hjemmeværnet"
     $Options += "Moment"
     $Options += "Politiet"
+    $Options += "Beredskabsstyrelsen"
 
     $option = foreach ($OptionsLine in $Options) {
         "&$OptionsLine"
