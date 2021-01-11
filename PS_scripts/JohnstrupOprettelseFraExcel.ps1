@@ -81,6 +81,7 @@ enum kontakansvarlig {
     SALM
     LNGE
     NALH
+    SATM
 }
 
 enum company {
@@ -119,6 +120,7 @@ if ( -not $kontakansvarlig) {
     $Options += "SALM"
     $Options += "LNGE"
     $Options += "NALH"
+    $Options += "SATM"
 
     $option = foreach ($OptionsLine in $Options) {
         "&$OptionsLine"
@@ -128,7 +130,7 @@ if ( -not $kontakansvarlig) {
         "$OptionsLine"
     }
 
-    $message = "Vælg ansvarlig"
+    $message = "Vælg ansvarlig (skriv alle fire initialer)"
 
     $default = -1
     Remove-Variable kontakansvarlig -ErrorAction SilentlyContinue
