@@ -415,7 +415,7 @@ function New-JohnstrupUsers {
             else {
                 # if (-not $TestIfUserExist) {
 
-                Write-Warning "{$($TestIfUserExist.Displayname)} Allready exist. Nothing have been changed on the user. correct user manually"
+                    Write-Warning "{$($TestIfUserExist.name)} Allready exist. Nothing have been changed on the user. Change Ma number in Excel if this is a new user"
             }
             #$AccountName
 

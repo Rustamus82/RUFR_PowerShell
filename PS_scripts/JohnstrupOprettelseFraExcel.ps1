@@ -81,12 +81,14 @@ enum kontakansvarlig {
     SALM
     LNGE
     NALH
+    SATM
 }
 
 enum company {
     Hjemmeværnet
     Moment
     Politiet
+    Beredskabsstyrelsen
 }
 
 if ( -not $kope) {
@@ -118,6 +120,7 @@ if ( -not $kontakansvarlig) {
     $Options += "SALM"
     $Options += "LNGE"
     $Options += "NALH"
+    $Options += "SATM"
 
     $option = foreach ($OptionsLine in $Options) {
         "&$OptionsLine"
@@ -127,7 +130,7 @@ if ( -not $kontakansvarlig) {
         "$OptionsLine"
     }
 
-    $message = "Vælg ansvarlig"
+    $message = "Vælg ansvarlig (skriv alle fire initialer)"
 
     $default = -1
     Remove-Variable kontakansvarlig -ErrorAction SilentlyContinue
@@ -140,6 +143,7 @@ if ( -not $company) {
     $Options += "Hjemmeværnet"
     $Options += "Moment"
     $Options += "Politiet"
+    $Options += "Beredskabsstyrelsen"
 
     $option = foreach ($OptionsLine in $Options) {
         "&$OptionsLine"
