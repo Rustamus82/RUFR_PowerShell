@@ -23,7 +23,7 @@ $OUPathDistrubutionslisterSTPS = 'OU=STPS,OU=Distributionsgrupper,DC=SST,DC=dk'
 $GroupAlias = Read-Host -Prompt "Angiv distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9\-_\.] (eksempel: itsupportere)"
 $GroupDispName = Read-Host -Prompt "Angiv distribution liste DisplayName eller gentag Alias, må kun indeholde [^\sa-zA-Z0-9-_.ÆØÅæøå] (eksempel: IT supportere)"
 $Manager = Read-Host -Prompt 'Angiv distributionsliste Ejer'
-$company = Read-Host "Tast 1 for Sundhedsstyrelsen, 2 for Sundheds- og Ældreministeriet eller 3 for Styrelsen for Patientsikkerhed  (så får den @sst.dk, @sum.dk eller @stps.dk)"
+$company = Read-Host "Tast 1 for Sundhedsstyrelsen, eller 3 for Styrelsen for Patientsikkerhed  (så får den @sst.dk, @sum.dk eller @stps.dk)"
 $Description = Read-Host -Prompt "Angiv beskrivelse af hvad vil den bruger til? (eller skriv '.' til at springe over N/A)"
 
 ##Check for illegal Characters i email alias
@@ -62,7 +62,7 @@ Set-Location -Path 'SSTAD:'
     $GroupMail = $GroupAlias+'@sst.dk'
     Set-ADGroup -Identity $GroupDispName -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
     }
-    ElseIf ($company -eq "2") {
+    <#ElseIf ($company -eq "2") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterDEP
     
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
@@ -72,8 +72,8 @@ Set-Location -Path 'SSTAD:'
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $GroupAlias+'@sum.dk'
     Set-ADGroup -Identity $GroupDispName -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
-    }
-    ElseIf ($company -eq "3") {
+    }#>
+    If ($company -eq "3") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSTPS
     
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
@@ -101,11 +101,11 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName}))
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
 
     }
-    ElseIf ($company -eq "2") {
+    <#ElseIf ($company -eq "2") {
     $new = $GroupAlias + "@sum.dk"
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-    }
-    ElseIf ($company -eq "3") {
+    }#>
+    If ($company -eq "3") {
     $new = $GroupAlias + "@stps.dk"
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }
@@ -125,7 +125,7 @@ Add-ADGroupMember -Identity $GroupDispName -Members $Manager
 Add-ADPermission -Identity $GroupDispName -User $Manager -AccessRights WriteProperty -Properties "Member"
 
 
-Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+Write-Host "Noter følgende i Sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
 $ResultGroupName = (Get-SSTGroup $GroupDispName).DisplayName
 Write-Host "Distrubutionsgruppe oprettet: $ResultGroupName" -foregroundcolor Green -backgroundcolor DarkCyan
 $ResultGroupAlias = (Get-SSTGroup $GroupDispName).WindowsEmailAddress

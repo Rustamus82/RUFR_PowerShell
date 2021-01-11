@@ -19,7 +19,7 @@ $userDisplayName = Read-Host -Prompt "Tast Displayname på mødelokalet, f.eks S
 $ADuser =  Read-Host -Prompt "Tast 'Alias' på nyt mødelokale min.5 og max. 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] - (eksempel: 202-213)"
 $Manager =  Read-Host -Prompt "Angiv Ejers INITIALER på Mødelokalle/sikkerhedsgruppen"
 $Capacity =  Read-Host -Prompt "Tast 'antal' personer for kapacitet af mødelokalet"
-$company = Read-Host -Prompt "Tast 1 for @sst.dk, 2 for @sum.dk eller 3 for @stps.dk for den tilhørende postkasse"
+$company = Read-Host -Prompt "Tast 1 for @sst.dk, eller 3 for @stps.dk for den tilhørende postkasse"
 
 $OUpathRoomSST = 'OU=eLokaler,OU=Systemkonti,DC=SST,DC=dk'
 
@@ -57,7 +57,7 @@ Set-Location -Path 'SSTAD:'
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
         Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
     }
-    Elseif ($company -eq "2") {
+    <#Elseif ($company -eq "2") {
 
         $ExchangeSikkerhedsgruppe = 'SUM_'+$ADuser
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
@@ -71,7 +71,7 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
         Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
-    }
+    }#>
     Elseif ($company -eq "3") {
 
         $ExchangeSikkerhedsgruppe = 'STPS_'+$ADuser
@@ -147,10 +147,6 @@ Else
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
-
-#Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
-#Get-SSTMailbox $ADuser | set-SSTClutter -Enable $false
-
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2010" -foregroundcolor Cyan       
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     Enable-SSTMailbox "$ADuser" 
@@ -158,25 +154,21 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     sleep 60
     #som resultat vil den være synlig på Exchange 2010 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 
-        if($company -eq "2"){
+        <#if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ADuser + "@sum.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
-        }
-        elseif($company -eq "3"){
+        }#>
+        if($company -eq "3"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ADuser + "@stps.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
         }
-
-
         elseif ($company -eq "1"){
         sleep 5
         }
-
-
         Else { 
     Write-Warning "Fejlede at tilføje sum.dk som primær smtp: $ADuser, noget gik galt..." 
     }
@@ -191,13 +183,13 @@ Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Ex
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
     {
         
-        if($company -eq "2"){
+        <#if($company -eq "2"){
             Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
-        }
-        elseif($company -eq "3"){
+        }#>
+        if($company -eq "3"){
             Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
@@ -260,8 +252,6 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Ændrer kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
 $ADuserCalenderPath = "$ADuser" + ":\Kalender"
 Set-SSTmailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
-#Concierge?
-#Add-SSTMailboxFolderPermission –Identity $ADuserCalenderPath –User ConciergeMobile –AccessRights Editor
 Get-SSTMailboxFolderPermission -Identity $ADuserCalenderPath
 
 
@@ -270,9 +260,6 @@ sleep 300
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-#Nedenstående kommando virker ikke, men genererer et Watson dump. Hvorfor?
-#Set-CalendarProcessing -Identity $ADUser -AutomateProcessing AutoAccept -DeleteComments $true -AddOrganizerToSubject $true -AllowConflicts $false
 
 #new added, need to see it works...?!
 Write-Host "Omdøber bruger..." -foregroundcolor Cyan
@@ -287,7 +274,7 @@ Write-Host
 Write-Host "Husk at sætte hak i 'Enable the Resource Booking Attendant' under fanen 'Resource general' i Exchange," -foregroundcolor Yellow -backgroundcolor DarkCyan
 Write-Host "så mødelokalet auto-accepterer mødeindkaldelser." -foregroundcolor Yellow -backgroundcolor DarkCyan
 Write-Host
-Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+Write-Host "Noter følgende i Sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
 $ResultMailboxType = (Get-SSTMailbox $ADuser).RecipientTypeDetails
 Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
 $ResultRoom = (Get-SSTMailbox $ADuser).PrimarySmtpAddress

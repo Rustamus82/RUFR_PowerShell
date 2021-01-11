@@ -2,6 +2,12 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+04-01-2021 RUFR_PowerShell_v2.06
+Jesper Jonstrup script incorporated in menu:
+.\PS_scripts\JohnstrupOprettelseFraExcel.ps1
+.\PS_scripts\New-JohnstrupUsers.psm1
+
+***********************************************************************************************************************************************************
 17-12-2020 RUFR_PowerShell_v2.05
 All logins updated with new servers:
 
