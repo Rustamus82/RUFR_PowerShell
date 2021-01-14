@@ -36,8 +36,10 @@ Set-Location "$($SiteCode):\" @initParams
 
 #add list Users to Usercollection - need to be correclt path to files
 
-$Objects = Get-Content "C:\RUFR_PowerShell_v1.64\ISE_scripts_only\SCCM\UsersCollectionMembers.txt"
+$Objects = Get-Content "C:\Users\adm-rufr\Desktop\UsersCollectionMembers.txt"
 $Objects.Count
-Get-Content "C:\RUFR_PowerShell_v1.64\ISE_scripts_only\SCCM\UsersCollectionMembers.txt" | foreach { Add-CMUserCollectionDirectMembershipRule -CollectionId 'PS100518' -ResourceId (Get-CMUser -Name $_).ResourceID -ErrorAction SilentlyContinue }
+$Objects | foreach { Add-CMUserCollectionDirectMembershipRule -CollectionId 'PS1005B4' -ResourceId (Get-CMUser -Name $_).ResourceID -ErrorAction SilentlyContinue }
+#Get-Content "C:\Users\adm-rufr\Desktop\UsersCollectionMembers.txt" | foreach { Add-CMUserCollectionDirectMembershipRule -CollectionId 'PS1005B4' -ResourceId (Get-CMUser -Name $_).ResourceID -ErrorAction SilentlyContinue }
 
+cls
 #(Get-CMuser -Name "dksund\rufr").ResourceID 

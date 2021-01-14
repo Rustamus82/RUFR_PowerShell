@@ -3,7 +3,7 @@ ChangeLog
 
 ***********************************************************************************************************************************************************
 11-01-2021 RUFR_PowerShell_v2.07
-Jesper Jonstrup script opdateret 
+Jesper opdateret Jonstrup scripts
 • added Beredskabsstyrelsen
 .\PS_scripts\JohnstrupOprettelseFraExcel.ps1
 .\PS_scripts\New-JohnstrupUsers.psm1
