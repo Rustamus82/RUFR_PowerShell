@@ -158,8 +158,6 @@ The role this cmdlet belongs to
 .FUNCTIONALITY
 The functionality that best describes this cmdlet
 #>
-
-
 function New-JohnstrupUsers {
     [CmdletBinding()]
     [OutputType([String])]
@@ -234,6 +232,7 @@ function New-JohnstrupUsers {
         if ( -not (Test-Path -Path $FilePath)) {
 
             write-warning "Jeg kan ikke finde den fil du har angivet. Ligger den i din egen downloads mappe?"
+            Pause
             Return
         }
 
@@ -273,6 +272,8 @@ function New-JohnstrupUsers {
             }
             catch [System.Object] {
                 Write-Host -ForegroundColor Yellow "Der er andet end tal i MA Numrer {$($MANumrerIntTest.Trim())}. Du havde vist ikke lavet ordenlig kontrol"
+                $excel.Quit()
+                Pause
                 Return
             }        
         }
@@ -306,7 +307,7 @@ function New-JohnstrupUsers {
             $Description = "Almindelig konto til ekstern konsulent, kontakt person $kontakansvarlig - $CaseID" # SALM LNGE NALH
 
             #hash table for splat New-ADUser
-            $hash = @{
+            $hash = [ordered]@{
                 Name                  = $name;
                 SamAccountName        = $AccountName;
                 Enabled               = $true;
@@ -329,15 +330,17 @@ function New-JohnstrupUsers {
             # only ask user to validate first user
             if ( -not $UserYesNoChoiceToDataValid) {
 
-                Out-GridView -InputObject $hash -Wait
-
+                Write-Host -ForegroundColor Yellow "Kig om det indlæste står i de korekte felter. Luk vinduet når du har kontrolleret det"
+                Show-FirstUserOutputWPFForm -hash $hash
+                #Out-GridView -InputObject $hash -Wait
+                <#
                 $Options = @()
                 $Options += "Nej"
                 $Options += "Ja"
 
-            $option = foreach ($OptionsLine in $Options) {
-                "&$OptionsLine"
-            }
+                $option = foreach ($OptionsLine in $Options) {
+                    "&$OptionsLine"
+                }
 
                 $helpText = foreach ($OptionsLine in $Options) {
                     "$OptionsLine"
@@ -349,11 +352,14 @@ function New-JohnstrupUsers {
                 $default = -1
                 Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
                 $UserYesNoChoiceToDataValid = Read-HostWithPrompt $caption $message $option $helpText $default
+                #>
             }
 
             if (-not $UserYesNoChoiceToDataValid) {
                 
                 Write-Host -ForegroundColor Yellow "kør scriptet igen når du har rettet fejlen du fandt i excel arket"
+                $excel.Quit()
+                pause
                 Return
             }
 
@@ -415,7 +421,7 @@ function New-JohnstrupUsers {
             else {
                 # if (-not $TestIfUserExist) {
 
-                    Write-Warning "{$($TestIfUserExist.name)} Allready exist. Nothing have been changed on the user. Change Ma number in Excel if this is a new user"
+                Write-Warning "{$($TestIfUserExist.name)} Allready exist. Nothing have been changed on the user. Change Ma number in Excel if this is a new user"
             }
             #$AccountName
 
@@ -423,11 +429,12 @@ function New-JohnstrupUsers {
         } # foreach ($number in $ExcelSelctor ) {
 
         Write-Output $UserCreationOutput
-
+        $global:UserYesNoChoiceToDataValid = $false
+        #Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
+        
         $excel.Quit()
         
-        do
-        {
+        do {
             $Options = @()
             $Options += "Ja"
             $Options += "Nej"
@@ -454,3 +461,105 @@ function New-JohnstrupUsers {
     }
 }
 
+function Show-FirstUserOutputWPFForm {
+
+    [CmdletBinding()]
+    [OutputType([bool])]
+    Param
+    (
+        # Userinformation Hash from New-JohnstrupUsers
+        [Parameter(Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true,
+            Position = 0)]
+        $hash
+    )
+
+    Add-Type -AssemblyName PresentationFramework, System.Windows.Forms, WindowsFormsIntegration
+
+    [xml][string]$XAML_ConnectDialog = @"
+    <Window 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Azure"
+    Title="Kig om det indlæste står i de korekte felter, for den første bruger i arket." Height="500" Width="610">
+<Grid Margin="0,0,0,0">
+    <Button Name="btnOK" Content="Godkend" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="510,0,0,20"  Width="75" Height="23"/>
+    <Button Name="btnExit" Content="Afvis" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="425,0,0,20"  Width="75" Height="23"/>
+    <ListView Name="Collections" Margin="0,0,0,53">
+    <ListView.View>
+      <GridView>
+        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+        <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="430"/>
+      </GridView>
+    </ListView.View>
+  </ListView>
+</Grid>
+</Window>
+"@
+
+    $XML_Node_Reader_ConnectDialog = (New-Object System.Xml.XmlNodeReader $XAML_ConnectDialog)
+
+    #$XML_Node_Reader_ConnectDialog = (New-Object System.Xml.XmlNodeReader $XAML_ConnectDialog)
+    $ConnectDialog = [Windows.Markup.XamlReader]::Load($XML_Node_Reader_ConnectDialog)
+    $Collections = $ConnectDialog.FindName('Collections')
+    
+    $Btn_ConnectDialog_ConnectOK = $ConnectDialog.FindName('btnOK')
+    $Btn_ConnectDialog_ConnectOK.IsDefault = $true
+    $Btn_ConnectDialog_ConnectOK.Add_Click( {
+
+        $global:UserYesNoChoiceToDataValid = $true
+        #write-host "1"
+        $ConnectDialog.Close()
+    })
+    $Btn_ConnectDialog_ConnectExit = $ConnectDialog.FindName('btnExit')
+    $Btn_ConnectDialog_ConnectExit.IsCancel = $true
+    $Btn_ConnectDialog_ConnectExit.Add_Click( {
+
+        $global:UserYesNoChoiceToDataValid = $false
+        #Write-Host "2"
+        $ConnectDialog.Close()
+        
+    })
+    $HashToArrayOfCustomObjects = $hash.GetEnumerator() | ForEach-Object{
+        [pscustomobject]@{name=$_.name;value=$_.Value}
+    }
+    #$DCs = Import-Csv -Path 'C:\Users\jebn\OneDrive - Sundhedsdatastyrelsen\Dokumenter\values.txt'
+    #$DCs = Get-ChildItem C:\RUFR_PowerShell\PS_scripts\SST
+    # $Collections.ItemsSource = $DCs    
+    $Collections.ItemsSource = $HashToArrayOfCustomObjects
+
+    # Add hanldling when exit i pressed. Not sure
+    $ConnectDialog.Add_Closing( { [System.Windows.Forms.Application]::Exit() }) # {$form.Close()}
+
+    # Running this without $appContext and ::Run would actually cause a really poor response.
+    $ConnectDialog.Show()
+
+    # This makes it pop up
+    $ConnectDialog.Activate() | Out-Null
+    #run the form ConnectDialog
+    $appContext = New-Object System.Windows.Forms.ApplicationContext
+    [System.Windows.Forms.Application]::Run($appContext)
+
+    #########################
+    #$ButtonPressBook 
+}
+ 
+    <#
+    $HashToArrayOfCustomObjects = $hash.GetEnumerator() | ForEach-Object{
+        [pscustomobject]@{name=$_.name;LastName=$_.Value}
+    }
+    $HashToArrayOfCustomObjects.GetType()
+
+    $data = @(
+        [pscustomobject]@{name='UserName';LastName='Marquette'}
+        [pscustomobject]@{name='SamAccountName'; LastName='Doe'}
+        [pscustomobject]@{name='Enabled';LastName='Marquette'}
+        [pscustomobject]@{name='Path'; LastName='Doe'}
+    )
+    $data
+    $data.GetType()
+
+    $BindableDCs = $DCs | Select-Object -Property @{Name='CollectionName';Expression={$_.Name}}, @{Name='CollectionCount';Expression={$_.MemberCount}}
+    #>

@@ -50,7 +50,7 @@ function Read-HostWithPrompt {
     ## Go through each of the options, and add them to the choice collection
     for ($counter = 0; $counter -lt $option.Length; $counter++) {
         $choice = New-Object Management.Automation.Host.ChoiceDescription `
-            $option[$counter]
+        $option[$counter]
 
         if ($helpText -and $helpText[$counter]) {
             $choice.HelpMessage = $helpText[$counter]
@@ -122,8 +122,10 @@ if ( -not $kontakansvarlig) {
     $Options += "NALH"
     $Options += "SATM"
 
+    $i = 1
     $option = foreach ($OptionsLine in $Options) {
-        "&$OptionsLine"
+        "&$i $OptionsLine"
+        $i++
     }
 
     $helpText = foreach ($OptionsLine in $Options) {
@@ -178,12 +180,31 @@ do {
     $FileName = $FolderBrowser.FileName
 }
 until ($FileName)
+
+# This part is done because Excel com objects doesn't support "\\tsclient" i filepath
+Remove-Variable -Name FilePathExcel -ErrorAction SilentlyContinue
+$FilePathExcel = Get-ChildItem $FileName
+
+
+if ($FilePathExcel.FullName -like '\\tsclient*') {
+    Remove-Variable -Name FileName -ErrorAction SilentlyContinue
+    Copy-Item -Path $FilePathExcel.FullName -Destination $env:TEMP
+    $FileName = (Get-ChildItem -Path "$env:TEMP\$($FilePathExcel.name)").FullName
+}
+
+
 Remove-Module -Name New-JohnstrupUsers -ErrorAction SilentlyContinue
 Import-Module ((Get-ChildItem "$PSScriptRoot" -Recurse -Filter "New-JohnstrupUsers.psm1").FullName)
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
-Set-Location -Path 'DKSUNDAD:'
+#Set-Location -Path 'DKSUNDAD:'
 
 New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName 
 
+# Remove temp file if it's copied to avoid "\\tsclient" i path.
+if ($FilePathExcel.FullName -like '\\tsclient*') {
+    
+    Remove-Item -Path $FileName 
+}
+#-CaseID $CaseID -Filename $FileName 
 
