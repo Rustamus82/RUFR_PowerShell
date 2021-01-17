@@ -184,8 +184,9 @@ until ($FileName)
 Remove-Variable -Name FilePathExcel -ErrorAction SilentlyContinue
 $FilePathExcel = Get-ChildItem $FileName
 
-Remove-Variable -Name FileName -ErrorAction SilentlyContinue
+
 if ($FilePathExcel.FullName -like '\\tsclient*') {
+    Remove-Variable -Name FileName -ErrorAction SilentlyContinue
     Copy-Item -Path $FilePathExcel.FullName -Destination $env:TEMP
     $FileName = (Get-ChildItem -Path "$env:TEMP\$($FilePathExcel.name)").FullName
 }

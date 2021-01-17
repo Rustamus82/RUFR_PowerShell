@@ -331,8 +331,9 @@ function New-JohnstrupUsers {
             if ( -not $UserYesNoChoiceToDataValid) {
 
                 Write-Host -ForegroundColor Yellow "Kig om det indlæste står i de korekte felter. Luk vinduet når du har kontrolleret det"
-                Out-GridView -InputObject $hash -Wait
-
+                Show-FirstUserOutputWPFForm -hash $hash
+                #Out-GridView -InputObject $hash -Wait
+                <#
                 $Options = @()
                 $Options += "Nej"
                 $Options += "Ja"
@@ -351,6 +352,7 @@ function New-JohnstrupUsers {
                 $default = -1
                 Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
                 $UserYesNoChoiceToDataValid = Read-HostWithPrompt $caption $message $option $helpText $default
+                #>
             }
 
             if (-not $UserYesNoChoiceToDataValid) {
@@ -427,7 +429,9 @@ function New-JohnstrupUsers {
         } # foreach ($number in $ExcelSelctor ) {
 
         Write-Output $UserCreationOutput
-
+        $global:UserYesNoChoiceToDataValid = $false
+        #Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
+        
         $excel.Quit()
         
         do {
@@ -479,7 +483,7 @@ function Show-FirstUserOutputWPFForm {
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Azure"
-    Title="Bruger Information" Height="500" Width="610">
+    Title="Kig om det indlæste står i de korekte felter, for den første bruger i arket." Height="500" Width="610">
 <Grid Margin="0,0,0,0">
     <Button Name="btnOK" Content="Godkend" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="510,0,0,20"  Width="75" Height="23"/>
     <Button Name="btnExit" Content="Afvis" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="425,0,0,20"  Width="75" Height="23"/>
@@ -505,16 +509,16 @@ function Show-FirstUserOutputWPFForm {
     $Btn_ConnectDialog_ConnectOK.IsDefault = $true
     $Btn_ConnectDialog_ConnectOK.Add_Click( {
 
-        $global:ButtonPressBool = $true
-        write-host "1"
+        $global:UserYesNoChoiceToDataValid = $true
+        #write-host "1"
         $ConnectDialog.Close()
     })
     $Btn_ConnectDialog_ConnectExit = $ConnectDialog.FindName('btnExit')
     $Btn_ConnectDialog_ConnectExit.IsCancel = $true
     $Btn_ConnectDialog_ConnectExit.Add_Click( {
 
-        $global:ButtonPressBool = $false
-        Write-Host "2"
+        $global:UserYesNoChoiceToDataValid = $false
+        #Write-Host "2"
         $ConnectDialog.Close()
         
     })
