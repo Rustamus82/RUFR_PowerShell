@@ -34,9 +34,9 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
 
     Write-Host "Whoops --> You have used illegal characters in email alias!" -foregroundcolor red
     Write-Host "Angiv Fællespostkasse ALIAS på minimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (f.eks Servicedesk):" -ForegroundColor Yellow
-    Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
+    Write-Host "Better luck next time, returning to menu!" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 #****************
@@ -600,7 +600,7 @@ else {
     Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
     Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan
     Pause 
-    exit
+    return
 } 
 
 #Fejlfinding

@@ -25,7 +25,7 @@ $OUPathSharedMailSTPS = 'OU=STPS,OU=eDelt,OU=Systemkonti,DC=SST,DC=dk'
 
 $userDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
 $ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
-$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk eller 3 for stps.dk til at vælge passende adresse."
+$company = Read-Host -Prompt "Tast 1 for sst.dk, eller 3 for stps.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 
 $ADuserDescription = 'Delt fællespostkasse (uden licens, direkte login disablet)'
@@ -41,7 +41,7 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
     Write-Host "Mødelokale ALIAS på minimum 5 og max 20 karaktere, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: 202-213):" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 
@@ -61,7 +61,7 @@ Set-Location -Path 'SSTAD:'
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
         Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
     }
-    Elseif ($company -eq "2") {
+    <#Elseif ($company -eq "2") {
 
         $ExchangeSikkerhedsgruppe = 'DEP_'+$ADuser+'_MAIL'
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
@@ -75,7 +75,7 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
         Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
-    }
+    }#>
     Elseif ($company -eq "3") {
         $ExchangeSikkerhedsgruppe = 'STPS_'+$ADuser+'_MAIL'
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
@@ -106,9 +106,9 @@ Set-Location -Path 'SSTAD:'
     if ($company -eq "1"){
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”sst.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSST 
     }
-    Elseif ($company -eq "2") {
+    <#Elseif ($company -eq "2") {
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”sum.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailDEP
-    }
+    }#>
     Elseif ($company -eq "3") {
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”stps.dk”) -ChangePasswordAtLogon $true -Path $OUPathSharedMailSTPS
     } 
@@ -128,9 +128,9 @@ Set-Location -Path 'SSTAD:'
         If ($company -eq "1") {
         Set-ADUser $ADuser -SamAccountName $ADuser -EmailAddress $ADuser'@sst.dk' -Company 'Sundhedsstyrelsen' 
         }
-        ElseIf ($company -eq "2") {
+        <#ElseIf ($company -eq "2") {
         Set-ADUser $ADuser -SamAccountName $ADuser -EmailAddress $ADuser'@sum.dk' -Company 'Sundheds- og Ældreministeriet' 
-        }
+        }#>
         Else {
         Set-ADUser $ADuser -SamAccountName $ADuser -EmailAddress $ADuser'@sum.dk' -Company 'Styrelsen for Patientsikkerhed' 
         }
@@ -157,13 +157,13 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     sleep 60
     #som resultat vil den være synlig på Exchnage 2010 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 
-        if($company -eq "2"){
+        <#if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ADuser + "@sum.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
-        }
-        elseif($company -eq "3") {
+        }#>
+        if($company -eq "3") {
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ADuser + "@stps.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
@@ -186,13 +186,13 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
         Write-Host "E-Mail aktivering af gruppen i Exchange 2010" -foregroundcolor Cyan
         Enable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     
-        if($company -eq "2"){
+        <#if($company -eq "2"){
             Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
-        }
-        elseif($company -eq "3"){
+        }#>
+        if($company -eq "3"){
             Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
@@ -255,7 +255,7 @@ Write-Host "Omdøber bruger..." -foregroundcolor Cyan
    sleep 6
 
 #Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ExchangeSikkerhedsgruppe, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+Write-Host "Noter følgende i Sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
 $ResultMailboxType = (Get-SSTMailbox $ADuser).RecipientTypeDetails
 Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
 $ResultSharedmail = (Get-SSTMailbox "$ADuser").PrimarySmtpAddress

@@ -23,7 +23,7 @@ $OUPathForExchangeSikkerhedsgrupperSTPS = 'OU=STPS,OU=Sikkerhedsgrupper,DC=SST,D
 
 $ExchangeSikkerhedsgruppe =  Read-Host -Prompt "Angiv Sikkerhedsgruppe navn, må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks. GRP-servicedesk)"
 $Manager = Read-Host -Prompt 'Angiv Ejers INITIALER til Sikkerhedsgruppe'
-$company = Read-Host "Tast 1 for Sundhedsstyrelsen, 2 for Sundheds- og Ældreministeriet eller 3 for Styrelsen for Patientsikkerhed"
+$company = Read-Host "Tast 1 for Sundhedsstyrelsen, eller 3 for Styrelsen for Patientsikkerhed"
 $SikkerhedsgrupperDescription = "Giver fuld adgang til sikkerhedgruppen $ExchangeSikkerhedsgruppe."
 
 ##Check for illegal characters
@@ -33,7 +33,7 @@ if($ExchangeSikkerhedsgruppe -match  '[^a-zA-Z0-9\-_\.]'){
     Write-Host "Sikkerhedsgruppe, Må indeholde kun [^a-zA-Z0-9\-_\.] (eksempel: GRP-servicedesk)" -ForegroundColor Yellow
     Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan
     pause
-    exit
+    return
 }
 
 
@@ -49,7 +49,7 @@ if ($company -eq "1"){
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
     Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
 }
-Elseif ($company -eq "2") {
+<#Elseif ($company -eq "2") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
     Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
     sleep 20
@@ -57,8 +57,8 @@ Elseif ($company -eq "2") {
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
     Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
-}
-Elseif ($company -eq "3") {
+}#>
+if ($company -eq "3") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
     Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
     sleep 20
@@ -67,8 +67,6 @@ Elseif ($company -eq "3") {
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
     Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Styrelsen for Patientsikkerhed";mail="$GroupMail"}
 }
-
-
 Else 
 { Write-Warning "Mislykkedes at oprette $ExchangeSikkerhedsgruppe, Noget gik galt..."}
 
@@ -88,10 +86,10 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
     #Disable-SSTSecurityGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2010" -foregroundcolor Cyan
    
-    if ($company -eq "2"){
+    <#if ($company -eq "2"){
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-    }
+    }#>
     elseif ($company -eq "3"){
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
@@ -100,10 +98,8 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
         sleep 5
     }
     else {
-    Write-Warning "Mislykkedes at e-mail aktivere $ExchangeSikkerhedsgruppe, noget gik galt."
+        Write-Warning "Mislykkedes at e-mail aktivere $ExchangeSikkerhedsgruppe, noget gik galt."
     }
-
-        
 }
 Else
 {

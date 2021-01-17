@@ -168,8 +168,9 @@ do {
 }
 until ($CaseID)
 
-write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Yellow
+write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
 
+# done to make sure a filepath is provided
 do {
     # Filepath for input
     Add-Type -AssemblyName System.Windows.Forms
@@ -192,7 +193,6 @@ if ($FilePathExcel.FullName -like '\\tsclient*') {
 }
 
 
-
 Remove-Module -Name New-JohnstrupUsers -ErrorAction SilentlyContinue
 Import-Module ((Get-ChildItem "$PSScriptRoot" -Recurse -Filter "New-JohnstrupUsers.psm1").FullName)
 
@@ -207,3 +207,4 @@ if ($FilePathExcel.FullName -like '\\tsclient*') {
     Remove-Item -Path $FileName 
 }
 #-CaseID $CaseID -Filename $FileName 
+
