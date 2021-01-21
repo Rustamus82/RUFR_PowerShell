@@ -248,6 +248,8 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
     Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
     Set-mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
+    #Remove-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile
+    #Remove-MailboxFolderPermission $ADuser -User conciergemobile
     Get-MailboxFolderPermission -Identity $MailCalenderPath
     
     
@@ -558,6 +560,8 @@ else {
     Add-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile –AccessRights Editor
     Add-MailboxFolderPermission $ADuser -User conciergemobile -AccessRights foldervisible -ErrorAction SilentlyContinue
     Set-mailboxfolderpermission $ADuser -User conciergemobile -AccessRights foldervisible
+    #Remove-MailboxFolderPermission –Identity $MailCalenderPath –User ConciergeMobile
+    #Remove-MailboxFolderPermission $ADuser -User conciergemobile
     Get-MailboxFolderPermission -Identity $MailCalenderPath
 
 
