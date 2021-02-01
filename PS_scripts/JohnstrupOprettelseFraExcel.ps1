@@ -184,7 +184,7 @@ if ($FilePathExcel.FullName -like '\\tsclient*') {
 }
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
-#Set-Location -Path 'DKSUNDAD:'
+Set-Location -Path 'DKSUNDAD:'
 
 $JonstrupUserOutput = New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName -AccountExpirationDate $AccountExpirationDate
 # Write-Output $JonstrupUserOutput 

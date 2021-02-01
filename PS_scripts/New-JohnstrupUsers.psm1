@@ -384,7 +384,15 @@ function New-JohnstrupUsers {
             Remove-Variable TestIfUserExist -ErrorAction SilentlyContinue
             $ErrorActionPreferenceBeforechange = $ErrorActionPreference
             $ErrorActionPreference = "SilentlyContinue" # done because get-aduser doesn't respect -ErrorAction
+            
+            try{
+            
             $TestIfUserExist = Get-ADUser -Identity "$MANumrerCleanEKS_"  -Properties *   -ErrorAction SilentlyContinue # -Server $server
+            }
+            catch{
+            
+                # do nothing
+            }
             $ErrorActionPreference = $ErrorActionPreferenceBeforechange
 
             if (-not $TestIfUserExist) {
