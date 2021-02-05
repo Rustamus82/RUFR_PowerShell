@@ -156,7 +156,7 @@ if ($Company -eq 'ATP') {
 }
 else {
         
-    $AccountExpirationDate = Get-DateFromString "28-02-2021"
+    $AccountExpirationDate = Get-DateFromString "30-06-2021"
 }
 
 write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
