@@ -159,7 +159,7 @@ The functionality that best describes this cmdlet
 #>
 function New-JohnstrupUsers {
     [CmdletBinding()]
-    #[OutputType([String])]
+    [OutputType([Microsoft.ActiveDirectory.Management.ADAccount])]
     Param
     (
         # User to get group membership from
@@ -387,7 +387,7 @@ function New-JohnstrupUsers {
             
             try{
             
-            $TestIfUserExist = Get-ADUser -Identity "$MANumrerCleanEKS_"  -Properties *   -ErrorAction SilentlyContinue # -Server $server
+            $TestIfUserExist = Get-ADUser -Identity "$MANumrerCleanEKS_" -ErrorAction Stop # -Server $server
             }
             catch{
             
@@ -423,7 +423,7 @@ function New-JohnstrupUsers {
 
                 # Add Group membership according to kope
                 Remove-Variable TestIfUserExistAfterNewUser -ErrorAction SilentlyContinue
-                $TestIfUserExistAfterNewUser = Get-ADUser -Identity $AccountName -ErrorAction SilentlyContinue -Properties * # -Server $server
+                $TestIfUserExistAfterNewUser = Get-ADUser -Identity $AccountName -ErrorAction SilentlyContinue  # -Server $server
                 # $TestIfUserExistAfterNewUser.MemberOf
                 if ($TestIfUserExistAfterNewUser) {
 
@@ -434,9 +434,10 @@ function New-JohnstrupUsers {
                         Add-ADGroupMember -Identity $SecurityGroupslineClean -Members  $MANumrerCleanEKS_ # -Server $server #-PassThru
                     }
                 }
-                $HashOutput = New-Object psobject -Property $Hash
-                Write-Output ($HashOutput | Select-Object -Property Name) # $hash.name
-                write-host "$($hash.name)"
+                Write-Output $TestIfUserExistAfterNewUser 
+                # $HashOutput = New-Object psobject -Property $Hash
+                # Write-Output ($HashOutput | Select-Object -Property Name) # $hash.name
+                # write-host "$($hash.name)"
             }
             else {
                 # if (-not $TestIfUserExist) {
@@ -451,10 +452,11 @@ function New-JohnstrupUsers {
         Write-Output $UserCreationOutput
         $global:UserYesNoChoiceToDataValid = $false
         #Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
-    }
-    End {
         Remove-Variable Password -ErrorAction SilentlyContinue
         $Excel.Quit()
+    }
+    End {
+
     }
 }
 function Show-FirstUserOutputWPFForm {

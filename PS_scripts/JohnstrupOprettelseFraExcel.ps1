@@ -188,7 +188,11 @@ Set-Location -Path 'DKSUNDAD:'
 
 $JonstrupUserOutput = New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName -AccountExpirationDate $AccountExpirationDate
 # Write-Output $JonstrupUserOutput 
-# there is no output from New-JohnstrupUsers. This needs futher investigation.
+
+foreach ($JonstrupUserOutputLine in $JonstrupUserOutput) {
+
+    Write-Host "$($JonstrupUserOutputLine.name)"
+}
 # Write-Host "$JonstrupUserOutput"
 
  do {
