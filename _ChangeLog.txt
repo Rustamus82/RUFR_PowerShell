@@ -2,6 +2,19 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+16-01-2021 ServicedeskPowershellTools_v2.08
+
+Commit Summary
+•	JohnstrupOprettelseFraExcel.ps1
+•	JohnstrupOprettelseFraExcel.ps1
+•	JohnstrupOprettelseFraExcel.ps1
+•	New-JohnstrupUsers.psm1
+File Changes
+•	M PS_scripts/JohnstrupOprettelseFraExcel.ps1 (168) 
+•	M PS_scripts/New-JohnstrupUsers.psm1 (346) 
+
+
+***********************************************************************************************************************************************************
 11-01-2021 RUFR_PowerShell_v2.07
 Jesper opdateret Jonstrup scripts
 • added Beredskabsstyrelsen
