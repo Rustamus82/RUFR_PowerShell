@@ -1,5 +1,4 @@
-﻿ 
-function Get-WpfUserInput {
+﻿function Get-WpfUserInput {
 
     [CmdletBinding()]
     Param
@@ -160,11 +159,10 @@ The functionality that best describes this cmdlet
 #>
 function New-JohnstrupUsers {
     [CmdletBinding()]
-    [OutputType([String])]
+    [OutputType([Microsoft.ActiveDirectory.Management.ADAccount])]
     Param
     (
-        # Param1 help description
-        
+        # User to get group membership from
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $false,
             ValueFromPipelineByPropertyName = $true,
@@ -173,15 +171,15 @@ function New-JohnstrupUsers {
         #[ValidateSet("kope1", "kope2")]
         [kope]$Kope,
 
-        # Param2 help description
+        # Responsible for the created user. Added to user description.
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $false,
             Position = 1,
             ValueFromPipelineByPropertyName = $true,
             ParameterSetName = 'Parameter Set 1')]
-        [kontakansvarlig]$kontakansvarlig,
+        [kontakansvarlig]$Kontakansvarlig,
 
-        # Param3 help description
+        # Case ID
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $false,
             Position = 1,
@@ -191,7 +189,7 @@ function New-JohnstrupUsers {
         [ValidateNotNullOrEmpty()]
         [string]$CaseID,        
 
-        # Param4 help description
+        # Company
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $false,
             Position = 2,
@@ -200,7 +198,7 @@ function New-JohnstrupUsers {
         #[ValidateSet("Hjemmeværnet", "Moment", "Politiet")]
         [company]$Company,
 
-        # Param5 help description
+        # Complete path to file.
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $false,
             Position = 3,
@@ -208,7 +206,17 @@ function New-JohnstrupUsers {
             ParameterSetName = 'Parameter Set 1')]
         [ValidateNotNull()]
         [ValidateNotNullOrEmpty()]
-        [String]$FileName
+        [String]$FileName,
+
+        # Complete path to file.
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $false,
+            Position = 3,
+            ValueFromPipelineByPropertyName = $true,
+            ParameterSetName = 'Parameter Set 1')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [DateTime]$AccountExpirationDate
     )
 
     Begin {
@@ -220,32 +228,35 @@ function New-JohnstrupUsers {
         $Office = "STPS"
         $Title = "Ekstern konsulent"
         $UserParentOUDistinguishedName = "OU=Eksterne,OU=Organisationer,DC=dksund,DC=dk"
-        $AccountExpirationDate = "28-02-2021"
         # $server = "S-AD-DC-03P.dksund.dk"
+        Remove-Variable SecurityGroups -ErrorAction SilentlyContinue
         $SecurityGroups = (Get-ADUser -Identity $($Kope.ToString()) -Properties MemberOf).MemberOf # -Server $server
         $UserPrincipalNamedomain = "@dksund.dk"
         # $UserNameOfRunner = $env:USERNAME -replace 'adm_', '' -replace 'adm-', ''
         # $FilePathDownloads = "C:\Users\$UserNameOfRunner\Downloads\"
         # $FilePath = "$FilePathDownloads" + "$FileName"
+        Remove-Variable FilePath -ErrorAction SilentlyContinue
         $FilePath = "$FileName"
 
         if ( -not (Test-Path -Path $FilePath)) {
 
-            write-warning "Jeg kan ikke finde den fil du har angivet. Ligger den i din egen downloads mappe?"
+            write-warning "Jeg kan ikke finde den fil du har angivet."
             Pause
             Return
         }
 
-        if (-not $password) {
-            $password = Get-WpfUserInput -Message 'skriv koden du vil have på brugerne'
+        if (-not $Password) {
+            $Password = Get-WpfUserInput -Message 'skriv koden du vil have på brugerne'
         }
         #$password = Read-Host -AsSecureString -Prompt 'indtast kode til brugeren'
 
-        $excel = New-Object -comobject Excel.Application
+        $Excel = New-Object -comobject Excel.Application
 
         #open file
-        $workbook = $excel.Workbooks.Open($FilePath)
-        $s1 = $workbook.sheets | Where-Object -FilterScript { $_.name -eq 'Ark1' }
+        Remove-Variable Workbook -ErrorAction SilentlyContinue
+        Remove-Variable s1 -ErrorAction SilentlyContinue
+        $Workbook = $Excel.Workbooks.Open($FilePath)
+        $s1 = $Workbook.sheets | Where-Object -FilterScript { $_.name -eq 'Ark1' }
 
         $iExcelTestLenght = 0
 
@@ -257,42 +268,62 @@ function New-JohnstrupUsers {
         until (-not $MANumrer)
 
         $ExcelSelctor = for ($iExcel = 2; $iExcel -lt $iExcelTestLenght; $iExcel++ ) {
-            # starts at 2, because first vallues conating userinformation in excel ar is line 2
+            # starts at 2, because first line vallues contain userinformation in excel
 
             Write-Output $iExcel
         }
         # $number = 2
 
-
-        foreach ($number in $ExcelSelctor ) {
+        # Skip test for only numbers in colum D. it doesn't apply to ATP
+        if ($Company -ne 'ATP') {
+            
+            foreach ($Number in $ExcelSelctor ) {
         
-            try {
-                $MANumrerIntTest = $s1.range("D$number").cells.text
-                [int]$MANumrerIntTestClean = $MANumrerIntTest.Trim() 
+                try {
+                    $MANumrerIntTest = $s1.range("D$number").cells.text
+                    [int]$MANumrerIntTestClean = $MANumrerIntTest.Trim() 
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Der er andet end tal i MA Numrer {$($MANumrerIntTest.Trim())}. Du havde vist ikke lavet ordenlig kontrol"
+                    $Excel.Quit()
+                    Pause
+                    Return
+                }        
             }
-            catch [System.Object] {
-                Write-Host -ForegroundColor Yellow "Der er andet end tal i MA Numrer {$($MANumrerIntTest.Trim())}. Du havde vist ikke lavet ordenlig kontrol"
-                $excel.Quit()
-                Pause
-                Return
-            }        
         }
 
-        $UserCreationOutput = foreach ($number in $ExcelSelctor ) {
+        #[int]$ExcelSelctorProgressCounter = 0
 
-            $GivenName = $s1.range("B$number").cells.text
+        $UserCreationOutput = foreach ($Number in $ExcelSelctor) {
+            
+            #[int]$ExcelSelctorProgressCounter++
+            Write-Progress -Activity "Creating Users" -Status "$($ExcelSelctor.IndexOf($Number)) af $($ExcelSelctor.count)"  -PercentComplete ($($ExcelSelctor.IndexOf($Number))/$ExcelSelctor.count*100)
+            
+            Remove-Variable GivenNameClean -ErrorAction SilentlyContinue
+            Remove-Variable SurnameClean -ErrorAction SilentlyContinue
+            Remove-Variable MANumrerClean -ErrorAction SilentlyContinue
+            Remove-Variable AccountName -ErrorAction SilentlyContinue
+            Remove-Variable MobilePhoneCleanPlus45 -ErrorAction SilentlyContinue
+            Remove-Variable EmailAddressClean -ErrorAction SilentlyContinue
+            Remove-Variable name -ErrorAction SilentlyContinue
+            Remove-Variable Displayname -ErrorAction SilentlyContinue
+            Remove-Variable UserPrincipalName -ErrorAction SilentlyContinue
+            Remove-Variable Description -ErrorAction SilentlyContinue
+            Remove-Variable Hash -ErrorAction SilentlyContinue
+
+            $GivenName = $s1.range("B$Number").cells.text
             $GivenNameClean = $GivenName.Trim()
 
             $Surname = $s1.range("C$number").cells.text
             $SurnameClean = $Surname.trim()
 
-            $MANumrer = $s1.range("D$number").cells.text
+            $MANumrer = $s1.range("D$Number").cells.text
             $MANumrerClean = $MANumrer.Trim()
 
             $MANumrerCleanEKS_ = "EKS_" + "$MANumrerClean"
             $AccountName = $MANumrerCleanEKS_
 
-            $MobilePhone = $s1.range("F$number").cells.text
+            $MobilePhone = $s1.range("F$Number").cells.text
             $MobilePhoneClean = $MobilePhone.trim()
             $MobilePhoneCleanPlus45 = "+45" + "$MobilePhoneClean"
 
@@ -307,7 +338,7 @@ function New-JohnstrupUsers {
             $Description = "Almindelig konto til ekstern konsulent, kontakt person $kontakansvarlig - $CaseID" # SALM LNGE NALH
 
             #hash table for splat New-ADUser
-            $hash = [ordered]@{
+            $Hash = [ordered]@{
                 Name                  = $name;
                 SamAccountName        = $AccountName;
                 Enabled               = $true;
@@ -331,34 +362,13 @@ function New-JohnstrupUsers {
             if ( -not $UserYesNoChoiceToDataValid) {
 
                 Write-Host -ForegroundColor Yellow "Kig om det indlæste står i de korekte felter. Luk vinduet når du har kontrolleret det"
-                Show-FirstUserOutputWPFForm -hash $hash
-                #Out-GridView -InputObject $hash -Wait
-                <#
-                $Options = @()
-                $Options += "Nej"
-                $Options += "Ja"
-
-                $option = foreach ($OptionsLine in $Options) {
-                    "&$OptionsLine"
-                }
-
-                $helpText = foreach ($OptionsLine in $Options) {
-                    "$OptionsLine"
-                }
-
-
-                $message = "er første bruger udfuldt med korrekt information i felterne? Svar Ja, eller Nej"
-
-                $default = -1
-                Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
-                $UserYesNoChoiceToDataValid = Read-HostWithPrompt $caption $message $option $helpText $default
-                #>
+                Show-FirstUserOutputWPFForm -hash $Hash
             }
 
             if (-not $UserYesNoChoiceToDataValid) {
                 
-                Write-Host -ForegroundColor Yellow "kør scriptet igen når du har rettet fejlen du fandt i excel arket"
-                $excel.Quit()
+                Write-Host -ForegroundColor Yellow "kør scriptet igen, når du har rettet fejlen, du fandt i excel arket"
+                $Excel.Quit()
                 pause
                 Return
             }
@@ -366,24 +376,32 @@ function New-JohnstrupUsers {
             ## removes $false values. find a better way to confirm value in hastable.
             <#
             #Removing empty values from OtherAttributes
-            @($hash.Keys) | ForEach-Object {
-            if (-not $hash[$_]) { $hash.Remove($_) }
+            @($Hash.Keys) | ForEach-Object {
+            if (-not $Hash[$_]) { $Hash.Remove($_) }
             }
             #>
 
             Remove-Variable TestIfUserExist -ErrorAction SilentlyContinue
             $ErrorActionPreferenceBeforechange = $ErrorActionPreference
             $ErrorActionPreference = "SilentlyContinue" # done because get-aduser doesn't respect -ErrorAction
-            $TestIfUserExist = Get-ADUser -Identity "$MANumrerCleanEKS_"  -Properties *   -ErrorAction SilentlyContinue # -Server $server
+            
+            try{
+            
+            $TestIfUserExist = Get-ADUser -Identity "$MANumrerCleanEKS_" -ErrorAction Stop # -Server $server
+            }
+            catch{
+            
+                # do nothing
+            }
             $ErrorActionPreference = $ErrorActionPreferenceBeforechange
 
             if (-not $TestIfUserExist) {
 
                 # Creating the user account
                 try {
-                    New-ADUser @hash  # -Server $server #-Verbose -PassThru
+                    New-ADUser @Hash  # -Server $server #-Verbose -PassThru
                 }
-                catch [System.Object] {
+                catch {
                     Write-Host -ForegroundColor Yellow "Could not create user {$AccountName} , {$Displayname}"
                 }
 
@@ -399,13 +417,13 @@ function New-JohnstrupUsers {
 
                     Set-ADUser -Identity $MANumrerCleanEKS_ -Replace @{info = $UserInfoFieldString } # -Server $server #-WhatIf
                 }
-                catch [System.Object] {
+                catch {
                     Write-Host -ForegroundColor Yellow "Could not replace userinfo field user {$AccountName} , {$Displayname}"
                 }
 
                 # Add Group membership according to kope
                 Remove-Variable TestIfUserExistAfterNewUser -ErrorAction SilentlyContinue
-                $TestIfUserExistAfterNewUser = Get-ADUser -Identity $AccountName -ErrorAction SilentlyContinue -Properties * # -Server $server
+                $TestIfUserExistAfterNewUser = Get-ADUser -Identity $AccountName -ErrorAction SilentlyContinue  # -Server $server
                 # $TestIfUserExistAfterNewUser.MemberOf
                 if ($TestIfUserExistAfterNewUser) {
 
@@ -416,7 +434,10 @@ function New-JohnstrupUsers {
                         Add-ADGroupMember -Identity $SecurityGroupslineClean -Members  $MANumrerCleanEKS_ # -Server $server #-PassThru
                     }
                 }
-                Write-Output $hash.name
+                Write-Output $TestIfUserExistAfterNewUser 
+                # $HashOutput = New-Object psobject -Property $Hash
+                # Write-Output ($HashOutput | Select-Object -Property Name) # $hash.name
+                # write-host "$($hash.name)"
             }
             else {
                 # if (-not $TestIfUserExist) {
@@ -431,36 +452,13 @@ function New-JohnstrupUsers {
         Write-Output $UserCreationOutput
         $global:UserYesNoChoiceToDataValid = $false
         #Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
-        
-        $excel.Quit()
-        
-        do {
-            $Options = @()
-            $Options += "Ja"
-            $Options += "Nej"
-
-            $option = foreach ($OptionsLine in $Options) {
-                "&$OptionsLine"
-            }
-
-            $helpText = foreach ($OptionsLine in $Options) {
-                "$OptionsLine"
-            }
-            $caption = ""
-            $message = "Har du kopiret output ud til Sagssystem? Svar Ja, eller Nej"
-
-            $default = -1
-            Remove-Variable ReadyToClose -ErrorAction SilentlyContinue
-            $ReadyToClose = Read-HostWithPrompt $caption $message $option $helpText $default    
-        }
-        until ($ReadyToClose -eq 0)
-
-        
+        Remove-Variable Password -ErrorAction SilentlyContinue
+        $Excel.Quit()
     }
     End {
+
     }
 }
-
 function Show-FirstUserOutputWPFForm {
 
     [CmdletBinding()]
@@ -471,7 +469,7 @@ function Show-FirstUserOutputWPFForm {
         [Parameter(Mandatory = $true,
             ValueFromPipelineByPropertyName = $true,
             Position = 0)]
-        $hash
+        $Hash
     )
 
     Add-Type -AssemblyName PresentationFramework, System.Windows.Forms, WindowsFormsIntegration
@@ -509,21 +507,21 @@ function Show-FirstUserOutputWPFForm {
     $Btn_ConnectDialog_ConnectOK.IsDefault = $true
     $Btn_ConnectDialog_ConnectOK.Add_Click( {
 
-        $global:UserYesNoChoiceToDataValid = $true
-        #write-host "1"
-        $ConnectDialog.Close()
-    })
+            $global:UserYesNoChoiceToDataValid = $true
+            #write-host "1"
+            $ConnectDialog.Close()
+        })
     $Btn_ConnectDialog_ConnectExit = $ConnectDialog.FindName('btnExit')
     $Btn_ConnectDialog_ConnectExit.IsCancel = $true
     $Btn_ConnectDialog_ConnectExit.Add_Click( {
 
-        $global:UserYesNoChoiceToDataValid = $false
-        #Write-Host "2"
-        $ConnectDialog.Close()
+            $global:UserYesNoChoiceToDataValid = $false
+            #Write-Host "2"
+            $ConnectDialog.Close()
         
-    })
-    $HashToArrayOfCustomObjects = $hash.GetEnumerator() | ForEach-Object{
-        [pscustomobject]@{name=$_.name;value=$_.Value}
+        })
+    $HashToArrayOfCustomObjects = $Hash.GetEnumerator() | ForEach-Object {
+        [pscustomobject]@{name = $_.name; value = $_.Value }
     }
     #$DCs = Import-Csv -Path 'C:\Users\jebn\OneDrive - Sundhedsdatastyrelsen\Dokumenter\values.txt'
     #$DCs = Get-ChildItem C:\RUFR_PowerShell\PS_scripts\SST
@@ -545,9 +543,141 @@ function Show-FirstUserOutputWPFForm {
     #########################
     #$ButtonPressBook 
 }
- 
-    <#
-    $HashToArrayOfCustomObjects = $hash.GetEnumerator() | ForEach-Object{
+function Get-DateFromString {
+    [CmdletBinding()]
+    [Alias('Get-DateFromReadHost')]
+    [OutputType([datetime])]
+    Param
+    (
+        # Date in format dd-mm-yyyy
+        [Parameter(Mandatory = $false,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            ValueFromRemainingArguments = $false,
+            Position = 0)]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        $datefromuser
+    )
+
+    Begin {
+    }
+    Process {
+        do {
+            Remove-Variable datetime -ErrorAction SilentlyContinue
+
+            if ($datefromuser) {
+
+                try {
+                    [int]$dd = $datefromuser.Substring(0, 2)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    [int]$mm = $datefromuser.Substring(3, 2)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    [int]$yyyy = $datefromuser.Substring(6, 4)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    $datetime = [datetime]::Parse("$yyyy-$mm-$dd`T00:00:00")
+                    #$ChangeDate = New-Object DateTime(2008, 11, 18, 1, 40, 02)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date  {$datefromuser}"
+                }
+                # Done to make sure a valid date is returned. If the provided indput ins't valid.
+                if (-not $datetime) {
+
+                    Write-Host -ForegroundColor Yellow "Could not parse Date enter valid date"
+                    Pause
+                    $datefromuser = Read-Host "please enter date in the format dd-mm-yyyy"
+
+                    try {
+                        [int]$dd = $datefromuser.Substring(0, 2)
+                    }
+                    catch {
+                        Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                    }
+
+                    try {
+                        [int]$mm = $datefromuser.Substring(3, 2)
+                    }
+                    catch {
+                        Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                    }
+
+                    try {
+                        [int]$yyyy = $datefromuser.Substring(6, 4)
+                    }
+                    catch {
+                        Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                    }
+
+                    try {
+                        $datetime = [datetime]::Parse("$yyyy-$mm-$dd`T00:00:00")
+                        #$ChangeDate = New-Object DateTime(2008, 11, 18, 1, 40, 02)
+                    }
+                    catch {
+                        Write-Host -ForegroundColor Yellow "Could not parse Date  {$datefromuser}"
+                    }
+                }
+
+            }
+            else {
+
+                $datefromuser = Read-Host "please enter date in the format dd-mm-yyyy"
+
+                try {
+                    [int]$dd = $datefromuser.Substring(0, 2)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    [int]$mm = $datefromuser.Substring(3, 2)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    [int]$yyyy = $datefromuser.Substring(6, 4)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date. Please follow format dd-mm-yyyy"
+                }
+
+                try {
+                    $datetime = [datetime]::Parse("$yyyy-$mm-$dd`T00:00:00")
+                    #$ChangeDate = New-Object DateTime(2008, 11, 18, 1, 40, 02)
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not parse Date  {$datefromuser}"
+                }
+            }
+
+        }
+        until ($datetime)
+
+        Write-Output $datetime
+    }
+    End {
+    }
+} 
+<#
+    $HashToArrayOfCustomObjects = $Hash.GetEnumerator() | ForEach-Object{
         [pscustomobject]@{name=$_.name;LastName=$_.Value}
     }
     $HashToArrayOfCustomObjects.GetType()
