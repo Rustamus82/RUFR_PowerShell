@@ -2,7 +2,7 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
-16-01-2021 ServicedeskPowershellTools_v2.08
+16-02-2021 ServicedeskPowershellTools_v2.08
 
 Commit Summary
 •	JohnstrupOprettelseFraExcel.ps1
