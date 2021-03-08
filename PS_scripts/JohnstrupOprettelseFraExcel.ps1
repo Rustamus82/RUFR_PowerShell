@@ -11,10 +11,8 @@ enum kope {
 }
 
 enum kontakansvarlig {
-    SALM
-    LNGE
     NALH
-    SATM
+    PTTL
     JACH
 }
 #[kontakansvarlig].GetEnumName(0)
@@ -60,10 +58,8 @@ if ( -not $kope) {
 if ( -not $kontakansvarlig) {
 
     $Options = @()
-    $Options += "SALM"
-    $Options += "LNGE"
     $Options += "NALH"
-    $Options += "SATM"
+    $Options += "PTTL"
     $Options += "JACH"
 
     $i = 1
