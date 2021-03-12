@@ -810,7 +810,7 @@ function Add-TextToUserInfoField {
         }
         catch {
 
-            Write-Warning "Could not add text to this user {$Identity}"
+            Write-Warning "Could not add text to this user userinfofield under telephone. {$Identity}"
         }
        
  
