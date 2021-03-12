@@ -25,13 +25,12 @@ cls
 
 
 #rooms errors
-Invoke-RestMethod "http://s-exccon-p.dksund.dk/reportingservice/api/errors/room"
+$b = Invoke-RestMethod "http://s-exccon-p.dksund.dk/reportingservice/api/errors/room"
 $CommandPath = (Get-Location).Path |Split-Path -Parent
-($a).smtp | Out-File $CommandPath\CSV\roomserrors.txt
+($b).smtp | Out-File $CommandPath\CSV\roomserrors.txt
 [array]$allmailbox =  get-content $CommandPath\CSV\roomserrors.txt 
 $allmailbox.Count
 cls
-
 
 #C:\Users\Concierge\AppData\Roaming\Fischer & Kerrn\Logs
 
