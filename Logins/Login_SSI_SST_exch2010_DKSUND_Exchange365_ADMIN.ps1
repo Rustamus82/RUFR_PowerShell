@@ -38,12 +38,28 @@ $Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  180000  -OperationTi
 $Global:UserCredSST = Get-Credential "sst.dk\$env:USERNAME" -Message "SST AD login og import af AD modulet"
 $env:USERNAME
 
-#exchange 2010
-$Global:Exchange2010_SST = "S-EXC-MBX01-P.sst.dk"
-$Global:SessionExchangeSST= New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://S-EXC-MBX01-P.sst.dk/PowerShell/ -Authentication Kerberos -Credential $Global:UserCredSST
-Import-PSSession $Global:SessionExchangeSST -Prefix SST
-#Write-Verbose "Loading the Exchange snapin (module)"
-Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction SilentlyContinue
+
+# Exchange 2016 SST
+try{​​​​​​​​
+  
+    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx02-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+}​​​​​​​​
+catch{​​​​​​​​
+ 
+    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx03-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+}
+
+try
+{
+    Import-PSSession $Global:SessionExchangeSST -Prefix SST -DisableNameChecking​​​​​​​​
+}
+catch 
+{
+    Write-Warning "Could not connect to SST exchnage 2016 servers"
+    Pause 
+    return
+}
+
 
 Start-Sleep 4;
 

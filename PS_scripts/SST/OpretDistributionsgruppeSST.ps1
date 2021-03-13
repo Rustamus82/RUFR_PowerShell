@@ -20,10 +20,12 @@ function Start-Sleep($seconds) {
 $OUPathDistrubutionslisterSST = 'OU=SST,OU=Distributionsgrupper,DC=SST,DC=dk'
 $OUPathDistrubutionslisterDEP = 'OU=DEP,OU=Distributionsgrupper,DC=SST,DC=dk'
 $OUPathDistrubutionslisterSTPS = 'OU=STPS,OU=Distributionsgrupper,DC=SST,DC=dk'
+$OUPathDistrubutionslisterNGC = 'OU=NGC,OU=Distributionsgrupper,DC=SST,DC=dk'
+
 $GroupAlias = Read-Host -Prompt "Angiv distributionsliste EMAIL, Må kun indeholde [^a-zA-Z0-9\-_\.] (eksempel: itsupportere)"
 $GroupDispName = Read-Host -Prompt "Angiv distribution liste DisplayName eller gentag Alias, må kun indeholde [^\sa-zA-Z0-9-_.ÆØÅæøå] (eksempel: IT supportere)"
 $Manager = Read-Host -Prompt 'Angiv distributionsliste Ejer'
-$company = Read-Host "Tast 1 for Sundhedsstyrelsen, eller 3 for Styrelsen for Patientsikkerhed  (så får den @sst.dk, @sum.dk eller @stps.dk)"
+$company = Read-Host "Tast 1 for SST, 2 for SUM eller 3 for STPS og 4 for NGC (så får den @sst.dk, @sum.dk, @stps.dk eller @ngc.dk)"
 $Description = Read-Host -Prompt "Angiv beskrivelse af hvad vil den bruger til? (eller skriv '.' til at springe over N/A)"
 
 ##Check for illegal Characters i email alias
@@ -62,7 +64,7 @@ Set-Location -Path 'SSTAD:'
     $GroupMail = $GroupAlias+'@sst.dk'
     Set-ADGroup -Identity $GroupDispName -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
     }
-    <#ElseIf ($company -eq "2") {
+    ElseIf ($company -eq "2") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterDEP
     
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
@@ -72,9 +74,20 @@ Set-Location -Path 'SSTAD:'
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $GroupAlias+'@sum.dk'
     Set-ADGroup -Identity $GroupDispName -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
-    }#>
+    }
     If ($company -eq "3") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSTPS
+    
+    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
+    sleep 20
+    
+    #Set-ADGroup -Identity $GroupAlias -Clear Company
+    Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
+    $GroupMail = $GroupAlias+'@stps.dk'
+    Set-ADGroup -Identity $GroupDispName -Add @{company="Styrelsensen for Patientsikkerhed";mail="$GroupMail"}
+    }
+    If ($company -eq "4") {
+    New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterNGC
     
     Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
     sleep 20
@@ -101,12 +114,16 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName}))
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
 
     }
-    <#ElseIf ($company -eq "2") {
+    ElseIf ($company -eq "2") {
     $new = $GroupAlias + "@sum.dk"
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
-    }#>
+    }
     If ($company -eq "3") {
     $new = $GroupAlias + "@stps.dk"
+    Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+    }
+    If ($company -eq "4") {
+    $new = $GroupAlias + "@ngc.dk"
     Set-SSTDistributionGroup $GroupDispName -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }
 }
@@ -114,7 +131,6 @@ Else
 {
     Write-Warning "Mislykkedes at e-mail aktivere $GroupAlias, da gruppen muligvis ikke findes i DKSUND/Exchange 2016..."
 }
-
 
 Write-Host "Tilføjer $Manager til  gruppen $GroupDispName medlemskab." -foregroundcolor Cyan
 Add-ADGroupMember -Identity $GroupDispName -Members $Manager

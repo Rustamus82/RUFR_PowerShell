@@ -20,7 +20,7 @@ function Start-Sleep($seconds) {
 $ADuser = Read-Host -Prompt "Tast Initialer for Bruger, som skal oprettes:"
 $UPN = "$ADuser@ssi.dk"
 
-Write-Host "ADobjekt angive til $ADuser" -foregroundcolor Yellow
+Write-Host "Angivet Bruger værdi: ""$ADuser"" for SSI/SDS oprettelse script" -foregroundcolor Yellow
 
 <# G drev kopiering som aftalt kopiere vi ikke mere.... for vi mener det ikke bliver brugt.
 Write-Host "Kopiere skabeloner til G drev" -foregroundcolor Cyan
@@ -93,6 +93,7 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 Else { Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, skifter til hoved menu"; & "$PSScriptRoot\BrugeradmSDmenu.ps1"}
 
 
+<## Direct Licens assignment
 Write-Host "Tildeler licens for $ADuser" -foregroundcolor Cyan  
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
 {
@@ -111,6 +112,48 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser}))
         #som resultat vil den være synlig i Offic365 , da den fik licens.
 }
 Else { Write-Warning "Bruger '$ADuser' kunne ikke findes i AD, tjek om det er korrekt fællespostkasse/bruger" }
+##>
+
+########################################
+## Group based licens assignment OU dksund.dk/Tier2/T2Groups/AAD/
+#$GroupLicensesOU = 'OU=AAD,OU=T2Groups,OU=Tier2,DC=dksund,DC=dk'
+#(Get-ADGroup -SearchBase "$GroupLicensesOU" -Filter *).count
+
+Write-Host "Vælger licens for Bruger $ADuser" -foregroundcolor Cyan 
+$Licens = Get-ADGroup -filter {name -like "*M365_LIC_U_Full*"} -Properties *| select Name,Description | ogv -PassThru
+#$GroupLicenses.Count
+$LicensName = $Licens.Name
+#$ADuser = "ssiprep"
+
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
+#Remove-ADGroupMember -Identity ($Licens.Name) $ADuser -Confirm:$false
+#Get-AzureADUser -ObjectId "$ADuser@dksund.dk"
+$AzureUserObjectId = Get-AzureADUser -Filter "MailNickName eq '$ADuser'" | select ObjectId; $AzureUserObjectId.ObjectId
+$AzureADGroupId = Get-AzureADGroup -SearchString ($Licens.Name) | select ObjectId; $AzureADGroupId.ObjectId
+$AzureADGroupmember = Get-AzureADGroupMember -ObjectId ($AzureADGroupId.ObjectId)
+
+do
+   {
+       
+       Start-Sleep 120
+       #Start-Sleep 3
+       Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+       $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+       $i++
+       IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
+       {
+           Write-Host "Tildeler Group based Licens for $ADuser forsøg $i" -foregroundcolor Cyan
+           Add-ADGroupMember -Identity ($Licens.Name) $ADuser  -Verbose
+
+       }
+    
+       if ($i -eq 67) {
+       Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
+   }
+   until ( ([bool]($AZmember.ObjectId) -contains ($AzureUserObjectId)) -or ($i -ge 67 ) )
+#######################################
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
@@ -156,10 +199,66 @@ Get-MailboxFolderPermission -Identity $MailCalenderPath
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
+Get-AzureADUser -ObjectId "$ADuser@dksund.dk" | select * 
+$ResultADuser = Get-AzureADUser -ObjectId "$ADuser@dksund.dk" | select DisplayName, UserPrincipalName, mail, Mobile,TelephoneNumber 
+$DisplayName = $ResultADuser.DisplayName
+$UserPrincipalName = $ResultADuser.UserPrincipalName
+$mail = $ResultADuser.mail
+$Mobile = $ResultADuser.Mobile
+$TelephoneNumber = $ResultADuser.TelephoneNumber
+Write-Host "Noter følgende i ServiecNow løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+#$ResultADuser = (Get-Mailbox "$ADuser").PrimarySmtpAddress
+Set-Location -Path 'SSIAD:'
+$ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName 
+$accountexpirationdate = Get-ADUser $ADuser -Properties * | select accountexpirationdate
+$AccountExpiressi = $accountexpirationdate.accountexpirationdate
+$CanonicalNameSSI = $ADSeaerch.CanonicalName
+#Write-Host  $ADSeaerch.CanonicalName -foregroundcolor Green
+Set-Location -Path 'DKSUNDAD:'
+$ADSeaerch = Get-ADUser $ADuser -Properties Canonicalname | Select-Object CanonicalName
+$CanonicalNameDKSUND = $ADSeaerch.CanonicalName
+$accountexpirationdate = Get-ADUser $ADuser -Properties * | select accountexpirationdate
+$AccountExpireDksund = $accountexpirationdate.accountexpirationdate
+#Write-Host  $ADSeaerch.CanonicalName -foregroundcolor Green
+Write-Host
+Write-Host
+#Write-Host "Bruger oprettet: $ResultADuser" -foregroundcolor Green -backgroundcolor DarkCyan
 
-Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
-$ResultADuser = (Get-Mailbox "$ADuser").PrimarySmtpAddress
-Write-Host "Bruger oprettet: $ResultADuser" -foregroundcolor Green -backgroundcolor DarkCyan
+@"
+Kære 
+
+Ny medarbejder er nu oprettet.
+
+Fulde Navn: $DisplayName
+Medarbejderens konto loginnavn: $UserPrincipalName 
+E-mail adresse: $mail
+
+Organization placering i SSI AD: $CanonicalNameSSI
+Udløbsdato: $AccountExpiressi
+
+Organization placering i DKSUND AD: $CanonicalNameDKSUND
+Udløbsdato: $AccountExpireDKSUND
+
+Første gang medarbejderen logger på netværket:
+Du skal skifte dit password første gang, du logger på nettet.
+Dit første midlertidige password er:
+
+Herefter bliver du bedst om at lave dit eget password. 
+
+Hvis dit password ikke virker, skal du kontakte Servicedesk og bede om hjælp. 
+Da dit password er strengt fortroligt, kan dine kolleger ikke gøre det på dine vegne.
+
+Konto har fået tildelt følgende Lync tlf.: $TelephoneNumber
+Registreret Mobil: $Mobile
+
+IT velkomstbrev kan findes på Koncernnet - Koncern IT
+https://dksund.sharepoint.com/sites/koncernnet/IT/Sider/velkomstbrev.aspx
+
+Venlig hilsen
+SDS Servicedesk 
+
+"@
+
 Pause
 
 #Fejlfinding

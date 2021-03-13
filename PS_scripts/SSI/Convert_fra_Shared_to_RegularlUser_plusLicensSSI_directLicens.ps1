@@ -17,7 +17,7 @@ function Start-Sleep($seconds) {
 #script execution
 #***************************************************************************
 #Variabler
-$ADuser = Read-Host -Prompt "Angiv fællespostkasse navn som skal konverteres fra type 'shared' til type 'Regular' og Tildele e2 Licens. - (f.eks Servicedesk)"
+$ADuser = Read-Host -Prompt "Angiv fællespostkasse navn som skal konverteres fra type 'shared' til type 'Regular' og Tildele Licens. - (f.eks Servicedesk)"
 #$ExchangeSikkerhedsgruppe = 'GRP-'+$ADuser
 #$OUPathForExchangeSikkerhedsgrupperSSI = 'OU=ResourceGroups,OU=Exchange,OU=Groups,OU=SSI,DC=SSI,DC=ad'
 #$OUPathForExchangeSikkerhedsgrupperSDS = 'OU=Exchange Sikkerhedsgrupper,OU=Sundhedsdatastyrelsen,OU=Ressourcer,DC=SSI,DC=ad'
@@ -35,15 +35,11 @@ if (-not ($ADuser -eq "*")) {
 		
         Start-Sleep 6
         Write-Host "Tildeler licens til kontoen..." -foregroundcolor Cyan
-        Add-ADGroupMember -Identity "M365_LIC_U_Full_E2_License_pr" $ADuser  -Verbose
-
-        <# Direct Licens assignment
-        $x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
+		$x = New-MsolLicenseOptions -AccountSkuId "dksund:ENTERPRISEPREMIUM" -DisabledPlans "PROJECTWORKMANAGEMENT","YAMMER_ENTERPRISE","MCOSTANDARD","SHAREPOINTWAC", "SWAY", "RMS_S_ENTERPRISE"
  		Set-MsolUser -UserPrincipalName "$ADuser@dksund.dk" -UsageLocation DK
 		#Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:WIN_DEF_ATP, dksund:ENTERPRISEPREMIUM, dksund:EMSPREMIUM
         Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -AddLicenses dksund:ENTERPRISEPREMIUM
 		Set-MsolUserLicense -UserPrincipalName "$ADuser@dksund.dk" -LicenseOptions $x
-        #>
 
         Set-Location -Path 'SSIAD:'
         if ((Get-ADUser $ADuser -Properties "Company").company -eq "Statens Serum Institut"){
