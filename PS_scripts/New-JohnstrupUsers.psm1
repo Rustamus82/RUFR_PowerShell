@@ -51,6 +51,7 @@
         else {
             $XML_Node_Reader_ConnectDialog = (New-Object System.Xml.XmlNodeReader $XAML_ConnectDialog)
         }
+        # [xml]$XAML_ConnectDialog = Get-Content 'C:\RUFR_PowerShell\UserMenu.xaml' -Encoding UTF8
         #$XML_Node_Reader_ConnectDialog = (New-Object System.Xml.XmlNodeReader $XAML_ConnectDialog)
         $ConnectDialog = [Windows.Markup.XamlReader]::Load($XML_Node_Reader_ConnectDialog)
         $Btn_ConnectDialog_Connect = $ConnectDialog.FindName('Btn_ConnectDialog_Connect')
