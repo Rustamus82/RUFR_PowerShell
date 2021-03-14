@@ -11,10 +11,8 @@ enum kope {
 }
 
 enum kontakansvarlig {
-    SALM
-    LNGE
     NALH
-    SATM
+    PTTL
     JACH
 }
 #[kontakansvarlig].GetEnumName(0)
@@ -31,6 +29,7 @@ enum company {
 $AccountExpirationDateEnteredArray = @()
 $AccountExpirationDateEnteredArray += "Enter Date"
 $AccountExpirationDateEnteredArray += "31-05-2021"
+$AccountExpirationDateEnteredArray += "30-06-2021"
 
 
 if ( -not $kope) {
@@ -59,10 +58,8 @@ if ( -not $kope) {
 if ( -not $kontakansvarlig) {
 
     $Options = @()
-    $Options += "SALM"
-    $Options += "LNGE"
     $Options += "NALH"
-    $Options += "SATM"
+    $Options += "PTTL"
     $Options += "JACH"
 
     $i = 1
@@ -112,52 +109,49 @@ do {
 }
 until ($CaseID)
 
-if ($Company -eq 'ATP') {
+# choose date part
+$Options = @()
+$Options += "Enter date"
+$Options += "31-05-2021"
+$Options += "30-06-2021"
 
-    $Options = @()
-    $Options += "Enter date"
-    $Options += "31-05-2021"
+$i = 1
+$option = foreach ($OptionsLine in $Options) {
+    "&$i $OptionsLine"
+    $i++
+}
 
-    $i = 1
-    $option = foreach ($OptionsLine in $Options) {
-        "&$i $OptionsLine"
-        $i++
+$helpText = foreach ($OptionsLine in $Options) {
+    "$OptionsLine"
+}
+
+$message = "Vælg slut dato for bruger eller tast selv"
+
+$default = -1
+Remove-Variable choice -ErrorAction SilentlyContinue
+[int]$choice = Read-HostWithPrompt $caption $message $option $helpText $default
+
+switch ($choice) {
+    '0' {
+        
+        $AccountExpirationDate = Get-DateFromString
     }
-
-    $helpText = foreach ($OptionsLine in $Options) {
-        "$OptionsLine"
+    '1' {
+        
+        $AccountExpirationDate = Get-DateFromString $($AccountExpirationDateEnteredArray[$choice])
     }
-
-    $message = "Vælg slut dato for bruger eller tast selv"
-
-    $default = -1
-    Remove-Variable choice -ErrorAction SilentlyContinue
-    [int]$choice = Read-HostWithPrompt $caption $message $option $helpText $default
-
-    switch ($choice)
-    {
-        '0' {
+    '2' {
         
-            $AccountExpirationDateEntered = Get-DateFromString
-            $AccountExpirationDate = $AccountExpirationDateEntered.AddDays(+1)        
-        }
-        '1' {
+        $AccountExpirationDate = Get-DateFromString $($AccountExpirationDateEnteredArray[$choice])
+    }        
+    Default {
         
-            $AccountExpirationDateEntered = Get-DateFromString $($AccountExpirationDateEnteredArray[$choice])
-            $AccountExpirationDate = $AccountExpirationDateEntered.AddDays(+1)
-        }
-        Default {
-        
-            Write-Warning "slut dato for bruger fejler"
-            pause
-            return
-        }
+        Write-Warning "slut dato for bruger fejler"
+        pause
+        return
     }
 }
-else {
-        
-    $AccountExpirationDate = Get-DateFromString "30-06-2021"
-}
+
 
 write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
 
@@ -168,25 +162,25 @@ do {
     $FolderBrowser = New-Object System.Windows.Forms.OpenFileDialog
     [void]$FolderBrowser.ShowDialog()
     # $FolderBrowser.FileName
-    $FileName = $FolderBrowser.FileName
+    $FilePath = $FolderBrowser.FileName
 }
-until ($FileName)
+until ($FilePath)
 
 # This part is done because Excel com objects doesn't support "\\tsclient" i filepath
 Remove-Variable -Name FilePathExcel -ErrorAction SilentlyContinue
-$FilePathExcel = Get-ChildItem $FileName
+$FilePathExcel = Get-ChildItem $FilePath
 
 
 if ($FilePathExcel.FullName -like '\\tsclient*') {
     Remove-Variable -Name FileName -ErrorAction SilentlyContinue
     Copy-Item -Path $FilePathExcel.FullName -Destination $env:TEMP
-    $FileName = (Get-ChildItem -Path "$env:TEMP\$($FilePathExcel.name)").FullName
+    $FilePath = (Get-ChildItem -Path "$env:TEMP\$($FilePathExcel.name)").FullName
 }
 
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
 
-$JonstrupUserOutput = New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FileName $FileName -AccountExpirationDate $AccountExpirationDate
+$JonstrupUserOutput = New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FilePath $FilePath -AccountExpirationDate $AccountExpirationDate
 # Write-Output $JonstrupUserOutput 
 
 foreach ($JonstrupUserOutputLine in $JonstrupUserOutput) {
@@ -195,7 +189,7 @@ foreach ($JonstrupUserOutputLine in $JonstrupUserOutput) {
 }
 # Write-Host "$JonstrupUserOutput"
 
- do {
+do {
     $Options = @()
     $Options += "Ja"
     $Options += "Nej"
