@@ -9,35 +9,14 @@ function Show-Menu
       Write-Host "******************************** $Title ******************************************"  -backgroundcolor Red -foregroundcolor Black
      Write-Host "==================================== Vælg en af de følgende logins ====================================================="  -backgroundcolor Red -foregroundcolor Black
      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
-      Write-Host "	Skriv 'bae' for at logge på som BAE                                                                             " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'jomh' for at logge på som JOMH                                                                           " -foregroundcolor Cyan
+      Write-Host "	Skriv 'initialer' for at logge på med egne admin konti - eksempelvis 'motj'                                              " -foregroundcolor Cyan
       Write-Host
-      Write-Host "	Skriv 'snt' for at logge på som SNT                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'motj' for at logge på som MOTJ                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'rufr' for at logge på som RUFR                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'krle' for at logge på som KRLE                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'dacj' for at logge på som DACJ                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'tije' for at logge på som TIJE                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'tije' for at logge på som TIBE                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'tije' for at logge på som JEBN                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'tije' for at logge på som ANVM                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'tije' for at logge på som LOWG                                                                           " -foregroundcolor Cyan
-      Write-Host
-      Write-Host "	Skriv 'admin' for at logge med adm-konti variabler                                                              " -foregroundcolor Cyan 
+      Write-Host "	Skriv 'admin' for at logge med adm-konti variabler når du er på servere                                                  " -foregroundcolor Cyan 
       Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
       Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -backgroundcolor Red -foregroundcolor Black
       Write-Host
-      Write-Host "*** Bruger ***" -foregroundcolor Green
+      Write-Host "[][][] Bruger [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][" -foregroundcolor Green
       Write-Host
       Write-Host " Skriv 'b' for at oprette bruger SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -47,7 +26,7 @@ function Show-Menu
       Write-Host
       Write-Host " Skriv 'jonstrup' for at oprette jonstrup brugere" -foregroundcolor Cyan
       Write-Host 
-      Write-Host "*** Fællespostkasse ***"  -foregroundcolor Green
+      Write-Host "[][][] Fællespostkasse [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[[]["  -foregroundcolor Green
       Write-Host
       Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -63,7 +42,7 @@ function Show-Menu
       Write-Host "          i tilhørende OU sikkermail, samt Tildele Licens i Office 365 SSI/SDS" -foregroundcolor Cyan
       Write-Host
       Write-Host
-      Write-Host "*** Gruppe / DIstributionslister ***" -foregroundcolor Green
+      Write-Host "[][][] Gruppe / DIstributionslister [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][" -foregroundcolor Green
       Write-Host
       Write-Host " Tryk '5' for at oprette ny Distributionsgruppe/Postlister SSI/SDS" -foregroundcolor Cyan
       Write-Host
@@ -78,13 +57,13 @@ function Show-Menu
       Write-Host " Tryk '6' for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST/DKSUND Domænet" -foregroundcolor Cyan
       Write-Host
       Write-Host
-      Write-Host "*** MødeLokaler ***"   -foregroundcolor Green
+      Write-Host "[][][] MødeLokaler [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][]["   -foregroundcolor Green
       Write-Host
       Write-Host " Skriv 'roomssi' for at oprette Mødelokalle i SSI" -foregroundcolor Cyan
       Write-Host
       Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST Exchange (sst og stps)" -foregroundcolor Cyan
       Write-Host
-      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Cyan
+      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI/SDS eller SUM eller SST -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Cyan
       Write-Host
       Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
       Write-Host "========================================================================================================================"  -backgroundcolor Red -foregroundcolor Black
@@ -105,66 +84,81 @@ do
             
             'bae' {
                  Clear-Host
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_BAE.ps1"
+             $global:UserInitial = "adm-bae"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'jomh' {
                  Clear-Host
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JOMH.ps1"
+             $global:UserInitial = "adm-jomh"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             
             'snt' {
                  Clear-Host
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_snt.ps1"
+             $global:UserInitial = "adm-snt"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_AD.ps1"
 		  }
             'motj' {
                  Clear-Host
-	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_MOTJ.ps1"
+             $global:UserInitial = "adm-motj"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'rufr' {
                  Clear-Host
 	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_RUFR.ps1"
+             $global:UserInitial = "adm-rufr"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_rufr.ps1.ps1"
 		  }
-
 
             'krle' {
                  Clear-Host
 	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_krle.ps1"
+             $global:UserInitial = "adm-krle"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
 
             'dacj' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_dacj.ps1"
+             $global:UserInitial = "adm_dacj"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
 
             'tije' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIJE.ps1"
+             $global:UserInitial = "adm-tije"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'tibe' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_TIBE.ps1"
+             $global:UserInitial = "adm_tibe"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'jebn' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_JEBN.ps1"
+             $global:UserInitial = "adm_jebn"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'anvm' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ANVM.ps1"
+             $global:UserInitial = "adm_anvm"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
             'lowg' {
                  Clear-Host
-	         
-            & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_LOWG.ps1"
+             $global:UserInitial = "adm_lowg"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+		  }
+            'frsl' {
+                 Clear-Host
+             $global:UserInitial = "adm_frsl"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
 		  }
 
+            'mcor' {
+                 Clear-Host
+             $global:UserInitial = "adm_mcor"
+	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+		  }
              'admin' {
                  Clear-Host
 	         & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ADMIN.ps1"
