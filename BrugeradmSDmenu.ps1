@@ -254,12 +254,12 @@ do {
           'bae' {
                Clear-Host
                $global:UserInitial = "adm-bae"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'jomh' {
                Clear-Host
                $global:UserInitial = "adm-jomh"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'snt' {
                Clear-Host
@@ -269,59 +269,59 @@ do {
           'motj' {
                Clear-Host
                $global:UserInitial = "adm-motj"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'rufr' {
                Clear-Host
 	         
                $global:UserInitial = "adm-rufr"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_rufr.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_rufr.ps1"
           }
           'krle' {
                Clear-Host
 	         
                $global:UserInitial = "adm-krle"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'dacj' {
                Clear-Host
                $global:UserInitial = "adm_dacj"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'tije' {
                Clear-Host
                $global:UserInitial = "adm-tije"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'tibe' {
                Clear-Host
                $global:UserInitial = "adm_tibe"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'jebn' {
                Clear-Host
                $global:UserInitial = "adm_jebn"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'anvm' {
                Clear-Host
                $global:UserInitial = "adm_anvm"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'lowg' {
                Clear-Host
                $global:UserInitial = "adm_lowg"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'frsl' {
                Clear-Host
                $global:UserInitial = "adm_frsl"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'mcor' {
                Clear-Host
                $global:UserInitial = "adm_mcor"
-               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1.ps1"
+               & "$PSScriptRoot\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1"
           }
           'admin' {
                Clear-Host

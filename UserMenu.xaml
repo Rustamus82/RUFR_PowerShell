@@ -53,6 +53,15 @@
                FontSize="16"
                Grid.Column="0"
                Grid.Row="0" />
+            <Label Content="Indtast initialer og tryk på knappen"
+               Width="849"
+               Height="33"
+               Margin="211,55,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               FontSize="16"
+               Grid.Column="0" 
+               Grid.Row="0" />               
       <Button Name="Btn_ConnectDialog_b"
               Content="B"
               Width="100"

@@ -40,24 +40,22 @@ $env:USERNAME
 
 
 # Exchange 2016 SST
-try{​​​​​​​​
-  
-    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx02-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
-}​​​​​​​​
-catch{​​​​​​​​
- 
-    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx03-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+
+try {
+    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx02-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+}
+catch {
+
+    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx03-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Continue
 }
 
-try
-{
-    Import-PSSession $Global:SessionExchangeSST -Prefix SST -DisableNameChecking​​​​​​​​
+try {
+    Import-PSSession $Global:SessionExchangeSST -Prefix SST -ErrorAction stop
 }
-catch 
-{
-    Write-Warning "Could not connect to SST exchnage 2016 servers"
+catch {
+    Write-Warning "Could not connect to SST exchange 2016 servers"
     Pause 
-    return
+    #return
 }
 
 

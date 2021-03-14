@@ -18,7 +18,7 @@ Write-Host "===================================================== Logon script =
 #Function progressbar for timeout by ctigeek:
 function Start-Sleep($seconds) {
     $doneDT = (Get-Date).AddSeconds($seconds)
-    while($doneDT -gt (Get-Date)) {
+    while ($doneDT -gt (Get-Date)) {
         $secondsLeft = $doneDT.Subtract((Get-Date)).TotalSeconds
         $percent = ($seconds - $secondsLeft) / $seconds * 100
         Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining $secondsLeft -PercentComplete $percent
@@ -46,24 +46,22 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction Silentl
 #>
 
 #exchange 2016 SST
-try{​​​​​​​​
-  
-    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx02-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
-}​​​​​​​​
-catch{​​​​​​​​
- 
-    $Global:SessionExchangeSST = New-PSSession-ConfigurationNameMicrosoft.Exchange-ConnectionUrihttp://s-exc-mbx03-p/PowerShell/-Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+
+try {
+    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx02-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
+}
+catch {
+
+    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx03-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Continue
 }
 
-try
-{
-    Import-PSSession $Global:SessionExchangeSST -Prefix SST -DisableNameChecking​​​​​​​​
+try {
+    Import-PSSession $Global:SessionExchangeSST -Prefix SST -ErrorAction stop
 }
-catch 
-{
-    Write-Warning "Could not connect to SST exchnage 2016 servers"
+catch {
+    Write-Warning "Could not connect to SST exchange 2016 servers"
     Pause 
-    return
+    #return
 }
 
 
@@ -143,7 +141,8 @@ if (-not(Get-PSDrive 'SSIAD' -ErrorAction SilentlyContinue)) {
     New-PSDrive -Name 'SSIAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSSI" -Credential $Global:UserCredSSI -Root '//RootDSE/' -Scope Global
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "ssi\$global:UserInitial") 
      
-} Else {
+}
+Else {
     Write-Output -InputObject "PSDrive SSIAD already exists"
 }
 
@@ -153,7 +152,8 @@ if (-not(Get-PSDrive 'DKSUNDAD' -ErrorAction SilentlyContinue)) {
     New-PSDrive -Name 'DKSUNDAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameDKSUND" -Credential $Global:UserCredDksund -Root '//RootDSE/' -Scope Global
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "sst.dk\$global:UserInitial"') 
      
-} Else {
+}
+Else {
     Write-Output -InputObject "PSDrive DKSUNDAD already exists"
 }
 
@@ -164,7 +164,8 @@ if (-not(Get-PSDrive 'SSTAD' -ErrorAction SilentlyContinue)) {
     New-PSDrive -Name 'SSTAD' -PSProvider ActiveDirectory -Server "$Global:ServerNameSST" -Credential $Global:UserCredSST -Root '//RootDSE/' -Scope Global
     #alternativet creds: Credential $(Get-Credential -Message 'Enter Password' -UserName "$global:UserInitial@dksund.dk") 
      
-} Else {
+}
+Else {
     Write-Output -InputObject "PSDrive SSTAD already exists"
 }
 
