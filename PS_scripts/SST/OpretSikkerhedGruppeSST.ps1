@@ -88,6 +88,7 @@ sleep 120
 
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
+Write-Host "Enable-DistributionGroup required LOGIN + PWD as it cannot take credentials as parameter :/" -foregroundcolor Yellow
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
 {
     Write-Host "E-Mail aktivering af gruppen i Exchange 2016 SST" -foregroundcolor Cyan
@@ -95,12 +96,16 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
     #Disable-SSTSecurityGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
    
-    <#if ($company -eq "2"){
+    if ($company -eq "2"){
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }#>
     elseif ($company -eq "3"){
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
+        Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+    }
+    elseif ($company -eq "4"){
+        $new = $ExchangeSikkerhedsgruppe + "@ngc.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }
     elseif ($company -eq "1"){

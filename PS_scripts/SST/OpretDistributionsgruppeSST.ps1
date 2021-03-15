@@ -94,8 +94,8 @@ Set-Location -Path 'SSTAD:'
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
-    $GroupMail = $GroupAlias+'@stps.dk'
-    Set-ADGroup -Identity $GroupDispName -Add @{company="Styrelsensen for Patientsikkerhed";mail="$GroupMail"}
+    $GroupMail = $GroupAlias+'@ngc.dk'
+    Set-ADGroup -Identity $GroupDispName -Add @{company="Nationalt Genom Center";mail="$GroupMail"}
     }
     Else{
     Write-Warning "Mislykkedes oprette og opdatere 'Company' felt på gruppen $GroupAlias fordi gruppen
@@ -107,6 +107,7 @@ sleep 120
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName})) 
 {
     Write-Host "E-Mail aktivering af gruppen i Exchange 2010" -foregroundcolor Cyan
+    Write-Host "Enable-DistributionGroup required LOGIN + PWD as it cannot take credentials as parameter :/" -foregroundcolor Yellow
     Enable-SSTDistributionGroup -Identity $GroupDispName
     #Disable-SSIDistributionGroup $GroupDispName
     If ($company -eq "1") {
@@ -137,8 +138,8 @@ Add-ADGroupMember -Identity $GroupDispName -Members $Manager
 #Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
 #Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manager
 
-#Der kommer en lang WARNING med nedenstående kommando, men det ser ud til at virke :-)
-Add-ADPermission -Identity $GroupDispName -User $Manager -AccessRights WriteProperty -Properties "Member"
+#Der kommer en lang WARNING med nedenstående kommando, virker ikke!
+#Add-ADPermission -Identity $GroupDispName -User $Manager -AccessRights WriteProperty -Properties "Member"
 
 
 Write-Host "Noter følgende i Sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
