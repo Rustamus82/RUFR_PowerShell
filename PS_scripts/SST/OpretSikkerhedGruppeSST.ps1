@@ -85,6 +85,8 @@ Add-ADGroupMember -Identity $ExchangeSikkerhedsgruppe -Members $Manager
 
 
 sleep 120
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan

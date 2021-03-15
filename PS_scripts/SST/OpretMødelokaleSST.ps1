@@ -138,8 +138,8 @@ Else
 
 sleep 300
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
 Write-Host "Enable-DistributionGroup required LOGIN + PWD as it cannot take credentials as parameter :/" -foregroundcolor Yellow
@@ -190,16 +190,20 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
         sleep 5
         }
         Else { 
-    Write-Warning "Fejlede at tilføje sum.dk som primær smtp: $ADuser, noget gik galt..." 
+            Write-Warning "Fejlede at tilføje sum.dk, stps eller ngc som primær smtp: $ADuser, noget gik galt..." 
     }
 
     }
     Else { 
-    Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." 
+            Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." 
     }
 
 
 Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
+
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
     {
         
@@ -246,8 +250,8 @@ if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til Mødelokale: $ADuser..." }
            
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
@@ -257,8 +261,8 @@ Set-SSTMailbox $ADuser -Type room -ResourceCapacity $Capacity
 Write-Host "time out 5 min..." -foregroundcolor Yellow 
 sleep 300
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 #Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sent items hos bruger og i selve Mødelokale." -foregroundcolor Cyan 
 #Set-SSTMailbox $ADuser -MessageCopyForSentAsEnabled $True 
@@ -267,8 +271,8 @@ Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan
 Set-SSTMailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
 
 sleep 120
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "Ændrer kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
@@ -280,8 +284,8 @@ Get-SSTMailboxFolderPermission -Identity $ADuserCalenderPath
 Write-Host "Time out 5 min..." -foregroundcolor Yellow 
 sleep 300
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 #new added, need to see it works...?!
 Write-Host "Omdøber bruger..." -foregroundcolor Cyan
