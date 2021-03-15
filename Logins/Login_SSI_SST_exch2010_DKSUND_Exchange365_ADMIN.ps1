@@ -40,7 +40,6 @@ $env:USERNAME
 
 
 # Exchange 2016 SST
-
 try {
     $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx02-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
 }
