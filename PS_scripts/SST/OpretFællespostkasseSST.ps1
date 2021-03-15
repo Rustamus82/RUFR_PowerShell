@@ -165,8 +165,8 @@ sleep 180
 Write-Host "time out 10 min (Synkroniserer i AD)" -foregroundcolor Yellow 
     sleep 600
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016 SST" -foregroundcolor Cyan       
@@ -174,7 +174,7 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     Enable-SSTMailbox "$ADuser" 
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     sleep 60
-    #som resultat vil den være synlig på Exchnage 2010 onprem men ikke i Offic365 , da den ikke endnu har en licens.
+    #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
 
         if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
@@ -254,15 +254,19 @@ if (-not ($ADuser -eq "*" -or $ADuser -eq "")) {
 }
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til fællespostkasse: $ADuser..." }
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 
 Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
 Set-SSTMailbox $ADuser -Type Shared
 
 Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
-Set-SSTMailboxSentItemsConfiguration -Identity  $ADUser -SendAsItemsCopiedTo SenderAndFrom 
+#exchnage 2010:
+#Set-SSTMailboxSentItemsConfiguration -Identity  $ADUser -SendAsItemsCopiedTo SenderAndFrom
+#Echnage 2016:
+Set-SSTMailbox  -Identity $ADUser -MessageCopyForSentAsEnabled $true
+Set-SSTMailbox  -Identity $ADUser -MessageCopyForSendOnBehalfEnabled $true 
 
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
 Set-SSTMailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
@@ -277,8 +281,9 @@ Get-SSTMailboxFolderPermission -Identity $MailCalenderPath
 Write-Host "Time out 1 min..." -foregroundcolor Yellow 
 sleep 60
 
-Add-ADPermission -Identity $ExchangeSikkerhedsgruppe -User $Manager -AccessRights WriteProperty -Properties "Member"
-
+# OBS. flueben at manager af sikkerhedsgruppe kan opdateret medlemskab
+#Add-ADPermission -Identity $ExchangeSikkerhedsgruppe -User $Manager -AccessRights WriteProperty -Properties "Member"
+Set-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe -ManagedBy $Manager
 
 
 Write-Host "Omdøber bruger..." -foregroundcolor Cyan
