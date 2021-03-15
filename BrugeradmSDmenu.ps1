@@ -29,7 +29,7 @@ function Show-Menu {
      Write-Host
      Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI/SDS" -foregroundcolor Cyan
      Write-Host
-     Write-Host " Tryk '1sst' for at oprette ny Fælles/Funktionspostkasse SST Exchange (sst og stps)" -foregroundcolor Cyan
+     Write-Host " Tryk '1sst' for at oprette ny Fælles/Funktionspostkasse SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
      Write-Host " Tryk '2' for at konverter eksisterende fællespostkasse af type 'Shared' til 'Regular'(Normal user)," -foregroundcolor Cyan
      Write-Host "          samt tildele Licens i office365 SSI/SDS "  -foregroundcolor Cyan
@@ -47,9 +47,9 @@ function Show-Menu {
      Write-Host
      Write-Host " Skriv 'ssigrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse" -foregroundcolor Cyan
      Write-Host
-     Write-Host " Tryk '5sst' for at oprette ny Distributionsgruppe/Postlister SST Exchange (sst og stps)" -foregroundcolor Cyan
+     Write-Host " Tryk '5sst' for at oprette ny Distributionsgruppe/Postlister SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
-     Write-Host " Skriv 'sstgrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse i SST Exchange (sst og stps)" -foregroundcolor Cyan
+     Write-Host " Skriv 'sstgrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse i SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
      Write-Host "*** Adm-Konti ifm. lokal admin rettigheder (Dispensation) ***"  -foregroundcolor Green
      Write-Host
@@ -60,7 +60,7 @@ function Show-Menu {
      Write-Host
      Write-Host " Skriv 'roomssi' for at oprette Mødelokalle i SSI" -foregroundcolor Cyan
      Write-Host
-     Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST Exchange (sst og stps)" -foregroundcolor Cyan
+     Write-Host " Skriv 'roomsst' for at oprette Mødelokalle i SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
      Write-Host " Skriv 'licensfri' convertere alle brugere i SSI/SDS eller SUM eller SST -DisabledUsers og fjerne licenser, så de bliver frigjort " -foregroundcolor Cyan
      Write-Host
