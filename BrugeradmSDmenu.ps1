@@ -105,7 +105,7 @@ function Show-WpfMenu {
      # Select B
      $Btn_ConnectDialog_b = $ConnectDialog.FindName('Btn_ConnectDialog_b')
      $Btn_ConnectDialog_b.Add_Click( {
-          $Global:InputFromHost = 'admin'
+          $Global:InputFromHost = 'b'
          $ConnectDialog.Close()
      })
      # Select U
