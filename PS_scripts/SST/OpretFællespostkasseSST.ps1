@@ -266,10 +266,12 @@ Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lag
 #Set-SSTMailboxSentItemsConfiguration -Identity  $ADUser -SendAsItemsCopiedTo SenderAndFrom
 #Echnage 2016:
 Set-SSTMailbox  -Identity $ADUser -MessageCopyForSentAsEnabled $true
-Set-SSTMailbox  -Identity $ADUser -MessageCopyForSendOnBehalfEnabled $true 
+Set-SSTMailbox  -Identity $ADUser -MessageCopyForSendOnBehalfEnabled $true
 
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
 Set-SSTMailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+#read changes
+Get-sstMailbox -Identity $ADuser| Format-List DisplayName,PrimarySmtpAddress,RecipientTypeDetails, MessageCopyForSentAsEnabled,MessageCopyForSendOnBehalfEnabled, Languages
 
 
 Write-Host "Ændrer kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 

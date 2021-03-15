@@ -130,8 +130,12 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 #Remove-ADGroupMember -Identity ($Licens.Name) $ADuser -Confirm:$false
 #Get-AzureADUser -ObjectId "$ADuser@dksund.dk"
-$AzureUserObjectId = Get-AzureADUser -Filter "MailNickName eq '$ADuser'" | select ObjectId; $AzureUserObjectId.ObjectId
-$AzureADGroupId = Get-AzureADGroup -SearchString ($Licens.Name) | select ObjectId; $AzureADGroupId.ObjectId
+$AzureUserObjectId = Get-AzureADUser -Filter "MailNickName eq '$ADuser'" | select ObjectId
+Write-Host "Azure user object ID:" -ForegroundColor Cyan
+$AzureUserObjectId.ObjectId
+$AzureADGroupId = Get-AzureADGroup -SearchString ($Licens.Name) | select ObjectId 
+Write-Host "Azure group object ID:" -ForegroundColor Cyan
+$AzureADGroupId.ObjectId
 $AzureADGroupmember = Get-AzureADGroupMember -ObjectId ($AzureADGroupId.ObjectId)
 
 do
@@ -152,7 +156,7 @@ do
        if ($i -eq 67) {
        Write-Warning "Kunne ikke tildele licen til $ADuser, da den findes ikke i Exchange online."}
    }
-   until ( ([bool]($AZmember.ObjectId) -contains ($AzureUserObjectId)) -or ($i -ge 67 ) )
+   until (([bool]($AzureADGroupmember.ObjectId) -contains ($AzureUserObjectId)) -or ($i -ge 67 ))
 #######################################
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
