@@ -159,8 +159,9 @@ Else
 }
 
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
 
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016 SST" -foregroundcolor Cyan       
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
@@ -200,9 +201,9 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
 
 
 Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
-
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
 
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
     {
