@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by eks-@nae 12-06-2019
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2021
 Write-Host "Du har valgt OpretFællespostkasseSST.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -27,7 +27,7 @@ $OUPathSharedMailNGC = 'OU=DEP,OU=eDelt,OU=Systemkonti,DC=SST,DC=dk'
 
 $userDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
 $ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
-$company = Read-Host -Prompt "Tast 1 for sst.dk, 3 for stps.dk eller 4 for NGC.dk til at vælge passende adresse."
+$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk 3 for stps.dk eller 4 for NGC.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 
 $ADuserDescription = 'Delt fællespostkasse (uden licens, direkte login disablet)'
@@ -160,21 +160,21 @@ Set-Location -Path 'SSTAD:'
         Write-Warning "Mislykkedes at tilføje 'samaccount' op opdatere 'company' felt for AD bruger $ADuser, Muligvis fordi den ikke findes i AD."
     }
 
-sleep 180
-
-Write-Host "time out 10 min (Synkroniserer i AD)" -foregroundcolor Yellow 
-    sleep 600
-
-Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
+sleep 120
 
 
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016 SST" -foregroundcolor Cyan       
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
+    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+    
     Enable-SSTMailbox "$ADuser" 
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
+        Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
         if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
@@ -244,21 +244,25 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
     }
 
 
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
 Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 
 if (-not ($ADuser -eq "*" -or $ADuser -eq "")) {
      
      Get-SSTMailbox -identity $ADuser | add-sstmailboxpermission -user $ExchangeSikkerhedsgruppe -accessrights FullAccess -inheritancetype All
      Add-SSTADPermission $ADuser -User $ExchangeSikkerhedsgruppe -Extendedrights "Send As"
+     Get-SSTADPermission -Identity $ADuser | where {$_.ExtendedRights -like 'Send*'} | Format-Table -Auto User,Deny,ExtendedRights
      #Man kan tilføje individuelle brugere, men ikke grupper. Søgning giver ingen resultater, hvis man gør det med GUI.
-     #Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+     Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+     Get-SSTMailbox -Identity $ADuser | Format-List GrantSendOnBehalfTo
      
 }
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til fællespostkasse: $ADuser..." }
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
 
 Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
 Set-SSTMailbox $ADuser -Type Shared
@@ -284,6 +288,8 @@ Get-SSTMailboxFolderPermission -Identity $MailCalenderPath
 
 Write-Host "Time out 1 min..." -foregroundcolor Yellow 
 sleep 60
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 # OBS. flueben at manager af sikkerhedsgruppe kan opdateret medlemskab
 #Add-ADPermission -Identity $ExchangeSikkerhedsgruppe -User $Manager -AccessRights WriteProperty -Properties "Member"

@@ -9,9 +9,9 @@ function Show-Menu {
      Write-Host "==================================== Vælg en af de følgende logins ====================================================="  -backgroundcolor Red -foregroundcolor Black
      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
      Write-Host
-     Write-Host "	Skriv 'initialer' for at logge på med egne admin konti - eksempelvis 'motj'                                              " -foregroundcolor Cyan
+     Write-Host "	Indtast 'initialer' og tryk på knappen. Kan bruges til server og klient pc. Kræver MFA. f.eks 'MOTJ'                 " -foregroundcolor Cyan
      Write-Host
-     Write-Host "	Skriv 'admin' for at logge med adm-konti variabler når du er på servere                                                  " -foregroundcolor Cyan 
+     Write-Host "	Indtast 'admin' for at logge med adm-konti variabler Dette skal køres fra server, da det er basic authentication     " -foregroundcolor Cyan 
      Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
      Write-Host "==================================== Vælg følgende (husk at logge på først!) ==========================================="  -backgroundcolor Red -foregroundcolor Black
      Write-Host

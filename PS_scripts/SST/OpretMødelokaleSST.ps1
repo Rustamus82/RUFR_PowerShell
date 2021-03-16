@@ -136,13 +136,11 @@ Else
 }
 
 
-sleep 300
-
+sleep 120
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
-Write-Host "Enable-DistributionGroup required LOGIN + PWD as it cannot take credentials as parameter :/" -foregroundcolor Yellow
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
 {
     Enable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe
@@ -169,6 +167,9 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     sleep 60
     
+    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+
         if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ADuser + "@sum.dk"
@@ -238,13 +239,16 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
         Write-Warning "Kunne ikke e-mail aktivere $ExchangeSikkerhedsgruppe, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
     }
 
-
+sleep 60
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
 Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
      $group = $ExchangeSikkerhedsgruppe
      Get-SSTMailbox -identity $ADuser | add-SSTmailboxpermission -user $group -accessrights FullAccess -inheritancetype All
      Add-SSTADPermission $ADuser -User $ExchangeSikkerhedsgruppe -Extendedrights "Send As"
+     Get-SSTADPermission -Identity $ADuser | where {$_.ExtendedRights -like 'Send*'} | Format-Table -Auto User,Deny,ExtendedRights
      #Man kan tilføje individuelle brugere, men ikke grupper. Søgning giver ingen resultater, hvis man gør det med GUI.
      #Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
 }
@@ -258,20 +262,11 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
 Set-SSTMailbox $ADuser -Type room -ResourceCapacity $Capacity
 
-
-Write-Host "time out 5 min..." -foregroundcolor Yellow 
-sleep 300
-
-Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-#Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sent items hos bruger og i selve Mødelokale." -foregroundcolor Cyan 
-#Set-SSTMailbox $ADuser -MessageCopyForSentAsEnabled $True 
-
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
 Set-SSTMailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+#read changes
+Get-sstMailbox -Identity $ADuser| Format-List DisplayName,PrimarySmtpAddress,RecipientTypeDetails, MessageCopyForSentAsEnabled,MessageCopyForSendOnBehalfEnabled, Languages
 
-sleep 120
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
@@ -281,9 +276,7 @@ $ADuserCalenderPath = "$ADuser" + ":\Kalender"
 Set-SSTmailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
 Get-SSTMailboxFolderPermission -Identity $ADuserCalenderPath
 
-
-Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-sleep 300
+sleep 6
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"

@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by eks-@nae 07-06-2019
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2021
 Write-Host "Du har valgt OpretDistributionsgruppeSST.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -110,7 +110,6 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName})) 
 {
     Write-Host "E-Mail aktivering af gruppen i Exchange 2010" -foregroundcolor Cyan
-    Write-Host "Enable-DistributionGroup required LOGIN + PWD as it cannot take credentials as parameter :/" -foregroundcolor Yellow
     Enable-SSTDistributionGroup -Identity $GroupDispName
     #Disable-SSIDistributionGroup $GroupDispName
     If ($company -eq "1") {
