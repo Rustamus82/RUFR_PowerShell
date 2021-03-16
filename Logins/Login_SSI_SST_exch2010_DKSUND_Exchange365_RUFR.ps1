@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by Rust@m 11-07-2020
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2021
 Write-Host "===================================================== Logon script ====================================================="  -backgroundcolor Red -foregroundcolor Cyan
 Write-Host "[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[][][][][][][]["  -foregroundcolor red
 Write-Host
@@ -37,7 +37,7 @@ $Global:PSSessionOption = New-PSSessionOption -OpenTimeOut  180000  -OperationTi
 #SST AD login og import af AD modulet.
 $Global:UserCredSST = Get-Credential "sst.dk\adm-rufr" -Message "SST AD login og import af AD modulet"
 
-<#exchange 2010
+<#Exchange 2010 depricated
 $Global:Exchange2010_SST = "S-EXC-MBX01-P.sst.dk"
 $Global:SessionExchangeSST= New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://S-EXC-MBX01-P.sst.dk/PowerShell/ -Authentication Kerberos -Credential $Global:UserCredSST
 Import-PSSession $Global:SessionExchangeSST -Prefix SST
@@ -45,24 +45,10 @@ Import-PSSession $Global:SessionExchangeSST -Prefix SST
 Add-PSSnapin Microsoft.Exchange.Management.PowerShell.E2010 -ErrorAction SilentlyContinue
 #>
 
-#exchange 2016 SST
-try {
-    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx02-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Stop
-}
-catch {
-
-    $Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx03-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST -ErrorAction Continue
-}
-
-try {
-    Import-PSSession $Global:SessionExchangeSST -Prefix SST -ErrorAction stop
-}
-catch {
-    Write-Warning "Could not connect to SST exchange 2016 servers"
-    Pause 
-    #return
-}
-
+#Exchange 2016 SST
+$Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx02-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST
+#$Global:SessionExchangeSST = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri 'http://s-exc-mbx03-p/PowerShell/' -Authentication Kerberos -Credential $Global:UserCredSST
+Import-PSSession $Global:SessionExchangeSST -Prefix SST
 
 Start-Sleep 4;
 
@@ -93,7 +79,7 @@ Get-AzureADUser -ObjectId rufr@dksund.dk
 #Import-PSSession $Global:sessiono365 -AllowClobber
 Connect-MsolService -Credential $Global:UserCredDksund
 <#
-Get-MsolUser -UserPrincipalName rufr@dksund.dk
+Get-MsolUser -UserPrincipalName rufr@dksund.dk | fl
 #>
 
 

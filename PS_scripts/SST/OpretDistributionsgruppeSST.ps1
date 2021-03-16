@@ -107,7 +107,6 @@ sleep 120
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
-
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName})) 
 {
     Write-Host "E-Mail aktivering af gruppen i Exchange 2010" -foregroundcolor Cyan
