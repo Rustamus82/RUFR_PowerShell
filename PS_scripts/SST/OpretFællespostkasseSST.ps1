@@ -13,6 +13,9 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue|Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
+#*********************************************************************************************************************************************
 #Variabler
 #****************
 $OUPathForExchangeSikkerhedsgrupperSST = 'OU=SST,OU=Sikkerhedsgrupper,DC=SST,DC=dk'
@@ -56,8 +59,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
         
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSST
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -71,8 +74,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -85,8 +88,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -99,8 +102,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperNGC
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -167,14 +170,15 @@ sleep 120
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016 SST" -foregroundcolor Cyan       
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-    $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+    #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+    if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
     
     Enable-SSTMailbox "$ADuser" 
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     sleep 60
     #som resultat vil den være synlig på Exchnage 2016 onprem men ikke i Offic365 , da den ikke endnu har en licens.
         Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-        $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+        if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
         if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
@@ -206,7 +210,8 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
     {
@@ -245,7 +250,8 @@ $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Ex
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 
@@ -262,7 +268,8 @@ if (-not ($ADuser -eq "*" -or $ADuser -eq "")) {
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til fællespostkasse: $ADuser..." }
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 Write-Host "Konverterer postkasse $ADuser til type Shared" -foregroundcolor Cyan 
 Set-SSTMailbox $ADuser -Type Shared
@@ -289,7 +296,8 @@ Get-SSTMailboxFolderPermission -Identity $MailCalenderPath
 Write-Host "Time out 1 min..." -foregroundcolor Yellow 
 sleep 60
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 # OBS. flueben at manager af sikkerhedsgruppe kan opdateret medlemskab
 #Add-ADPermission -Identity $ExchangeSikkerhedsgruppe -User $Manager -AccessRights WriteProperty -Properties "Member"

@@ -13,6 +13,8 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue|Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
 #*********************************************************************************************************************************************
 #script 
 #*********************************************************************************************************************************************
@@ -56,8 +58,8 @@ Set-Location -Path 'SSTAD:'
 
     If ($company -eq "1") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSST
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -67,8 +69,8 @@ Set-Location -Path 'SSTAD:'
     ElseIf ($company -eq "2") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterDEP
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -78,8 +80,8 @@ Set-Location -Path 'SSTAD:'
     If ($company -eq "3") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSTPS
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -89,8 +91,8 @@ Set-Location -Path 'SSTAD:'
     If ($company -eq "4") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterNGC
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -105,7 +107,9 @@ Set-Location -Path 'SSTAD:'
 sleep 120
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+
 
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName})) 
 {
