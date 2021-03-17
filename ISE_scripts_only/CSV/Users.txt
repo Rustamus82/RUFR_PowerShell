@@ -1,19 +1,4 @@
-﻿AKAJ
-CHDE
-DATI
-DATR
-INGJ
-JAGU
-NMI
-PSKO
-RBRP
-BEHO
-CHDJ
-CTVI
-EFO
-HASR
-JSKH
-LEJA
-LIRO
-MEDF
-MICH
+﻿- fællesgruppe DNB-SDI hvor følgende medarbejdere fra Danmarks Nationale Biobank skal meldes ind:
+MAMU - not found on portal yet
+STCH - not found on portal yet
+Initialer
