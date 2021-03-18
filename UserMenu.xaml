@@ -1,4 +1,4 @@
-<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Name="Form_ConnectDialog"
         Width="950"
@@ -53,7 +53,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />                
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <Button x:Name="Btn_ConnectDialog_User_Admin"
@@ -75,7 +75,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 FontSize="16"
-                Grid.Column="2" 
+                Grid.Column="2"
                 Grid.Row="2" />
             <Button x:Name="Btn_ConnectDialog_User_Initials"
               Content="Initialer (xxxx)"
@@ -89,7 +89,7 @@
               Grid.Column="1"
               Grid.Row="3"
                />
-            <TextBox Name= "Txt_ConnectDialog_User_Initials" 
+            <TextBox Name= "Txt_ConnectDialog_User_Initials"
                HorizontalAlignment="Left"
                Margin="5,0,0,0"
                Text=""
@@ -106,7 +106,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 FontSize="16"
-                Grid.Column="2" 
+                Grid.Column="2"
                 Grid.Row="3" />
             <Button Name="Btn_ConnectDialog_b"
               Content="B"
@@ -150,7 +150,7 @@
              Grid.Column="2" />
             <Button Name="Btn_ConnectDialog_rights"
               Content="Rights"
-              Width="100"      
+              Width="100"
               Margin="0,0,0,0"
               HorizontalAlignment="Left"
               VerticalAlignment="Center"
@@ -188,6 +188,26 @@
              FontSize="16"
              Grid.Row="8"
              Grid.Column="2" />
+            <Button Name="Btn_ConnectDialog_jonstrupned"
+              Content="Jonstrup ned"
+              Width="100"
+              Margin="0,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Center"
+              FontSize="14"
+              IsDefault="True"
+              Grid.Column="1"
+              Grid.Row="9"
+              Height="24" />
+            <Label Content="Nedlæg jonstrup brugere"
+             Width="auto"
+             Height="auto"
+             Margin="0,0,0,0"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Center"
+             FontSize="16"
+             Grid.Row="9"
+             Grid.Column="2" />
             <Button Name="Btn_ConnectDialog_1"
               Content="1"
               Width="100"
@@ -197,7 +217,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="12"
+              Grid.Row="13"
               Height="23" />
             <Label Content="Opret ny Fælles/Funktionspostkasse SSI/SDS"
              Width="auto"
@@ -207,7 +227,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="12" />
+             Grid.Row="13" />
             <Button Name="Btn_ConnectDialog_1sst"
               Content="1 SST"
               Width="100"
@@ -217,7 +237,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="13"
+              Grid.Row="14"
               Height="23" />
             <Label Content="Opret ny Fælles/Funktionspostkasse SST Exchange (SST og STPS)"
              Width="auto"
@@ -227,7 +247,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="13" />
+             Grid.Row="14" />
             <Button Name="Btn_ConnectDialog_2"
               Content="2"
               Width="100"
@@ -237,7 +257,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="14"
+              Grid.Row="15"
               Height="46" />
             <Label Content="konverter eksisterende fællespostkasse af type 'Shared' til 'Regular'(Normal user),&#xD;&#xA;samt tildele Licens i office365 SSI/SDS samt tildele Licens i office365 SSI/SDS"
              Width="auto"
@@ -247,7 +267,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="14" />
+             Grid.Row="15" />
             <Button Name="Btn_ConnectDialog_3"
               Content="3"
               Width="100"
@@ -257,7 +277,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="15"
+              Grid.Row="16"
               Height="23" />
             <Label Content="konverter eksisterende fællespostkasse af type 'Regular'(Normal user) til type 'Shared', samt fjrne Licensen SSI"
              Width="auto"
@@ -267,7 +287,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="15" />
+             Grid.Row="16" />
             <Button Name="Btn_ConnectDialog_4"
               Content="4"
               Width="100"
@@ -277,7 +297,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="16"
+              Grid.Row="17"
               Height="46" />
             <Label Content="konverter eksisterende fællespostkasse af type 'Shared' til 'Regual' (Normal user for Sikkermail). &#xD;&#xA;I tilhørende OU sikkermail, samt Tildele Licens i Office 365 SSI/SDS"
              Width="auto"
@@ -287,7 +307,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="16" />
+             Grid.Row="17" />
             <Button x:Name="Btn_ConnectDialog_5"
               Content="5"
               Width="100"
@@ -297,7 +317,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="18"
+              Grid.Row="19"
               Height="23" />
             <Label Content="Opret ny Distributionsgruppe/Postlister SSI/SDS"
              Width="auto"
@@ -307,7 +327,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="18" />
+             Grid.Row="19" />
             <Button x:Name="Btn_ConnectDialog_ssigrp"
               Content="SSI Group"
               Width="100"
@@ -317,7 +337,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="19"
+              Grid.Row="20"
               Height="22" />
             <Label Content="Opret Sikkerhedsgruppe for en Eksisterende fællespostkasse"
              Width="auto"
@@ -327,7 +347,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="19" />
+             Grid.Row="20" />
             <Button x:Name="Btn_ConnectDialog_5sst"
               Content="5 SST"
               Width="100"
@@ -337,7 +357,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="20"
+              Grid.Row="21"
               Height="24" />
             <Label Content="Opret ny Distributionsgruppe/Postlister SST Exchange (sst og stps)"
              Width="auto"
@@ -347,7 +367,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="20" />
+             Grid.Row="21" />
             <Button x:Name="Btn_ConnectDialog_sstgrp"
               Content="SST Group"
               Width="100"
@@ -357,7 +377,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="21"
+              Grid.Row="22"
               Height="22" />
             <Label Content="Opret Sikkerhedsgruppe for en Eksisterende fællespostkasse i SST Exchange (sst og stps)"
              Width="auto"
@@ -367,7 +387,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="21" />
+             Grid.Row="22" />
             <Button x:Name="Btn_ConnectDialog_6"
               Content="6"
               Width="100"
@@ -377,7 +397,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="23"
+              Grid.Row="24"
               Height="24" />
             <Label Content="for at oprette ny ADM_KONTO for eksiterende AD bruger enten i SSI/SST/DKSUND Domænet"
              Width="auto"
@@ -387,7 +407,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="23" />
+             Grid.Row="24" />
             <Button x:Name="Btn_ConnectDialog_roomssi"
               Content="Room SSI"
               Width="100"
@@ -397,7 +417,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="25"
+              Grid.Row="26"
               Height="23" />
             <Label Content="Opret Mødelokalle i SSI"
              Width="auto"
@@ -407,7 +427,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="25" />
+             Grid.Row="26" />
             <Button x:Name="Btn_ConnectDialog_roomsst"
               Content="Romm SST"
               Width="100"
@@ -417,7 +437,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="26"
+              Grid.Row="27"
               Height="23" />
             <Label Content="Opret Mødelokalle i SST Exchange (sst og stps)"
              Width="auto"
@@ -427,7 +447,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="26" />
+             Grid.Row="27" />
             <Button x:Name="Btn_ConnectDialog_licensfri"
               Content="Licens Fri"
               Width="100"
@@ -437,7 +457,7 @@
               FontSize="14"
               IsDefault="True"
               Grid.Column="1"
-              Grid.Row="27"
+              Grid.Row="28"
               Height="22"
               RenderTransformOrigin="0.614,-1.328" />
             <Label Content="convertere alle brugere i SSI -DisabledUsers og fjerne licenser, så de bliver frigjort"
@@ -448,7 +468,7 @@
              VerticalAlignment="Center"
              FontSize="16"
              Grid.Column="2"
-             Grid.Row="27" />
+             Grid.Row="28" />
             <Button x:Name="Btn_ConnectDialog_Close_Form"
               Content="Luk"
               Width="100"
@@ -457,7 +477,7 @@
               VerticalAlignment="Center"
               FontSize="14"
               IsDefault="True"
-              Grid.Column="2"      
+              Grid.Column="2"
               Grid.Row="1"
               Height="23" />
             <Label Content="Vælg burger"
@@ -491,7 +511,7 @@
              FontSize="16"
              Grid.Column="1"
              Grid.ColumnSpan="3"
-             Grid.Row="11"
+             Grid.Row="12"
              Margin="0,0,0,0" />
             <Label Content="Gruppe / DIstributionslister"
              Foreground="blue"
@@ -502,7 +522,7 @@
              FontSize="16"
              Grid.Column="1"
              Grid.ColumnSpan="3"
-             Grid.Row="17" />
+             Grid.Row="18" />
             <Label Content="Adm-Konti ifm. lokal admin rettigheder (Dispensation)"
              Foreground="blue"
              Width="auto"
@@ -512,7 +532,7 @@
              FontSize="16"
              Grid.Column="1"
              Grid.ColumnSpan="3"
-             Grid.Row="22" />
+             Grid.Row="23" />
             <Label Content="MødeLokaler"
              Foreground="blue"
              Width="auto"
@@ -521,7 +541,7 @@
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
              FontSize="16"
-             Grid.Row="24"
+             Grid.Row="25"
              Grid.Column="1"
              Grid.ColumnSpan="3"
              RenderTransformOrigin="0.233,-8.917" />

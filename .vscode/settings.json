@@ -1,0 +1,15 @@
+{
+    // When enabled, will trim trailing whitespace when you save a file.
+    "files.trimTrailingWhitespace": true,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\Sysnative\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "files.defaultLanguage": "powershell",
+    "powershell.scriptAnalysis.enable": true,
+    "powershell.startAutomatically": true,
+    "powershell.integratedConsole.focusConsoleOnExecute": false,
+    "powershell.codeFormatting.openBraceOnSameLine": true,
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "editor.smoothScrolling": true,
+    "editor.codeLens": true,
+    "files.encoding": "utf8bom"
+}
