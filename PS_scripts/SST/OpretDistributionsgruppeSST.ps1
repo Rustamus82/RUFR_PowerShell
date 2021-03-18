@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by eks-@nae 07-06-2019
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2021
 Write-Host "Du har valgt OpretDistributionsgruppeSST.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -13,6 +13,8 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue|Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
 #*********************************************************************************************************************************************
 #script 
 #*********************************************************************************************************************************************
@@ -56,8 +58,8 @@ Set-Location -Path 'SSTAD:'
 
     If ($company -eq "1") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSST
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -67,8 +69,8 @@ Set-Location -Path 'SSTAD:'
     ElseIf ($company -eq "2") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterDEP
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -78,8 +80,8 @@ Set-Location -Path 'SSTAD:'
     If ($company -eq "3") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterSTPS
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
@@ -89,13 +91,13 @@ Set-Location -Path 'SSTAD:'
     If ($company -eq "4") {
     New-ADGroup -Name $GroupDispName -GroupScope Universal -GroupCategory Distribution -ManagedBy $Manager -Description $Description -Path $OUPathDistrubutionslisterNGC
     
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Cyan
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Cyan
+    sleep 60
     
     #Set-ADGroup -Identity $GroupAlias -Clear Company
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
-    $GroupMail = $GroupAlias+'@stps.dk'
-    Set-ADGroup -Identity $GroupDispName -Add @{company="Styrelsensen for Patientsikkerhed";mail="$GroupMail"}
+    $GroupMail = $GroupAlias+'@ngc.dk'
+    Set-ADGroup -Identity $GroupDispName -Add @{company="Nationalt Genom Center";mail="$GroupMail"}
     }
     Else{
     Write-Warning "Mislykkedes oprette og opdatere 'Company' felt på gruppen $GroupAlias fordi gruppen
@@ -103,6 +105,11 @@ Set-Location -Path 'SSTAD:'
     }
 
 sleep 120
+
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+
 
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $GroupDispName})) 
 {
@@ -137,8 +144,8 @@ Add-ADGroupMember -Identity $GroupDispName -Members $Manager
 #Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
 #Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manager
 
-#Der kommer en lang WARNING med nedenstående kommando, men det ser ud til at virke :-)
-Add-ADPermission -Identity $GroupDispName -User $Manager -AccessRights WriteProperty -Properties "Member"
+#Der kommer en lang WARNING med nedenstående kommando, virker ikke!
+#Add-ADPermission -Identity $GroupDispName -User $Manager -AccessRights WriteProperty -Properties "Member"
 
 
 Write-Host "Noter følgende i Sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan

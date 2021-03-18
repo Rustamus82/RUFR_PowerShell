@@ -1,4 +1,4 @@
-﻿#PSVersion 5 Script made/assembled by eks-@nae 07-05-2019
+﻿#PSVersion 5 Script made/assembled by Rust@m 16-03-2021
 Write-Host "Du har valgt OpretSikkerhedGruppeSST.ps1" -ForegroundColor Gray -BackgroundColor DarkCyan
 #*********************************************************************************************************************************************
 #Function progressbar for timeout by ctigeek:
@@ -13,6 +13,8 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue|Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
 #*********************************************************************************************************************************************
 #script 
 #*********************************************************************************************************************************************
@@ -42,8 +44,8 @@ Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundco
 if ($company -eq "1"){
     
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSST
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+    sleep 60
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -51,8 +53,8 @@ if ($company -eq "1"){
 }
 Elseif ($company -eq "2") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+    sleep 60
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -60,8 +62,8 @@ Elseif ($company -eq "2") {
 }
 if ($company -eq "3") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+    sleep 60
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -69,8 +71,8 @@ if ($company -eq "3") {
 }
 if ($company -eq "4") {
     New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperNGC
-    Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-    sleep 20
+    Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+    sleep 60
 
     Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
     $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -85,6 +87,9 @@ Add-ADGroupMember -Identity $ExchangeSikkerhedsgruppe -Members $Manager
 
 
 sleep 120
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
@@ -95,12 +100,16 @@ if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
     #Disable-SSTSecurityGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
    
-    <#if ($company -eq "2"){
+    if ($company -eq "2"){
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }#>
     elseif ($company -eq "3"){
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
+        Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+    }
+    elseif ($company -eq "4"){
+        $new = $ExchangeSikkerhedsgruppe + "@ngc.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
     }
     elseif ($company -eq "1"){

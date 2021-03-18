@@ -13,6 +13,9 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue|Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
+#*********************************************************************************************************************************************
 #script
 #*********************************************************************************************************************************************
 $userDisplayName = Read-Host -Prompt "Tast Displayname på mødelokalet, f.eks SST Mødelokale 402"
@@ -51,8 +54,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
         
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSST
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -66,8 +69,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -81,8 +84,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -96,8 +99,8 @@ Set-Location -Path 'SSTAD:'
         Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
 
         New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperNGC
-        Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
-        sleep 20
+        Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
+        sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
         $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
@@ -136,10 +139,10 @@ Else
 }
 
 
-sleep 300
-
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+sleep 120
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
 if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
@@ -158,8 +161,10 @@ Else
 }
 
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+
 
 Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 2016 SST" -foregroundcolor Cyan       
     if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})){
@@ -167,6 +172,10 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     Write-Host "Time Out 1 min..."  -foregroundcolor Yellow  
     sleep 60
     
+    Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+    #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+    if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+
         if($company -eq "2"){
             Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ADuser + "@sum.dk"
@@ -189,16 +198,21 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
         sleep 5
         }
         Else { 
-    Write-Warning "Fejlede at tilføje sum.dk som primær smtp: $ADuser, noget gik galt..." 
+            Write-Warning "Fejlede at tilføje sum.dk, stps eller ngc som primær smtp: $ADuser, noget gik galt..." 
     }
 
     }
     Else { 
-    Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." 
+            Write-Warning "Fejlede at E-Mail aktivere fællespostkasse/bruger: $ADuser, noget gik galt..." 
     }
 
 
 Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+
+
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
     {
         
@@ -232,42 +246,39 @@ Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Ex
         Write-Warning "Kunne ikke e-mail aktivere $ExchangeSikkerhedsgruppe, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
     }
 
-
+sleep 60
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
      $group = $ExchangeSikkerhedsgruppe
      Get-SSTMailbox -identity $ADuser | add-SSTmailboxpermission -user $group -accessrights FullAccess -inheritancetype All
      Add-SSTADPermission $ADuser -User $ExchangeSikkerhedsgruppe -Extendedrights "Send As"
+     Get-SSTADPermission -Identity $ADuser | where {$_.ExtendedRights -like 'Send*'} | Format-Table -Auto User,Deny,ExtendedRights
      #Man kan tilføje individuelle brugere, men ikke grupper. Søgning giver ingen resultater, hvis man gør det med GUI.
      #Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
 }
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til Mødelokale: $ADuser..." }
            
 
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 
 Write-Host "Konverterer postkasse $ADuser til type Room og sætter kapacitet til: $Capacity" -foregroundcolor Cyan 
 Set-SSTMailbox $ADuser -Type room -ResourceCapacity $Capacity
 
-
-Write-Host "time out 5 min..." -foregroundcolor Yellow 
-sleep 300
-
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-#$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
-
-#Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sent items hos bruger og i selve Mødelokale." -foregroundcolor Cyan 
-#Set-SSTMailbox $ADuser -MessageCopyForSentAsEnabled $True 
-
 Write-Host "Sætter standard sprog til DK" -foregroundcolor Cyan 
 Set-SSTMailboxRegionalConfiguration –identity $ADuser –language da-dk -LocalizeDefaultFolderName
+#read changes
+Get-sstMailbox -Identity $ADuser| Format-List DisplayName,PrimarySmtpAddress,RecipientTypeDetails, MessageCopyForSentAsEnabled,MessageCopyForSendOnBehalfEnabled, Languages
 
-sleep 120
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 
 Write-Host "Ændrer kalender rettighed af $ADuser til LimitedDetails " -foregroundcolor Cyan 
@@ -275,12 +286,11 @@ $ADuserCalenderPath = "$ADuser" + ":\Kalender"
 Set-SSTmailboxfolderpermission –identity $ADuserCalenderPath –user Default –Accessrights LimitedDetails
 Get-SSTMailboxFolderPermission -Identity $ADuserCalenderPath
 
+sleep 6
 
-Write-Host "Time out 5 min..." -foregroundcolor Yellow 
-sleep 300
-
-#Write-Host "Connecting to Sessions" -ForegroundColor Magenta
+Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
+if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 #new added, need to see it works...?!
 Write-Host "Omdøber bruger..." -foregroundcolor Cyan
