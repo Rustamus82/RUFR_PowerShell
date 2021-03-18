@@ -25,6 +25,8 @@ function Show-Menu {
      Write-Host
      Write-Host " Skriv 'jonstrup' for at oprette jonstrup brugere" -foregroundcolor Cyan
      Write-Host 
+     Write-Host " Skriv 'jonstrupned' for at oprette jonstrup brugere" -foregroundcolor Cyan
+     Write-Host 
      Write-Host "[][][] Fællespostkasse [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][[[]["  -foregroundcolor Green
      Write-Host
      Write-Host " Tryk '1' for at oprette ny Fælles/Funktionspostkasse SSI/SDS" -foregroundcolor Cyan
@@ -434,13 +436,17 @@ do {
                Clear-Host
                #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
                & "$PSScriptRoot\PS_scripts\JohnstrupOprettelseFraExcel.ps1" 
-          }            
+          }
+          'jonstrupned' {
+               Clear-Host
+               #Skriv 'ps1' for at køre i powershell fri style mens du er logget på og har forbindelse på tværs domæner...
+               & "$PSScriptRoot\PS_scripts\JohnstrupNedlæggelseFraExcel.ps1" 
+          }          
+                     
           'path' {
                Clear-Host
                & "$PSScriptRoot\PS_scripts\SSI\path.ps1"
           }
-            
-
 
           'q' {
                return

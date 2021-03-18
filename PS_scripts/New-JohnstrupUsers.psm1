@@ -1,4 +1,4 @@
-﻿function Get-WpfUserInput {
+﻿function Get-WpfUserPasswordInput {
 
     [CmdletBinding()]
     Param
@@ -241,7 +241,7 @@ function New-JohnstrupUsers {
 
         Remove-Variable -Name Password -ErrorAction SilentlyContinue
         if (-not $Password) {
-            $Password = Get-WpfUserInput -Message 'skriv koden du vil have på brugerne'
+            $Password = Get-WpfUserPasswordInput -Message 'skriv koden du vil have på brugerne'
         }
         #$password = Read-Host -AsSecureString -Prompt 'indtast kode til brugeren'
 
@@ -270,14 +270,6 @@ function New-JohnstrupUsers {
                 Return
             }
 
-            ## removes $false values. find a better way to confirm value in hastable.
-            <#
-            #Removing empty values from OtherAttributes
-            @($Hash.Keys) | ForEach-Object {
-            if (-not $Hash[$_]) { $Hash.Remove($_) }
-            }
-            #>
-
             Remove-Variable TestIfUserExist -ErrorAction SilentlyContinue
             try {
                 
@@ -301,6 +293,7 @@ function New-JohnstrupUsers {
                     Write-Host -ForegroundColor Yellow "Could not create user {$($User.Name)} , {$($User.DisplayName)}"
                 }
 
+                Remove-Variable UserInfoFieldString -ErrorAction SilentlyContinue
                 ## set the decription
                 $DateForDayOne = (get-date).DateTime 
                 $UserInfoFieldString += "Brugeroprettet {$DateForDayOne}"
@@ -342,7 +335,158 @@ function New-JohnstrupUsers {
         Remove-Variable Password -ErrorAction SilentlyContinue
     }
     End {
+    }
+}
+function Remove-JohnstrupUsers {
+    [CmdletBinding()]
+    #[OutputType([Microsoft.ActiveDirectory.Management.ADAccount])]
+    Param
+    (
+        # Case ID
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $false,
+            Position = 1,
+            ValueFromPipelineByPropertyName = $true,
+            ParameterSetName = 'Parameter Set 1')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [string]$CaseID,        
 
+        # Company
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $false,
+            Position = 2,
+            ValueFromPipelineByPropertyName = $true,
+            ParameterSetName = 'Parameter Set 1')]
+        #[ValidateSet("Hjemmeværnet", "Moment", "Politiet")]
+        [company]$Company,
+
+        # Complete path to file.
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $false,
+            Position = 3,
+            ValueFromPipelineByPropertyName = $true,
+            ParameterSetName = 'Parameter Set 1')]
+        [ValidateNotNullOrEmpty()]
+        [String]$FilePath
+    )
+
+    Begin {
+    }
+    Process {
+        
+        #Write-Verbose "FilePath = $FilePath" -Verbose
+
+        if ( -not (Test-Path -Path $FilePath)) {
+
+            write-warning "Jeg kan ikke finde den fil du har angivet."
+            Pause
+            Return
+        }
+
+        $UserInformationFromExcell = Get-JonstrupExcelInfomation -FilePath $FilePath -Company $Company 
+        
+        $UserCreationOutput = foreach ($User in $UserInformationFromExcell) {
+            
+            #[int]$UserInformationFromExcellProgressCounter++
+            if ( $UserInformationFromExcell.count -gt 1 ) {
+
+                Write-Progress -Activity "Removing Users" -Status "$($UserInformationFromExcell.IndexOf($User)) af $($UserInformationFromExcell.count)"  -PercentComplete ($($UserInformationFromExcell.IndexOf($User)) / $UserInformationFromExcell.count * 100)
+            }
+
+            # only ask user to validate first user
+            if ( -not $UserYesNoChoiceToDataValid) {
+
+                Write-Host -ForegroundColor Yellow "Kig om det indlæste står i de korekte felter. Luk vinduet når du har kontrolleret det"
+                Show-FirstUserOutputWPFForm -hash $User
+            }
+
+            if (-not $UserYesNoChoiceToDataValid) {
+                
+                Write-Host -ForegroundColor Yellow "kør scriptet igen, når du har rettet fejlen, du fandt i excel arket"
+                $Excel.Quit()
+                pause
+                Return
+            }
+
+            Remove-Variable UserDKSUND -ErrorAction SilentlyContinue
+            Remove-Variable UserMoved -ErrorAction SilentlyContinue
+            Remove-Variable UserInfoFieldString -ErrorAction SilentlyContinue
+            
+            try {
+                
+                if ($Company -ne 'ATP') {
+                    
+                    $UserDKSUND = Get-ADUser -Filter "SamAccountName -eq '$($User.SamAccountName.Trim())'"  -SearchBase  'OU=Eksterne,OU=Organisationer,DC=dksund,DC=dk' -ErrorAction Stop # -Server $server
+                }
+                else {
+
+                    $User.SamAccountName = $($User.SamAccountName.Trim()) -replace 'EKS_','EKS_ATP'
+                    $UserDKSUND = Get-ADUser -Filter "SamAccountName -eq '$($User.SamAccountName.Trim())'"  -SearchBase  'OU=Eksterne,OU=Organisationer,DC=dksund,DC=dk' -ErrorAction Stop # -Server $server
+                }
+            }
+            catch {
+            
+                # do nothing
+            }
+
+            if ($UserDKSUND) {
+
+                # moving the user account
+
+                ## set the decription
+                $DateForDayOne = (get-date).DateTime 
+                $UserInfoFieldString += "Bruger forsøges flyttet til OU TilSletning {$DateForDayOne} $CaseID"
+                
+                Add-TextToUserInfoField -Identity $($UserDKSUND.SamAccountName) -Text $UserInfoFieldString
+                
+                try {
+                    
+                    $UserDKSUND | Disable-ADAccount -ErrorAction Stop
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not disable user {$($User.Name)} , {$($User.DisplayName)}"
+                }
+                try {
+                    
+                    $UserDKSUNDDisabledPath = "OU=TilSletning,DC=dksund,DC=dk"
+                    Move-ADObject -Identity $($UserDKSUND.DistinguishedName) -TargetPath $UserDKSUNDDisabledPath -ErrorAction Stop
+                    $UserMoved = $true
+                }
+                catch {
+                    Write-Host -ForegroundColor Yellow "Could not move user to OU=TilSletning,DC=dksund,DC=dk {$($UserDKSUND.Name)}"
+                }
+
+                If ((Get-ADUser -Identity $($UserDKSUND.SamAccountName) -Properties DistinguishedName).DistinguishedName -like "*$UserDKSUNDDisabledPath") {
+                    # skal laves test på bruger for at se hviket disbled ou de skal i og testes.
+    
+                    Write-Verbose 'user {$($UserDKSUND.Name)} is moved to correct OU DKSUND' -Verbose
+                }
+                else {
+    
+                    Write-Warning 'user {$($UserDKSUND.Name)} is NOT in correct OU, look again or look via gui search'
+                }                
+
+                Write-Output $UserDKSUND 
+                # $HashOutput = New-Object psobject -Property $Hash
+                # Write-Output ($HashOutput | Select-Object -Property Name) # $hash.name
+                # write-host "$($hash.name)"
+            }
+            else {
+                # if (-not $TestIfUserExist) {
+
+                Write-Warning "{$($User.name)} doesn't exist"
+                Write-Warning "Change Ma number in Excel, or the user is allready removed"
+            }
+            #$AccountName
+
+        } # foreach ($User in $UserInformationFromExcell ) {
+
+        Write-Output $UserCreationOutput
+        $global:UserYesNoChoiceToDataValid = $false
+        #Remove-Variable UserYesNoChoiceToDataValid -ErrorAction SilentlyContinue
+    }
+    End {
     }
 }
 function Show-FirstUserOutputWPFForm {
@@ -359,7 +503,7 @@ function Show-FirstUserOutputWPFForm {
     )
 
     Add-Type -AssemblyName PresentationFramework, System.Windows.Forms, WindowsFormsIntegration
-
+    #
     [xml][string]$XAML_ConnectDialog = @"
     <Window 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -367,19 +511,32 @@ function Show-FirstUserOutputWPFForm {
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Azure"
-    Title="Kig om det indlæste står i de korekte felter, for den første bruger i arket." Height="500" Width="610">
-<Grid Margin="0,0,0,0">
-    <Button Name="btnOK" Content="Godkend" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="510,0,0,20"  Width="75" Height="23"/>
-    <Button Name="btnExit" Content="Afvis" HorizontalAlignment="Left" VerticalAlignment="bottom" Margin="425,0,0,20"  Width="75" Height="23"/>
-    <ListView Name="Collections" Margin="0,0,0,53">
-    <ListView.View>
-      <GridView>
-        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
-        <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="430"/>
-      </GridView>
-    </ListView.View>
-  </ListView>
-</Grid>
+    ResizeMode="CanResize"
+    Title="Kig om det indlæste står i de korekte felter, for den første bruger i arket." Height="495" Width="625">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <Button Name="btnOK" Content="Godkend" HorizontalAlignment="Right" VerticalAlignment="bottom" Margin="0,20,0,0"  Width="75" Height="23" Grid.Column="1" Grid.Row="2"/>
+        <Button Name="btnExit" Content="Afvis" HorizontalAlignment="Right" VerticalAlignment="bottom" Margin="0,20,80,0"  Width="75" Height="23" Grid.Column="1" Grid.Row="2"/>
+        <ListView Name="Collections" Margin="0,0,0,0" Grid.Column="1" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="auto"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
 </Window>
 "@
 
@@ -753,7 +910,7 @@ function Get-JonstrupExcelInfomation {
 }
 function Add-TextToUserInfoField {
     [CmdletBinding()]
-    [OutputType([PSCustomObject])]
+    #[OutputType([PSCustomObject])]
     Param
     (
         # Information from User Excel sheet
@@ -799,11 +956,11 @@ function Add-TextToUserInfoField {
  
         try {
 
-            if($server){
+            if ($server) {
             
                 Set-ADUser -Identity $Identity -Replace @{info = $UserInfoFieldString } -Server $server -ErrorAction Stop
             }
-            else{
+            else {
             
                 Set-ADUser -Identity $Identity -Replace @{info = $UserInfoFieldString } -ErrorAction Stop
             }
