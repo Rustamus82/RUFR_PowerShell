@@ -2,9 +2,9 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
-13-03-2021 ServicedeskPowershellTools_v2.10
+21-03-2021 ServicedeskPowershellTools_v2.10
 
-new redesigned script that creates, attach security group to existing usermailbox as, full access, send as and send on behalf. It alsoc set correct langauge, calender "limiteddetails" permission for existing mailbox.
+new redesigned script that creates, attach security group to existing usermailbox as, full access, send as and send on behalf. It also set correct language, calendar "limited details" permission for existing mailbox.
 
 .\PS_scripts\SST\OpretSikkerhedGruppeSST.ps1
 
@@ -26,7 +26,7 @@ File Changes
 
 ***********************************************************************************************************************************************************
 13-03-2021 ServicedeskPowershellTools_v2.09
-oupdated login for Exchnage 2010 to 2016 SST
+Updated login for Exchnage 2010 to 2016 SST
 .\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ADMIN.ps1
 .\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_Variabel.ps1
 .\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_RUFR.ps1
