@@ -219,19 +219,19 @@ if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-pat
         Enable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     
         if($company -eq "2"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@sum.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "3"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@stps.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "4"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@ngc.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@ngc.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60

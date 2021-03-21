@@ -6,6 +6,16 @@ Install-Module -Name "msonline" -Scope AllUsers -AllowClobber
 Import-Module -Name "msonline"
 Uninstall-Module -Name "msonline" -Force
 
+#Install RSAT features:
+# Win 10 version 1809, 1903 og derefter
+if([version](Get-CimInstance Win32_OperatingSystem).Version -ge [version]"10.0.17763" -and [version](Get-CimInstance Win32_OperatingSystem).Version -lt [version]"10.9.9999.999"){
+    
+    Get-WindowsCapability -Online | Where-Object {($_.State -notmatch 'Installed') -and ($_.Name -match 'rsat')} | %{Add-WindowsCapability -Name $_.Name -Online}
+    Get-WindowsCapability -Online | Where-Object {($_.State -notmatch 'Installed') -and ($_.Name -match 'rsat')} | %{Add-WindowsCapability -Name $_.Name -Online}
+    Update-Help -Force -ErrorAction SilentlyContinue
+}
+
+
 Get-PSRepository 
 #på server/PC hvor man magler psgallery: https://stackoverflow.com/questions/43323123/warning-unable-to-find-module-repositories
 Get-PSRepository

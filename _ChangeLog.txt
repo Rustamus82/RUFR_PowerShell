@@ -2,6 +2,29 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+13-03-2021 ServicedeskPowershellTools_v2.10
+
+new redesigned script that creates, attach security group to existing usermailbox as, full access, send as and send on behalf. It alsoc set correct langauge, calender "limiteddetails" permission for existing mailbox.
+
+.\PS_scripts\SST\OpretSikkerhedGruppeSST.ps1
+
+Jesper har opdateret følgende
+Commit Summary
+•	JohnstrupOprettelseFraExcel.ps1
+•	JohnstrupOprettelseFraExcel.ps1
+•	New-JohnstrupUsers.psm1
+•	Added UserMenu WPF
+•	UserMenu
+•	run menu.ps1
+•	BrugeradmSDmenu.ps1
+•	Added UserMenu GUI made in WPF
+File Changes
+•	M BrugeradmSDmenu.ps1 (664) 
+•	M PS_scripts/JohnstrupOprettelseFraExcel.ps1 (90) 
+•	M PS_scripts/New-JohnstrupUsers.psm1 (441) 
+•	A UserMenu.xaml (462) 
+
+***********************************************************************************************************************************************************
 13-03-2021 ServicedeskPowershellTools_v2.09
 oupdated login for Exchnage 2010 to 2016 SST
 .\Logins\Login_SSI_SST_exch2010_DKSUND_Exchange365_ADMIN.ps1

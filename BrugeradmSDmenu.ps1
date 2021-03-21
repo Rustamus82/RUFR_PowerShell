@@ -51,7 +51,7 @@ function Show-Menu {
      Write-Host
      Write-Host " Tryk '5sst' for at oprette ny Distributionsgruppe/Postlister SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
-     Write-Host " Skriv 'sstgrp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse i SST Exchange (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
+     Write-Host " Skriv 'grp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse i ExchangeSST (SST, DEP, STPS og NGC)" -foregroundcolor Cyan
      Write-Host
      Write-Host "*** Adm-Konti ifm. lokal admin rettigheder (Dispensation) ***"  -foregroundcolor Green
      Write-Host
@@ -387,9 +387,9 @@ do {
                & "$PSScriptRoot\PS_scripts\SSI\OpretSikkerhedGruppeSSI_udenHak_iManagerSSI.ps1"
           }
 
-          'sstgrp' {
+          'grp' {
                Clear-Host
-               # "Skriv 'grpssi' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse"
+               # "Skriv 'grp' for at oprette Sikkerhedsgruppe for en Eksisterende fællespostkasse"
                & "$PSScriptRoot\PS_scripts\SST\OpretSikkerhedGruppeSST.ps1"
           }
 
