@@ -65,12 +65,15 @@ Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
 $Global:UserCredDksund = Get-Credential "adm-rufr@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
 Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true -ShowBanner:$false 
+#Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client  -  "AllowBasic"=dword:00000001  -- stadigvæk kræver som ellers bliver slået fra med policy
 #Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
 #Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true 
 Connect-AzureAD -AccountId "adm-rufr@dksund.dk"
 #Connect-AzureAD -Credential $Global:UserCredDksund
 <#
 Get-AzureADUser -ObjectId rufr@dksund.dk
+$MFAExchangeModule = ((Get-ChildItem -Path $($env:LOCALAPPDATA+"\Apps\2.0\") -Filter CreateExoPSSession.ps1 -Recurse ).FullName | Select-Object -Last 1); "$MFAExchangeModule"
+Import-Module "$MFAExchangeModule"
 #>
 
 ##Import-Module MSOnline - Depricated soon.....
