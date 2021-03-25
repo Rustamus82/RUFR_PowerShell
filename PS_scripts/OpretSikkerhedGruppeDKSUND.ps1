@@ -13,8 +13,8 @@ function Start-Sleep($seconds) {
     Write-Progress -Activity "Sleeping" -Status "Sleeping..." -SecondsRemaining 0 -Completed
 }
 #*********************************************************************************************************************************************
-$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPath = "$ISEScriptPath\Logins\Session_reconnect.ps1"
-$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPath = "$PSscriptPath\Logins\Session_reconnect.ps1"
+$ISEScriptPath = (Get-Location).Path | Split-Path -Parent -ErrorAction SilentlyContinue; $ISEScriptPathReconnect = "$ISEScriptPath\Logins\Session_reconnect.ps1"
+$PSscriptPath =  $PSScriptRoot | Split-Path -Parent -ErrorAction SilentlyContinue; $PSscriptPathReconnect = "$PSscriptPath\Logins\Session_reconnect.ps1"
 #*********************************************************************************************************************************************
 #Variabler
 #****************
@@ -72,7 +72,7 @@ sleep 120
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+if (Test-Path $ISEScriptPathReconnect){ Invoke-Expression $ISEScriptPathReconnect }elseif(test-path $PSscriptPathReconnect){Invoke-Expression $PSscriptPathReconnect}
 
     if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ADgroup})) 
     {
@@ -97,7 +97,7 @@ if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-pat
 
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+if (Test-Path $ISEScriptPathReconnect){ Invoke-Expression $ISEScriptPathReconnect }elseif(test-path $PSscriptPathReconnect){Invoke-Expression $PSscriptPathReconnect}
 
 Write-Host "Tilføjer sikkerhedsgruppe $ADgroup som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 
@@ -114,7 +114,7 @@ if (-not ($ADuser -eq "*" -or $ADuser -eq "")) {
 Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til fællespostkasse: $ADuser..." }
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+if (Test-Path $ISEScriptPathReconnect){ Invoke-Expression $ISEScriptPathReconnect }elseif(test-path $PSscriptPathReconnect){Invoke-Expression $PSscriptPathReconnect}
 
 Write-Host "Opretter regel at Mail som er sendt fra shared postkasse, bliver lagt 2 steder, nemlig i sendt items hos bruger og i selve fællespostkasse." -foregroundcolor Cyan 
 #exchnage 2010:
@@ -138,7 +138,7 @@ Get-SSIMailboxFolderPermission -Identity $MailCalenderPath
 Write-Host "Time out 1 min..." -foregroundcolor Yellow 
 sleep 60
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
-if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
+if (Test-Path $ISEScriptPathReconnect){ Invoke-Expression $ISEScriptPathReconnect }elseif(test-path $PSscriptPathReconnect){Invoke-Expression $PSscriptPathReconnect}
 
 # OBS. flueben at manager af sikkerhedsgruppe kan opdateret medlemskab
 #Add-ADPermission -Identity $ADgroup -User $Manager -AccessRights WriteProperty -Properties "Member"

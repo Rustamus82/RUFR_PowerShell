@@ -77,7 +77,7 @@ New-VMSwitch -name PrivateSwitch -SwitchType Private -ErrorAction SilentlyContin
 ### Creat one VM
 <#
 $VM = "VM01-WXU"
-New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "C:\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "C:\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 60GB -Generation 2 -Switch ExternalSwitch
+New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "C:\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "C:\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 128GB -Generation 2 -Switch ExternalSwitch
 #>
 
 <### Configure one VM
@@ -129,37 +129,15 @@ $VMs = $wxu+$win10Dev+$win8+$win7
 foreach ($VM in $VMs)
 {
   Write-Host "Creating Virtual Machine - $VM" -ForegroundColor Yellow -Verbose
-  New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 60GB -Generation 2 -Switch ExternalSwitch
+  New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\" -NewVHDSizeBytes 128GB -Generation 2 -Switch ExternalSwitch
   
 }
 
-<#
-foreach ($VM in $win10Dev)
-{
-  Write-Host "Creating Virtual Machine - $VM" -ForegroundColor Yellow -Verbose
-  New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 60GB -Generation 2 -Switch ExternalSwitch
-  
-}
-
-foreach ($VM in $win8)
-{
-  Write-Host "Creating Virtual Machine - $VM" -ForegroundColor Yellow -Verbose
-  New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 60GB -Generation 2 -Switch ExternalSwitch
-  
-}
-
-foreach ($VM in $win7)
-{
-  Write-Host "Creating Virtual Machine - $VM" -ForegroundColor Yellow -Verbose
-  New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 40GB -Generation 1 -Switch ExternalSwitch
-  
-}
-#>
 
 #Configuration of VM's for generation 2 windows 10
 foreach ($VM in $VMs)
 {
-  Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  PC:  XXX.dksund.dk  -PreProd" -SnapshotFileLocation "\Hyper-V\Virtual Hard Disks\$VM\Snapshot" -SmartPagingFilePath "\Hyper-V\Virtual Machines\$VM" -CheckpointType Production -AutomaticCheckpointsEnabled $False -Verbose
+  Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  PC:  XXX.dksund.dk  -PreProd" -SnapshotFileLocation "\Hyper-V\Virtual Hard Disks\" -SmartPagingFilePath "\Hyper-V\Virtual Machines\" -CheckpointType Production -AutomaticCheckpointsEnabled $False -Verbose
   Set-VMMemory $VM -Buffer 5 -Priority 10 -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Guest Service Interface" -ErrorAction SilentlyContinue -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" -ErrorAction SilentlyContinue -Verbose
