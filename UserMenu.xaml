@@ -239,7 +239,7 @@
               Grid.Column="1"
               Grid.Row="14"
               Height="23" />
-            <Label Content="Opret ny Fælles/Funktionspostkasse SST Exchange (SST og STPS)"
+            <Label Content="Opret ny Fælles/Funktionspostkasse ExchangeSST (SST, DEP, STPS og NGC)"
              Width="auto"
              Height="auto"
              Margin="0,0,0,0"
@@ -359,7 +359,7 @@
               Grid.Column="1"
               Grid.Row="21"
               Height="24" />
-            <Label Content="Opret ny Distributionsgruppe/Postlister SST Exchange (sst og stps)"
+            <Label Content="Opret ny Distributionsgruppe/Postlister ExchangeSST (SST, DEP, STPS og NGC)"
              Width="auto"
              Height="auto"
              Margin="0,0,0,0"
@@ -379,7 +379,7 @@
               Grid.Column="1"
               Grid.Row="22"
               Height="22" />
-            <Label Content="Opret Sikkerhedsgruppe for en Eksisterende fællespostkasse i SST Exchange (sst og stps)"
+            <Label Content="Opret Sikkerhedsgruppe for en Eksisterende fællespostkasse i ExchangeSST (SST, DEP, STPS og NGC)"
              Width="auto"
              Height="auto"
              Margin="0,0,0,0"
@@ -439,7 +439,7 @@
               Grid.Column="1"
               Grid.Row="27"
               Height="23" />
-            <Label Content="Opret Mødelokalle i SST Exchange (sst og stps)"
+            <Label Content="Opret Mødelokalle i ExchangeSST (SST, DEP, STPS og NGC)"
              Width="auto"
              Height="auto"
              Margin="0,0,0,0"
