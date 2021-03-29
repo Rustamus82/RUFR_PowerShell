@@ -25,7 +25,7 @@ $OUPathSharedMailSTPK = 'OU=Shared mailbox,OU=STPK,OU=Organisationer,DC=dksund,D
 
 
 $ADuser = Read-Host -Prompt "Angiv eksisterende fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
-$company = Read-Host -Prompt "Tast 5 for stpk.dk til at vælge passende adresse."
+$company = Read-Host -Prompt "Tast 6 for stpk.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 $SikkerhedsgrupperDescription = "Giver fuld adgang til fællespostkasse $ADuser"
 
@@ -46,7 +46,7 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
 
-    if ($company -eq "5"){
+    if ($company -eq "6"){
         
         New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathForADgrouperSTPK
         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
@@ -79,7 +79,7 @@ if (Test-Path $ISEScriptPathReconnect){ Invoke-Expression $ISEScriptPathReconnec
         Write-Host "E-Mail aktivering af gruppen i Exchange 2016 SST" -foregroundcolor Cyan
         Enable-SSIDistributionGroup -Identity $ADgroup -ErrorAction Stop
     
-        if($company -eq "5"){
+        if($company -eq "6"){
                 Write-Host "Tilføjer primær '@stpk.dk' smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
                 $new = $ADgroup + "@stpk.dk"
                 Set-SSIDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false

@@ -30,7 +30,7 @@ $OUPathSharedMailNGC = 'OU=DEP,OU=eDelt,OU=Systemkonti,DC=SST,DC=dk'
 
 $userDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
 $ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
-$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk 3 for stps.dk eller 4 for NGC.dk til at vælge passende adresse."
+$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk 3 for stps.dk eller 4 for NGC.dk 5 for dketik.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 
 $ADuserDescription = 'Delt fællespostkasse (uden licens, direkte login disablet)'

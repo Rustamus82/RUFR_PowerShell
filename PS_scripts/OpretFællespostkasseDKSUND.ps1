@@ -24,7 +24,7 @@ $OUPathForADgrouperSTPK = 'OU=Grupper,OU=STPK,OU=Organisationer,DC=dksund,DC=dk'
 $OUPathSharedMailSTPK = 'OU=Shared mailbox,OU=STPK,OU=Organisationer,DC=dksund,DC=dk'
 
 [string]$ADuser = Read-Host -Prompt "Angiv Fællespostkasse ALIAS på minimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (f.eks Servicedesk):"
-[string]$company = Read-Host -Prompt "Tast 5 for @stps.dk"
+[string]$company = Read-Host -Prompt "Tast 6 for @stps.dk"
 [string]$Manager = Read-Host -Prompt "Angiv Ejers INITIALER til angivet fællespostkassen/sikkerhedsgruppen"
 
 [string]$UserDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
@@ -58,7 +58,7 @@ IF([bool](Get-ADUser -Filter "MailNickName eq '$ADuser'"))
 
     Write-Host "Opdaterer AD objekt $ADgroup i DKSUND AD" -foregroundcolor Cyan
         
-    if ($company -eq "5"){
+    if ($company -eq "6"){
         $ADgroup = 'STPS_'+$ADuser+'_MAIL'
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
         Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
@@ -96,7 +96,7 @@ IF([bool](Get-ADUser -Filter "MailNickName eq '$ADuser'"))
 
             switch ($company)
             {
-                '5' {
+                '6' {
             
                         Write-Host "Connecting to Sessions" -ForegroundColor Magenta
                         if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
@@ -110,7 +110,7 @@ IF([bool](Get-ADUser -Filter "MailNickName eq '$ADuser'"))
             
                     }
 
-                 Default {$company = Read-Host -Prompt "Tast 5 for @stpk.dk til at vælge passende adresse."}
+                 Default {$company = Read-Host -Prompt "Tast 6 for @stpk.dk til at vælge passende adresse."}
             }
 
         }
@@ -230,7 +230,7 @@ else {
     {
           switch ($company)
           {
-                 '5' {
+                 '6' {
                         New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $ADgroupDescription -Path $OUPathForADgrouperSTPK
                         Write-Host "TimeOut for 20 sek." -foregroundcolor Yellow 
                         Start-Sleep 20
@@ -244,7 +244,7 @@ else {
     		  }
               
                 Default {
-                        $company = Read-Host -Prompt "5 for @stpk.dk til at vælge passende adresse."
+                        $company = Read-Host -Prompt "6 for @stpk.dk til at vælge passende adresse."
                 
                 }
           }
@@ -258,7 +258,7 @@ else {
     Add-ADGroupMember -Identity $ADgroup -Members $Manager
 
     Write-Host "Opretter Fællespostkasse/SharedMail in DKSUND AD." -foregroundcolor Cyan
-    if ($company -eq "5"){
+    if ($company -eq "6"){
         New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName ("{0}@{1}” -f $ADuser,"dksund.dk") -ChangePasswordAtLogon $true -Path $OUPathSharedMailSTPK
     }
     Else 
@@ -273,7 +273,7 @@ else {
     If (Get-ADUser -Filter  {Name -eq $ADuser}) 
     {
     
-        If ($company -eq "5") {
+        If ($company -eq "6") {
         Set-ADUser $ADuser -SamAccountName $ADuser -EmailAddress $ADuser'@stpk.dk' -Company 'STYRELSEN FOR PATIENTKLAGER' 
         }
     }
@@ -291,7 +291,7 @@ else {
 
             switch ($company)
             {
-                '5' {
+                '6' {
             
                         Write-Host "Connecting to Sessions" -ForegroundColor Magenta
                         if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
@@ -305,7 +305,7 @@ else {
             
                     }
                 
-                 Default {$company = Read-Host -Prompt "Tast 5 for @stpk.dk til at vælge passende adresse."}
+                 Default {$company = Read-Host -Prompt "Tast 6 for @stpk.dk til at vælge passende adresse."}
             }
 
         }
