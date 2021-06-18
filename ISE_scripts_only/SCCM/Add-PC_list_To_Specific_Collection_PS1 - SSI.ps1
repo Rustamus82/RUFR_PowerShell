@@ -1,6 +1,6 @@
 ﻿#PSVersion 5 Script made/assembled by Rust@m 08-05-2019
 #Start ps1 as different user - ssi\adm-initialer
-
+$ISEScriptPath = (Get-Location).Path
 # Press 'F5' to run this script. Running this script will load the ConfigurationManager
 # module for Windows PowerShell and will connect to the site.
 #
@@ -35,12 +35,15 @@ if((Get-PSDrive -Name $SiteCode -PSProvider CMSite -ErrorAction SilentlyContinue
 Set-Location "$($SiteCode):\" @initParams
 
 #add list of Computers to DeviceCollection - need to be correclt path to files Get-Content ".\CollectionDeviceMembers.txt" - -CollectionID "Se in Properties on Collection"
-Get-Content "C:\RUFR_PowerShell\ISE_scripts_only\SCCM\DeviceCollectionMembers.txt" | foreach { Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS10050A" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }
+#Get-Content "C:\RUFR_PowerShell\ISE_scripts_only\SCCM\DeviceCollectionMembers.txt" | foreach { Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS10050A" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }
+$devices = Get-Content "C:\Users\adm-rufr\Desktop\SCCM\DeviceCollectionMembers.txt"; $devices.Count
+Get-Content "C:\Users\adm-rufr\Desktop\SCCM\DeviceCollectionMembers.txt" | foreach {Write-Host "Addin Device: $_" -foregroundcolor Cyan; Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS1006F5" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }    
+
 cls
-#(Get-CMDevice -Name 'SST000545').ResourceID 
+#(Get-CMDevice -Name 's-sei-mq1-p').ResourceID 
 <#
-Get-CMDeviceCollection -Name "RUFR PCer med defekt SCCM klient need to be fixed" |select name,CollectionID
-Get-CMDeviceCollection -Id "PS1005D0" |select name,CollectionID
+Get-CMDeviceCollection -Name "VMware Virtuele servere i HCI v11.2.5 (s-vc01-p)" |select name,CollectionID
+Get-CMDeviceCollection -Id "PS1006F5" |select name,CollectionID
 #> 
 
 <#
