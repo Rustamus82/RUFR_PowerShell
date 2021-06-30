@@ -16,8 +16,9 @@ Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted;Get-PSRepository
 
 
 # improt excel module
-Find-Module -Name "importexc*" | Install-Module
-Install-Module -Name "ImportExcel" -Scope AllUsers -AllowClobber
+#Find-Module -Name "importexc*" | Install-Module
+#Install-Module -Name "ImportExcel" -Scope AllUsers -AllowClobber
+Install-Module -Name "ImportExcel" -RequiredVersion 7.1.0 -Scope AllUsers -AllowClobber
 Import-Module -Name "ImportExcel"
 Uninstall-Module -Name "ImportExcel" -Force
 
