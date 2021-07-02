@@ -89,7 +89,7 @@ $Email = Get-Mailbox rufr | Select-Object PrimarySmtpAddress
 
 $Email.PrimarySmtpAddress
 
-$Email = Get-Group 'RUFR test p�re og �bler' | Select-Object WindowsEmailAddress
+$Email = Get-Group 'RUFR test pære og æbler' | Select-Object WindowsEmailAddress
 $Email.WindowsEmailAddress
 
 

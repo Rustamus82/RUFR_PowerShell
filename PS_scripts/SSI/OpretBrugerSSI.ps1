@@ -174,6 +174,8 @@ Grant-LYNCCsClientPolicy -PolicyName 'KunADfoto' -Identity $UPN
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
+Write-Host "Time Out 3 min..."  -foregroundcolor Yellow  
+Start-Sleep 120
 
 Write-Host "Deaktiverer Clutter..." -foregroundcolor Cyan 
 Get-Mailbox $ADuser | set-Clutter -Enable $false
@@ -247,7 +249,7 @@ Første gang medarbejderen logger på netværket:
 Du skal skifte dit password første gang, du logger på nettet.
 Dit første midlertidige password er:
 
-Herefter bliver du bedst om at lave dit eget password. 
+Herefter bliver du bedt om at lave dit eget password. 
 
 Hvis dit password ikke virker, skal du kontakte Servicedesk og bede om hjælp. 
 Da dit password er strengt fortroligt, kan dine kolleger ikke gøre det på dine vegne.

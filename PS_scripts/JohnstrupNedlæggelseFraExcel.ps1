@@ -5,78 +5,12 @@ cls; Write-Host "Du har valgt JohnstrupOprettelseFraExcel.ps1" -ForegroundColor 
 Remove-Module -Name New-JohnstrupUsers -ErrorAction SilentlyContinue
 Import-Module ((Get-ChildItem "$PSScriptRoot" -Recurse -Filter "New-JohnstrupUsers.psm1").FullName)
 
-enum kope {
-    kope1
-    kope2
-}
-
-enum kontakansvarlig {
-    EVAL
-    PTTL
-    JACH
-}
-#[kontakansvarlig].GetEnumName(0)
-
 enum company {
     Hjemmeværnet
     Moment
     Politiet
     Beredskabsstyrelsen
     ATP
-}
-
-# could not create enum with "numbers" or "-"". Changes to array and i index into it instead. 
-$AccountExpirationDateEnteredArray = @()
-$AccountExpirationDateEnteredArray += "Enter Date"
-$AccountExpirationDateEnteredArray += "31-05-2021"
-$AccountExpirationDateEnteredArray += "30-06-2021"
-
-
-if ( -not $kope) {
-
-    $Options = @()
-    $Options += "kope1"
-    $Options += "kope2"
-
-    $i = 1
-    $option = foreach ($OptionsLine in $Options) {
-        "&$i $OptionsLine"
-        $i++
-    }
-
-    $helpText = foreach ($OptionsLine in $Options) {
-        "$OptionsLine"
-    }
-
-    $message = "Vælg kope"
-
-    $default = -1
-    Remove-Variable kope -ErrorAction SilentlyContinue
-    [kope]$kope = Read-HostWithPrompt $caption $message $option $helpText $default
-}
-
-if ( -not $kontakansvarlig) {
-
-    $Options = @()
-    $Options += "EVAL"
-    $Options += "PTTL"
-    $Options += "JACH"
-
-    $i = 1
-    $option = foreach ($OptionsLine in $Options) {
-        "&$i $OptionsLine"
-        $i++
-    }
-
-    $helpText = foreach ($OptionsLine in $Options) {
-        "$OptionsLine"
-    }
-
-    $message = "Vælg ansvarlig"
-
-    $default = -1
-    Remove-Variable kontakansvarlig -ErrorAction SilentlyContinue
-    [kontakansvarlig]$kontakansvarlig = Read-HostWithPrompt $caption $message $option $helpText $default
 }
 
 if ( -not $company) {
@@ -111,50 +45,6 @@ do {
 }
 until ($CaseID)
 
-# choose date part
-$Options = @()
-$Options += "Enter date"
-$Options += "31-05-2021"
-$Options += "30-06-2021"
-
-$i = 1
-$option = foreach ($OptionsLine in $Options) {
-    "&$i $OptionsLine"
-    $i++
-}
-
-$helpText = foreach ($OptionsLine in $Options) {
-    "$OptionsLine"
-}
-
-$message = "Vælg slut dato for bruger eller tast selv"
-
-$default = -1
-Remove-Variable choice -ErrorAction SilentlyContinue
-[int]$choice = Read-HostWithPrompt $caption $message $option $helpText $default
-
-switch ($choice) {
-    '0' {
-        
-        $AccountExpirationDate = Get-DateFromString
-    }
-    '1' {
-        
-        $AccountExpirationDate = Get-DateFromString $($AccountExpirationDateEnteredArray[$choice])
-    }
-    '2' {
-        
-        $AccountExpirationDate = Get-DateFromString $($AccountExpirationDateEnteredArray[$choice])
-    }        
-    Default {
-        
-        Write-Warning "slut dato for bruger fejler"
-        pause
-        return
-    }
-}
-
-
 write-host "Vælg Jonstrup Excel fil fra sagen" -ForegroundColor Green
 
 # done to make sure a filepath is provided
@@ -182,7 +72,7 @@ if ($FilePathExcel.FullName -like '\\tsclient*') {
 Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
 Set-Location -Path 'DKSUNDAD:'
 
-$JonstrupUserOutput = New-JohnstrupUsers -Kope $kope -kontakansvarlig $kontakansvarlig -CaseID $CaseID -Company $company -FilePath $FilePath -AccountExpirationDate $AccountExpirationDate
+$JonstrupUserOutput = Remove-JohnstrupUsers -CaseID $CaseID -Company $company -FilePath $FilePath 
 # Write-Output $JonstrupUserOutput 
 
 foreach ($JonstrupUserOutputLine in $JonstrupUserOutput) {
@@ -211,7 +101,6 @@ do {
     $ReadyToClose = Read-HostWithPrompt $Caption $Message $option $HelpText $Default    
 }
 until ($ReadyToClose -eq 0)
-
 
 # Remove temp file if it's copied to avoid "\\tsclient" i path.
 if ($FilePathExcel.FullName -like '\\tsclient*') {

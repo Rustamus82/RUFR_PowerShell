@@ -30,7 +30,7 @@ $OUPathSharedMailNGC = 'OU=DEP,OU=eDelt,OU=Systemkonti,DC=SST,DC=dk'
 
 $userDisplayName = Read-Host -Prompt "Angiv displayname til postkassen."
 $ADuser = Read-Host -Prompt "Angiv ny fællespostkasse Navn/Alias på minimum 5 og max 20 karakterer, Må indeholde kun [^a-zA-Z0-9\-_\.] (f.eks Servicedesk):"
-$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk 3 for stps.dk eller 4 for NGC.dk til at vælge passende adresse."
+$company = Read-Host -Prompt "Tast 1 for sst.dk, 2 for sum.dk 3 for stps.dk eller 4 for NGC.dk 5 for dketik.dk til at vælge passende adresse."
 $Manager = Read-Host -Prompt "Angiv Ejers INITIALER til fællespostkassen og den tilhørende sikkerhedsgruppe."
 
 $ADuserDescription = 'Delt fællespostkasse (uden licens, direkte login disablet)'
@@ -219,19 +219,19 @@ if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-pat
         Enable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe -ErrorAction Stop
     
         if($company -eq "2"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@sum.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "3"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@stps.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "4"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær '@ngc.dk' smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ExchangeSikkerhedsgruppe + "@ngc.dk"
         Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60

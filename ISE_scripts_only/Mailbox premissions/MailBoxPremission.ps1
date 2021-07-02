@@ -100,3 +100,106 @@ Remove-SSTMailboxFolderPermission $ADuser -User 'S-1-5-21-1142715587-1998998323-
 
 Get-SSTMailboxPermission $ADuser |select user
 Remove-SSTMailboxPermission $ADuser -User 'S-1-5-21-1142715587-1998998323-1238779560-15141' -Confirm:$false
+
+
+##grant on behalf DPG tunnel mail/e-Boks
+
+Set-Location -Path 'DKSUNDAD:' 
+
+Get-SSIMailbox stpk@stpk.dk
+Get-ADGroup "Alle STPK"
+$alias = "stpk@stpk.dk"
+$ADgroup = "DPG Tunnelmail STPK"
+#$ADgroup = "Alle STPK"
+Get-SSIMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSIMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSIMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSIMailbox -Identity $alias |fl
+#Get-SSIMailboxPermission -Identity $alias | ogv
+
+
+Set-Location -Path 'SSTAD:'
+
+$alias = "sst@sst.dk"
+$ADgroup = "DPG Tunnelmail SST"
+#$ADgroup = "SST alle Sundhedsstyrelsen"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
+
+
+
+$alias = "sum@sum.dk"
+$ADgroup = "DPG tunnelmail SUM"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
+
+
+$alias = "kontakt@ngc.dk"
+$ADgroup = "DPG tunnelmail NGC"
+#$ADgroup = "Nationalt Genom Center All"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
+
+
+$alias = "dketik@dketik.dk"
+$ADgroup = "DPG tunnelmail DKETIK"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
+
+$alias = "stps@stps.dk"
+$ADgroup = "DPG Tunnelmail STPS"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
+
+
+$alias = "sis@sis.dk"
+$ADgroup = "DPG Tunnelmail SIS"
+#$ADgroup = "SIS Alle medarbejdere"
+Get-SSTMailbox $alias
+Get-ADGroup $ADgroup
+
+#Get-Mailbox -identity $alias | add-mailboxpermission -user $ADgroup -accessrights FullAccess -inheritancetype All
+#Add-recipientPermission $alias -AccessRights SendAs -Trustee $ADgroup -Confirm:$false
+Set-SSTMailbox -Identity $alias -GrantSendOnBehalfTo $ADgroup
+Get-SSTMailbox -Identity $alias | Format-List *GrantSendOnBehalfTo*
+#get-SSTMailbox -Identity $alias |fl
+#Get-SSTMailboxPermission -Identity $alias | ogv
