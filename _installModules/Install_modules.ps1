@@ -43,11 +43,16 @@ Find-Module -Name "AzureAD" | Install-Module
 Install-Module -Name "AzureAD" -Scope AllUsers -AllowClobber
 Import-Module -Name "AzureAD"; Get-Module AzureAD
 
+#Microsoft Teams:
+Find-Module -Name "MicrosoftTeams" | Install-Module
+Install-Module -Name "MicrosoftTeams" -Scope AllUsers -AllowClobber -Force
+Import-Module -Name "MicrosoftTeams"; Get-Module MicrosoftTeams
 
 #Update your existing version of the PowerShellGet module to the latest version
 Update-Module -Name ExchangeOnlineManagement
 Update-Module -Name PowerShellGet
 Update-Module -Name AzureAD
+Update-Module -Name MicrosoftTeams
 #Update-Module -Name msonline
 #Update-Module -Name ActiveDirectory
 
