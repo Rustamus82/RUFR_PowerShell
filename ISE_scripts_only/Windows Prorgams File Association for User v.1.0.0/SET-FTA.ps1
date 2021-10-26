@@ -684,4 +684,26 @@ function Set-PTA {
   Set-FTA -ProgId $ProgId -Protocol $Protocol -Icon $Icon
 }
 
-Set-FTA Applications\AcroRd32.exe .pdf
+<#
+Get-FTA |ogv
+#>
+
+#Adobe reader
+#Set-FTA Applications\AcroRd32.exe .pdf
+Set-FTA AcroExch.Document.DC .pdf
+
+#Citrix
+#Set-FTA Applications\ .ica
+#Register-FTA "${env:ProgramFiles(x86)}\Citrix\ICA Client\wfcrun32.exe" .ica
+Set-FTA Applications\Citrix.ICAClient.2.13 .ica
+
+#7.zip
+# set to unknown
+#Set-FTA Applications\ .7z
+#Set-FTA Applications\ .rar
+# set to 7-zip
+#Set-FTA Applications\7zFM.exe .7z -Icon "C:\Program Files\7-Zip\7zG.exe,0"
+#Register-FTA "C:\Program Files\7-Zip\7zFM.exe" .7z -Icon "C:\Program Files\7-Zip\7zG.exe,0"
+Register-FTA "$env:ProgramFiles\7-Zip\7zFM.exe" .7z -Icon "$env:ProgramFiles\7-Zip\7zG.exe,0"
+#Register-FTA "C:\Program Files\7-Zip\7zFM.exe" .rar -Icon "C:\Program Files\7-Zip\7zG.exe,0"
+Register-FTA "$env:ProgramFiles\7-Zip\7zFM.exe" .rar -Icon "$env:ProgramFiles\7-Zip\7zG.exe,0"

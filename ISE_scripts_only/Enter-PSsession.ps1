@@ -18,7 +18,7 @@ $Global:UserCredDKSUND = Get-Credential -Message "Angiv brugernavn og password" 
 $Global:UserCredSST = Get-Credential -Message "Angiv brugernavn og password" -UserName ’sst.dk\adm-rufr’
 
 
-$computer = 'SSI002686.dksund.dk';Test-Connection -ComputerName $computer
+$computer = 'HWI-M03702.ssi.ad';Test-Connection -ComputerName $computer
 
 
 ## Computer sessions
@@ -55,6 +55,7 @@ Enter-PSSession -ComputerName $computer -Credential $Global:UserCredSSI
 Enter-PSSession -ComputerName $computer -Credential $Global:UserCredSST
 
 #install remotely, execute install files
+& "$env:SystemDrive\SCCM_Client_Install\Certificates\Import.cmd";
 & "$env:SystemDrive\SCCM_Client_Install\_RunMeSCCM_reinstall.cmd"; 
 get-content "$env:SystemRoot\ccmsetup\logs\ccmsetup.log" -Tail 20
 Remove-Item -Path "$env:SystemDrive\SCCM_Client_Install\" -Recurse
