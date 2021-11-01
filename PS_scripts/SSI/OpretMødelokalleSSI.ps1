@@ -117,7 +117,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
 
     Write-Host "Omdøber bruger til $UserDisplayName" -foregroundcolor Cyan
     Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$UserDisplayName"
-    sleep 6
+    sleep 120
     
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
@@ -405,10 +405,6 @@ else {
     Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
     Start-Sleep 120
 
-    Write-Host "Omdøber bruger til $UserDisplayName" -foregroundcolor Cyan
-    Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$UserDisplayName"
-    sleep 6
-
     Write-Host "Tilføjer 'sammacount' email og opdatere 'comapny' felt field in AD for $ADuser." -foregroundcolor Cyan
     If ([bool](Get-ADUser -Filter  {Name -eq $ADuser})) 
     {
@@ -442,6 +438,10 @@ else {
     $acl.AddAccessRule($rule) 
     Set-Acl -acl $acl -path $aclPath
 
+
+    Write-Host "Omdøber bruger til $UserDisplayName" -foregroundcolor Cyan
+    Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$UserDisplayName"
+    
     <#Venter Synkronisering til DKSUND
     Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
     Start-Sleep 10800
