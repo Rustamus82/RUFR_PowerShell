@@ -18,3 +18,24 @@ $aclPath = "AD:\" + $group.distinguishedName
 $acl = Get-Acl $aclPath
 $acl.AddAccessRule($rule) 
 Set-Acl -acl $acl -path $aclPath
+
+
+#Manager 
+$ManagerObject = Get-ADUser $Manager 
+Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+#RightsGuid
+$guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+#SID of the manager 
+$sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+#ActiveDirectoryAccessRule create 
+$ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+$rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+$rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+#Read out the group ACL, add a new rule and overwrite the group's ACL 
+$GroupObject = Get-ADGroup "$ADgroup"
+$AD = Get-Location
+#$aclPath = "AD:\" + $group.distinguishedName 
+$aclPath = "$AD" + $GroupObject.distinguishedName 
+$acl = Get-Acl $aclPath
+$acl.AddAccessRule($rule) 
+Set-Acl -acl $acl -path $aclPath

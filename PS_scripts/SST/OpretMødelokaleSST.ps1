@@ -48,71 +48,90 @@ if($ADuser -match '[^a-zA-Z0-9\-_\.]' -or $ADuser.Length -lt 5 -or $ADuser.Lengt
 Set-Location -Path 'SSTAD:'
     if ($company -eq "1"){
         
-        $ExchangeSikkerhedsgruppe = 'SST_'+$ADuser
+        $ADgroup = 'SST_'+$ADuser
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
-        Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
-        Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
+        Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
+        Write-Host "Opretter AD objekt $ADgroup i SST AD" -foregroundcolor Cyan
         
-        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSST
+        New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSST
         Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
         sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføje  email adresse til gruppen" -foregroundcolor Cyan
-        $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
-        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
+        $GroupMail = $ADgroup+'@sst.dk'
+        Set-ADGroup -Identity $ADgroup -Add @{company="Sundhedsstyrelsen";mail="$GroupMail"}
     }
     Elseif ($company -eq "2") {
 
-        $ExchangeSikkerhedsgruppe = 'SUM_'+$ADuser
+        $ADgroup = 'SUM_'+$ADuser
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
-        Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
-        Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
+        Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
+        Write-Host "Opretter AD objekt $ADgroup i SST AD" -foregroundcolor Cyan
 
-        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
+        New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperDEP
         Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
         sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
-        $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
-        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
+        $GroupMail = $ADgroup+'@sst.dk'
+        Set-ADGroup -Identity $ADgroup -Add @{company="Sundheds- og Ældreministeriet";mail="$GroupMail"}
     }
     Elseif($company -eq "3"){
 
-        $ExchangeSikkerhedsgruppe = 'STPS_'+$ADuser
+        $ADgroup = 'STPS_'+$ADuser
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
-        Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
-        Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
+        Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
+        Write-Host "Opretter AD objekt $ADgroup i SST AD" -foregroundcolor Cyan
 
-        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
+        New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperSTPS
         Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
         sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
-        $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
-        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Styrelsen for Patientsikkerhed";mail="$GroupMail"}
+        $GroupMail = $ADgroup+'@sst.dk'
+        Set-ADGroup -Identity $ADgroup -Add @{company="Styrelsen for Patientsikkerhed";mail="$GroupMail"}
     }
     Elseif($company -eq "4"){
 
-        $ExchangeSikkerhedsgruppe = 'NGC_'+$ADuser
+        $ADgroup = 'NGC_'+$ADuser
         Write-Host "Objekt $ADuser Findes ikke i AD til at starte med, opretter " -foregroundcolor Yellow
-        Write-Host "Sikkerhedsgruppe bliver til $ExchangeSikkerhedsgruppe" -ForegroundColor Yellow
-        Write-Host "Opretter AD objekt $ExchangeSikkerhedsgruppe i SST AD" -foregroundcolor Cyan
+        Write-Host "Sikkerhedsgruppe bliver til $ADgroup" -ForegroundColor Yellow
+        Write-Host "Opretter AD objekt $ADgroup i SST AD" -foregroundcolor Cyan
 
-        New-ADGroup -Name $ExchangeSikkerhedsgruppe -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperNGC
+        New-ADGroup -Name $ADgroup -GroupScope Universal -GroupCategory Security -ManagedBy $Manager -Description $SikkerhedsgrupperDescription -Path $OUPathForExchangeSikkerhedsgrupperNGC
         Write-Host "TimeOut for 60 sek." -foregroundcolor Yellow 
         sleep 60
 
         Write-Host "Opdaterer 'Company' felt og tilføjer  email adresse til gruppen" -foregroundcolor Cyan
-        $GroupMail = $ExchangeSikkerhedsgruppe+'@sst.dk'
-        Set-ADGroup -Identity $ExchangeSikkerhedsgruppe -Add @{company="Nationalt Genom Center";mail="$GroupMail"}
+        $GroupMail = $ADgroup+'@sst.dk'
+        Set-ADGroup -Identity $ADgroup -Add @{company="Nationalt Genom Center";mail="$GroupMail"}
     }
     Else 
-    { Write-Warning "Mislykkedes at oprette $ExchangeSikkerhedsgruppe, Noget gik galt..."}
+    { Write-Warning "Mislykkedes at oprette $ADgroup, Noget gik galt..."}
 
 
-Write-Host "Tilføjer $Manager til gruppen $ExchangeSikkerhedsgruppe medlemskab." -foregroundcolor Cyan
-Add-ADGroupMember -Identity $ExchangeSikkerhedsgruppe -Members $Manager
+Write-Host "Tilføjer $Manager til gruppen $ADgroup medlemskab." -foregroundcolor Cyan
+Add-ADGroupMember -Identity $ADgroup -Members $Manager
 
+Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+#Manager 
+$ManagerObject = Get-ADUser $Manager 
+#Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+#RightsGuid
+$guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+#SID of the manager 
+$sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+#ActiveDirectoryAccessRule create 
+$ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+$rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+$rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+#Read out the group ACL, add a new rule and overwrite the group's ACL 
+$GroupObject = Get-ADGroup "$ADgroup"
+$AD = Get-Location
+$aclPath = "$AD" + $GroupObject.distinguishedName 
+$acl = Get-Acl $aclPath
+$acl.AddAccessRule($rule) 
+Set-Acl -acl $acl -path $aclPath
    
 Write-Host "Timeout i 20 sekunder." -foregroundcolor Yellow 
 sleep 20
@@ -144,20 +163,20 @@ Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
-Write-Host "E-Mail aktivering af $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
-if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe}))
+Write-Host "E-Mail aktivering af $ADgroup i Exchange 2016 SST" -foregroundcolor Cyan
+if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ADgroup}))
 {
-    Enable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe
-    #Disable-SSTDistributionGroup -Identity $ExchangeSikkerhedsgruppe
-    $new = $ExchangeSikkerhedsgruppe + "@sst.dk"
-    Write-Host "Disabled email politik på Exchange 2016 SST $ExchangeSikkerhedsgruppe" -foregroundcolor Cyan
-    Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+    Enable-SSTDistributionGroup -Identity $ADgroup
+    #Disable-SSTDistributionGroup -Identity $ADgroup
+    $new = $ADgroup + "@sst.dk"
+    Write-Host "Disabled email politik på Exchange 2016 SST $ADgroup" -foregroundcolor Cyan
+    Set-SSTDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         
        
 }
 Else
 {
-    Write-Warning "Kunne ikke e-mail aktivere $ExchangeSikkerhedsgruppe, da gruppen muligvis ikke findes i Exchange 2016 SST, eller noget gik  galt." -ErrorAction Stop
+    Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i Exchange 2016 SST, eller noget gik  galt." -ErrorAction Stop
 }
 
 
@@ -177,19 +196,19 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
         if($company -eq "2"){
-            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ADuser + "@sum.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
         }
         if($company -eq "3"){
-            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ADuser + "@stps.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
         }
         if($company -eq "4"){
-            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
+            Write-Host "Tilføjer primær smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
         $new = $ADuser + "@ngc.dk"
         Set-SSTMailbox $ADuser -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60 
@@ -207,31 +226,31 @@ Write-Host "Forsøger at E-Mail aktivere fællesposkasse $ADuser på Exchange 20
     }
 
 
-Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ExchangeSikkerhedsgruppe i Exchange 2016 SST" -foregroundcolor Cyan
+Write-Host "E-Mail aktivering af Sikkerhedsgruppe $ADgroup i Exchange 2016 SST" -foregroundcolor Cyan
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
 
-    if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ExchangeSikkerhedsgruppe})) 
+    if ([bool](Get-ADGroup -Filter  {SamAccountName -eq $ADgroup})) 
     {
         
         if($company -eq "2"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
-        $new = $ExchangeSikkerhedsgruppe + "@sum.dk"
-        Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
+        $new = $ADgroup + "@sum.dk"
+        Set-SSTDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "3"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
-        $new = $ExchangeSikkerhedsgruppe + "@stps.dk"
-        Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
+        $new = $ADgroup + "@stps.dk"
+        Set-SSTDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         if($company -eq "4"){
-            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ExchangeSikkerhedsgruppe på Exchange 2016 SST" -foregroundcolor Cyan
-        $new = $ExchangeSikkerhedsgruppe + "@ngc.dk"
-        Set-SSTDistributionGroup $ExchangeSikkerhedsgruppe -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
+            Write-Host "Tilføjer primær sum smtp adressen og disabled email politik for $ADgroup på Exchange 2016 SST" -foregroundcolor Cyan
+        $new = $ADgroup + "@ngc.dk"
+        Set-SSTDistributionGroup $ADgroup -PrimarySMTPAddress $new -EmailAddressPolicyEnabled $false
         sleep 60
         }
         Elseif($company -eq "1"){
@@ -243,7 +262,7 @@ if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-pat
     }
     Else
     {
-        Write-Warning "Kunne ikke e-mail aktivere $ExchangeSikkerhedsgruppe, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
+        Write-Warning "Kunne ikke e-mail aktivere $ADgroup, da gruppen muligvis ikke findes i DKSUND/Exchange 2016, eller noget gik  galt." -ErrorAction Stop
     }
 
 sleep 60
@@ -251,16 +270,16 @@ Write-Host "Connecting to Sessions" -ForegroundColor Magenta
 #$reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 if (Test-Path $ISEScriptPath){ Invoke-Expression $ISEScriptPath }elseif(test-path $PSscriptPath){Invoke-Expression $PSscriptPath}
 
-Write-Host "Tilføjer sikkerhedsgruppe $ExchangeSikkerhedsgruppe som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
+Write-Host "Tilføjer sikkerhedsgruppe $ADgroup som 'FUll access & Send As' på $ADuser" -foregroundcolor Cyan     
 if ([bool](Get-ADuser -Filter  {SamAccountName -eq $ADuser})) {
-     $group = $ExchangeSikkerhedsgruppe
+     $group = $ADgroup
      Get-SSTMailbox -identity $ADuser | add-SSTmailboxpermission -user $group -accessrights FullAccess -inheritancetype All
-     Add-SSTADPermission $ADuser -User $ExchangeSikkerhedsgruppe -Extendedrights "Send As"
+     Add-SSTADPermission $ADuser -User $ADgroup -Extendedrights "Send As"
      Get-SSTADPermission -Identity $ADuser | where {$_.ExtendedRights -like 'Send*'} | Format-Table -Auto User,Deny,ExtendedRights
      #Man kan tilføje individuelle brugere, men ikke grupper. Søgning giver ingen resultater, hvis man gør det med GUI.
-     #Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ExchangeSikkerhedsgruppe
+     #Set-SSTMailbox -Identity $ADuser -GrantSendOnBehalfTo $ADgroup
 }
-Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ExchangeSikkerhedsgruppe adgang til Mødelokale: $ADuser..." }
+Else { write-host "Mislykkedes at tilknytte sikkerhedsgruppe: $ADgroup adgang til Mødelokale: $ADuser..." }
            
 
 Write-Host "Connecting to Sessions" -ForegroundColor Magenta
@@ -297,9 +316,9 @@ Write-Host "Omdøber bruger..." -foregroundcolor Cyan
 Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$userDisplayName"
 sleep 6
 
-Write-Host "Obs! er manager sat som ejer?" -foregroundcolor Yellow -backgroundcolor DarkCyan
+#Write-Host "Obs! er manager sat som ejer?" -foregroundcolor Yellow -backgroundcolor DarkCyan
 #ER det nødvendigt med en manager med nedenstående for mødelokaler?
-#Write-Host "Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ExchangeSikkerhedsgruppe," -foregroundcolor Yellow -backgroundcolor DarkCyan
+#Write-Host "Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup," -foregroundcolor Yellow -backgroundcolor DarkCyan
 #Write-Host "da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
 Write-Host
 Write-Host "Husk at sætte hak i 'Enable the Resource Booking Attendant' under fanen 'Resource general' i Exchange," -foregroundcolor Yellow -backgroundcolor DarkCyan
@@ -310,7 +329,7 @@ $ResultMailboxType = (Get-SSTMailbox $ADuser).RecipientTypeDetails
 Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
 $ResultRoom = (Get-SSTMailbox $ADuser).PrimarySmtpAddress
 Write-Host "Mødelokalle oprettet: $ResultRoom" -foregroundcolor Green -backgroundcolor DarkCyan
-$ResultGroup = (Get-SSTGroup $ExchangeSikkerhedsgruppe).WindowsEmailAddress
+$ResultGroup = (Get-SSTGroup $ADgroup).WindowsEmailAddress
 Write-Host "Tilhørende sikkerhedsgruppe oprettet: $ResultGroup" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Kapacitet: $Capacity" -foregroundcolor Green -backgroundcolor DarkCyan
 Write-Host "Ejer: $Manager" -foregroundcolor Green -backgroundcolor DarkCyan

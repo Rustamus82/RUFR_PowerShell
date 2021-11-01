@@ -2,6 +2,12 @@
 ChangeLog
 
 ***********************************************************************************************************************************************************
+01-11-2021 RUFR_PowerShell_v2.14?
+.\PS_scripts\
+updated group manager checkmark for updates on groups that are used in rooms, sharedmails and distributions.
+.\PS_scripts\SSI\OpretMødelokalleSSI.ps1
+added renaming rooms and -display name corrected
+
 <<<<<<< HEAD
 17-03-2021 ServicedeskPowershellTools_v2.09
 oupdated login for Exchnage 2010 to 2016 SST

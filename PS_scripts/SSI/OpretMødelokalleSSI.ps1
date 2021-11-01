@@ -15,8 +15,8 @@ function Start-Sleep($seconds) {
 #*********************************************************************************************************************************************
 #script
 #*********************************************************************************************************************************************
-[string]$userDisplayName = Read-Host -Prompt "Tast Displayname på mødelokale eksempel: (202-213 Mødelokale)"
-[string]$ADuser =  Read-Host -Prompt "Tast 'Alias' på nyt mødelokaleminimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213)"
+[string]$ADuser =  Read-Host -Prompt "Tast 'Alias' på nyt mødelokaleminimum 5 og max 20 karaktere, Må IKKE indeholde: mellemrum, komma, ÆØÅ / \ (eksempel: 202-213a)"
+[string]$UserDisplayName = "$ADuser Mødelokale"
 [string]$Manager =  Read-Host -Prompt "Angiv Ejers INITIALER på Mødelokalle/sikkerhedsgruppen"
 [string]$Capacity =  Read-Host -Prompt "Tast 'antal' personer for Kapacitet af mødeloaket. Skriv tal:"
 
@@ -95,6 +95,29 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manager -ErrorAction SilentlyContinue
 
+    Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+    #Manager 
+    $ManagerObject = Get-ADUser $Manager 
+    #Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+    #RightsGuid
+    $guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+    #SID of the manager 
+    $sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+    #ActiveDirectoryAccessRule create 
+    $ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+    $rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+    $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+    #Read out the group ACL, add a new rule and overwrite the group's ACL 
+    $GroupObject = Get-ADGroup "$ADgroup"
+    $AD = Get-Location
+    $aclPath = "$AD" + $GroupObject.distinguishedName 
+    $acl = Get-Acl $aclPath
+    $acl.AddAccessRule($rule) 
+    Set-Acl -acl $acl -path $aclPath
+
+    Write-Host "Omdøber bruger til $UserDisplayName" -foregroundcolor Cyan
+    Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$UserDisplayName"
+    sleep 6
     
     Write-Host "Skifter til DKSUND AD" -foregroundcolor Yellow
     Set-Location -Path 'DKSUNDAD:'
@@ -286,8 +309,8 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
     
-    Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    #Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    Write-Host "Noter følgende i sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
     $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
@@ -361,8 +384,6 @@ else {
      }
      until (($company -eq '1') -or ($company -eq '2'))
 
-
-
     Write-Host "Tilføjer $Manager til  gruppen $ADgroup medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity $ADgroup -Members $Manager
     Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
@@ -372,10 +393,10 @@ else {
     Write-Host "Opretter AdObjekt i SSI AD." -foregroundcolor Cyan
     Set-Location -Path 'SSIAD:'
     if ($company -eq "1"){
-        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSSI
+        New-ADUser -Name "$ADuser" -DisplayName $UserDisplayName -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSSI
     }
     Elseif ($company -eq "2") {
-        New-ADUser -Name "$ADuser" -DisplayName $ADuser -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSDS
+        New-ADUser -Name "$ADuser" -DisplayName $UserDisplayName -GivenName $ADuser -Manager $Manager -Description $ADuserDescription -UserPrincipalName (“{0}@{1}” -f $ADuser,”ssi.dk”) -ChangePasswordAtLogon $true -Path $OUpathRoomSDS
     }
     Else 
     { Write-Warning "Mislykkedes at oprette AD objekt: $ADuser."; Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan; pause;exit }
@@ -384,6 +405,9 @@ else {
     Write-Host "time out 2 min (Synkroniserer i AD)" -foregroundcolor Yellow 
     Start-Sleep 120
 
+    Write-Host "Omdøber bruger til $UserDisplayName" -foregroundcolor Cyan
+    Get-ADUser -Identity $ADuser | Rename-ADObject -NewName "$UserDisplayName"
+    sleep 6
 
     Write-Host "Tilføjer 'sammacount' email og opdatere 'comapny' felt field in AD for $ADuser." -foregroundcolor Cyan
     If ([bool](Get-ADUser -Filter  {Name -eq $ADuser})) 
@@ -397,6 +421,26 @@ else {
         }
     }
     Else { Write-Warning "Mislykkedes at tilføker 'samaccount' op opdatere 'company' felt for AD bruger $ADuser, Muligvis fordi den ikke findes i AD." ; Write-Host "Better luck next time, exiting script!" -ForegroundColor Cyan; pause;exit }
+
+    Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+    #Manager 
+    $ManagerObject = Get-ADUser $Manager 
+    #Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+    #RightsGuid
+    $guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+    #SID of the manager 
+    $sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+    #ActiveDirectoryAccessRule create 
+    $ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+    $rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+    $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+    #Read out the group ACL, add a new rule and overwrite the group's ACL 
+    $GroupObject = Get-ADGroup "$ADgroup"
+    $AD = Get-Location
+    $aclPath = "$AD" + $GroupObject.distinguishedName 
+    $acl = Get-Acl $aclPath
+    $acl.AddAccessRule($rule) 
+    Set-Acl -acl $acl -path $aclPath
 
     <#Venter Synkronisering til DKSUND
     Write-Host "Time out 3 timer. venter til konti synkroniseret til DKSUND" -foregroundcolor Yellow 
@@ -595,8 +639,8 @@ else {
     Write-Host "Connecting to Sessions" -ForegroundColor Magenta
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
-    Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    #Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    Write-Host "Noter følgende i sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
     $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress

@@ -83,7 +83,25 @@ IF([bool](Get-ADUser -Filter "MailNickName eq '$ADuser'"))
 
     Write-Host "Tilføjer $Manager til  gruppen $ADgroup medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity $ADgroup -Members $Manager
-
+    Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+    #Manager 
+    $ManagerObject = Get-ADUser $Manager 
+    #Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+    #RightsGuid
+    $guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+    #SID of the manager 
+    $sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+    #ActiveDirectoryAccessRule create 
+    $ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+    $rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+    $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+    #Read out the group ACL, add a new rule and overwrite the group's ACL 
+    $GroupObject = Get-ADGroup "$ADgroup"
+    $AD = Get-Location
+    $aclPath = "$AD" + $GroupObject.distinguishedName 
+    $acl = Get-Acl $aclPath
+    $acl.AddAccessRule($rule) 
+    Set-Acl -acl $acl -path $aclPath
    
     Write-Host "Forsøger at E-Mail aktivere Sikkerhedsgruppe $ADgroup  i Exchange 2016" -foregroundcolor Yellow
     do

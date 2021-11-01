@@ -81,6 +81,26 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     Write-Host "Tilføjer $Manager som Manager på AD Objekt $ADuser." -foregroundcolor Cyan
     Set-ADUser $ADuser -Manager $Manager
 
+    Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+    #Manager 
+    $ManagerObject = Get-ADUser $Manager 
+    #Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+    #RightsGuid
+    $guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+    #SID of the manager 
+    $sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+    #ActiveDirectoryAccessRule create 
+    $ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+    $rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+    $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+    #Read out the group ACL, add a new rule and overwrite the group's ACL 
+    $GroupObject = Get-ADGroup "$ADgroup"
+    $AD = Get-Location
+    $aclPath = "$AD" + $GroupObject.distinguishedName 
+    $acl = Get-Acl $aclPath
+    $acl.AddAccessRule($rule) 
+    Set-Acl -acl $acl -path $aclPath
+
     Write-Host "Tilføjer $Manager til  gruppen $ADgroup medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity $ADgroup -Members $Manager
     Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
@@ -283,7 +303,7 @@ IF([bool](Get-AzureADUser -Filter "MailNickName eq '$ADuser'"))
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
     
     Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    Write-Host "Noter følgende i sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
     $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
@@ -361,6 +381,27 @@ else {
 
     Write-Host "Tilføjer $Manager til  gruppen $ADgroup medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity $ADgroup -Members $Manager
+
+    Write-Host "Sætter hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup" -foregroundcolor Cyan
+    #Manager 
+    $ManagerObject = Get-ADUser $Manager 
+    #Set-ADGroup "$ADgroup" -Replace @{managedBy=$ManagerObject.DistinguishedName}
+    #RightsGuid
+    $guid = [guid]'bf9679c0-0de6-11d0-a285-00aa003049e2'
+    #SID of the manager 
+    $sid = [System.Security.Principal.SecurityIdentifier]$ManagerObject.sid
+    #ActiveDirectoryAccessRule create 
+    $ctrlType = [System.Security.AccessControl.AccessControlType]::Allow 
+    $rights = [System.DirectoryServices.ActiveDirectoryRights]::WriteProperty -bor [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight
+    $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($sid, $rights, $ctrlType, $guid)
+    #Read out the group ACL, add a new rule and overwrite the group's ACL 
+    $GroupObject = Get-ADGroup "$ADgroup"
+    $AD = Get-Location
+    $aclPath = "$AD" + $GroupObject.distinguishedName 
+    $acl = Get-Acl $aclPath
+    $acl.AddAccessRule($rule) 
+    Set-Acl -acl $acl -path $aclPath
+
     Write-Host "Tilføjer $Manager til  gruppen 'U-SSI-CTX-Standard applikationer' medlemskab." -foregroundcolor Cyan
     Add-ADGroupMember -Identity 'U-SSI-CTX-Standard applikationer' -Members  $Manager -ErrorAction SilentlyContinue
 
@@ -595,7 +636,7 @@ else {
     $reconnect =  $PSScriptRoot | Split-Path -Parent | Split-Path -Parent; Invoke-Expression "$reconnect\Logins\Session_reconnect.ps1"
 
     Write-Host "Obs! Husk at sætte hak i Manager må godt opdatere medlemskabsliste på sikkerhedsgruppe $ADgroup, da dette kan ikke automatiseres pt. !!!!" -foregroundcolor Yellow -backgroundcolor DarkCyan
-    Write-Host "Noter følgende i Nilex løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
+    Write-Host "Noter følgende i sagens løsningsbeksrivelse:" -foregroundcolor Yellow -backgroundcolor DarkCyan
     $ResultMailboxType = (Get-Mailbox $ADuser).RecipientTypeDetails
     Write-Host "Postkasse type: $ResultMailboxType" -foregroundcolor Green -backgroundcolor DarkCyan
     $ResultSharedmail = (Get-Mailbox "$ADuser").PrimarySmtpAddress
