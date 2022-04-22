@@ -39,11 +39,12 @@ Set-Location "$($SiteCode):\" @initParams
 #PowerShell script to list all the application deployments
 #Import-Module 'C:\Program Files (x86)\Microsoft Configuration Manager\AdminConsole\bin\ConfigurationManager.psd1' 
 
-Get-CMApplication | Select-Object LocalizedDisplayName,SoftwareVersion,NumberOfDeployments | Export-CSV "$ISEScriptPath\20211026-AllApplicationsSCCM.csv"
-
 Get-CMUserCollection -Name '*rufr*'
 Get-CMDeviceCollection -Name '*rufr*'
 
-Get-CMUserCollection | Select-Object Name,LimitToCollectionName,MemberCount | Export-CSV "$ISEScriptPath\20211026-AllUserCollectionsSCCM.csv"
 
-Get-CMDeviceCollection | Select-Object Name,LimitToCollectionName,MemberCount | Export-CSV "$ISEScriptPath\20211026-AllDeviceCollectionsSCCM.csv"
+Get-CMApplication | Select-Object LocalizedDisplayName,SoftwareVersion,NumberOfDeployments | Export-CSV "$ISEScriptPath\20220422-AllApplicationsSCCM.csv"
+
+Get-CMUserCollection | Select-Object Name,LimitToCollectionName,MemberCount | Export-CSV "$ISEScriptPath\20220422-AllUserCollectionsSCCM.csv"
+
+Get-CMDeviceCollection | Select-Object Name,LimitToCollectionName,MemberCount | Export-CSV "$ISEScriptPath\20220422-AllDeviceCollectionsSCCM.csv"
