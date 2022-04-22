@@ -20,19 +20,19 @@ $now = [datetime]::Now.ToString('yyyyMMddHHmmss')
 
 
 #SST.DK credentials
-$SSTcreds = Get-Credential -Message 'Angiv adm-konto til SST.DK domænet'
+$SSTcreds = Get-Credential -Message 'Angiv adm-konto til SST.DK domænet' sst.dk\adm-rufr
 $SSTDomainController = (Get-ADDomainController -DomainName 'SST.DK' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $SSTDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 
 
 #SSI.AD credentials
-$SSICreds = Get-Credential -Message 'Angiv adm-konto til SSI.AD domænet'
+$SSICreds = Get-Credential -Message 'Angiv adm-konto til SSI.AD domænet' ssi\adm-rufr
 $SSIDomainController = (Get-ADDomainController -DomainName 'SSI.AD' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $SSIDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 
 
 #SSI.AD credentials
-$DKSUNDCreds = Get-Credential -Message 'Angiv adm-konto til DKSUND.DK domænet'
+$DKSUNDCreds = Get-Credential -Message 'Angiv adm-konto til DKSUND.DK domænet' dksund\adm-rufr
 $DKSUNDDomainController = (Get-ADDomainController -DomainName 'DKSUND.DK' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $DKSUNDDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 

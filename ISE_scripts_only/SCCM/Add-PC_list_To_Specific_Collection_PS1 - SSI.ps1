@@ -37,7 +37,7 @@ Set-Location "$($SiteCode):\" @initParams
 #add list of Computers to DeviceCollection - need to be correclt path to files Get-Content ".\CollectionDeviceMembers.txt" - -CollectionID "Se in Properties on Collection"
 #Get-Content "C:\RUFR_PowerShell\ISE_scripts_only\SCCM\DeviceCollectionMembers.txt" | foreach { Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS10050A" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }
 $devices = Get-Content "C:\Users\adm-rufr\Desktop\SCCM\DeviceCollectionMembers.txt"; $devices.Count
-Get-Content "C:\Users\adm-rufr\Desktop\SCCM\DeviceCollectionMembers.txt" | foreach {Write-Host "Addin Device: $_" -foregroundcolor Cyan; Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS1006F5" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }    
+Get-Content "C:\Users\adm-rufr\Desktop\SCCM\DeviceCollectionMembers.txt" | foreach {Write-Host "Adding Device: $_" -foregroundcolor Cyan; Add-CMDeviceCollectionDirectMembershipRule -CollectionID "PS10073D" -ResourceID (Get-CMDevice -Name $_).ResourceID -ErrorAction SilentlyContinue }    
 
 cls
 #(Get-CMDevice -Name 's-sei-mq1-p').ResourceID 
