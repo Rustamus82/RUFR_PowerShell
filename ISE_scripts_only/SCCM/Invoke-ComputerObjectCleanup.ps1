@@ -20,19 +20,19 @@ $now = [datetime]::Now.ToString('yyyyMMddHHmmss')
 
 
 #SST.DK credentials
-$SSTcreds = Get-Credential -Message 'Angiv adm-konto til SST.DK domænet' sst.dk\adm-rufr
+$SSTcreds = Get-Credential -Message 'Angiv adm-konto til SST.DK domænet' sst.dk\daa_rufr
 $SSTDomainController = (Get-ADDomainController -DomainName 'SST.DK' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $SSTDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 
 
 #SSI.AD credentials
-$SSICreds = Get-Credential -Message 'Angiv adm-konto til SSI.AD domænet' ssi\adm-rufr
+$SSICreds = Get-Credential -Message 'Angiv adm-konto til SSI.AD domænet' ssi\daa_rufr
 $SSIDomainController = (Get-ADDomainController -DomainName 'SSI.AD' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $SSIDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 
 
-#SSI.AD credentials
-$DKSUNDCreds = Get-Credential -Message 'Angiv adm-konto til DKSUND.DK domænet' dksund\adm-rufr
+#DKSUND.AD credentials
+$DKSUNDCreds = Get-Credential -Message 'Angiv adm-konto til DKSUND.DK domænet' dksund\daa_rufr
 $DKSUNDDomainController = (Get-ADDomainController -DomainName 'DKSUND.DK' -Discover).HostName[-1]
 if (-not ((Test-NetConnection -ComputerName $DKSUNDDomainController -Port 389).TcpTestSucceeded)) { return 1 }
 
@@ -83,7 +83,7 @@ Get-ADComputer -Filter {Enabled -eq $true -and OperatingSystem -notlike '*server
     Move-ADObject -Server $SSIDomainController -Credential $SSICreds -TargetPath 'OU=Disabled computers,DC=ssi,DC=ad'
 
 
-#SSI.AD
+#DKSUND.AD
 Get-ADComputer -Filter {Enabled -eq $true -and OperatingSystem -notlike '*server*' -and PasswordLastSet -lt $daysago -and LastLogonTimeStamp -lt $daysago} -Properties OperatingSystem,PwdLastSet,LastLogonTimeStamp -Server $DKSUNDDomainController |
     Set-ADComputer -Server $DKSUNDDomainController -Enabled $false -Credential $DKSUNDCreds -PassThru |
     Move-ADObject -Server $DKSUNDDomainController -Credential $DKSUNDCreds -TargetPath 'OU=Disabled computers,DC=dksund,DC=dk'
