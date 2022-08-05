@@ -64,6 +64,7 @@ Start-Sleep 4;
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
 $Global:UserCredDksund = Get-Credential "adm-rufr@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Connect-ExchangeOnline -UserPrincipalName "adm-rufr@dksund.dk" -ShowProgress $true -ShowBanner:$false 
 #Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client  -  "AllowBasic"=dword:00000001  -- stadigvæk kræver som ellers bliver slået fra med policy
 #Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false

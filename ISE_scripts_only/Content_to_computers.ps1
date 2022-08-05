@@ -19,12 +19,13 @@ $WorkingDir = Convert-Path .
 
 $CSV = Import-CSV "$WorkingDir\CSV\Computers.csv" -Delimiter ";"
 $computers = $CSV.name
+$computers = "SSI000447.ssi.ad"
 cls
 
  
 # This is the file/folder(s) you want to copy to the servers in the $computer variable
 #$source = "C:\Users\Public\Desktop\Software Center.lnk"
-$source = "C:\DispRun\install\SCCM_Client_Install" 
+$source = "$WorkingDir\InstallSource\SCCM_Client_Install" 
 # The destination location you want the file/folder(s) to be copied to
 $destination = "C$\SCCM_Client_Install\"
 
@@ -38,3 +39,26 @@ Copy-Item $source -Destination \\$computer\$destination -Recurse -Force -Verbose
 "\\$computer\$destination is not reachable or does not exist"
 }
 }
+
+
+Test-Connection -ComputerName $computers
+
+
+
+##Source packages
+#Sccm reinstall
+$CommandPath = (Get-Location).Path; $InstallPackageFiles = "$CommandPath\InstallSource\SCCM_Client_Install"
+
+
+
+##Enter Sessions for remote Computers
+#PSsessions SSI, enter remote PC
+Enter-PSSession -ComputerName $computer 
+
+
+#install remotely, execute install files
+& "$env:SystemDrive\SCCM_Client_Install\Certificates\Import.cmd";
+& "$env:SystemDrive\SCCM_Client_Install\_RunMeSCCM_reinstall.cmd"; 
+get-content "$env:SystemRoot\ccmsetup\logs\ccmsetup.log" -Tail 20
+Remove-Item -Path "$env:SystemDrive\SCCM_Client_Install\" -Recurse
+exit

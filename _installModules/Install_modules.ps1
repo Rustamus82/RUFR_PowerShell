@@ -110,3 +110,5 @@ Disconnect-ExchangeOnline
 Get-EXOMailbox rufr
 Get-Help Connect-ExchangeOnline
 get-help Connect-ExchangeOnline -examples
+
+Get-InstalledModule *exch*

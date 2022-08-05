@@ -58,6 +58,7 @@ Start-Sleep 4;
 Import-Module ExchangeOnlineManagement
 Import-Module AzureAD
 $Global:UserCredDksund = Get-Credential "$env:USERNAME@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Connect-ExchangeOnline -Credential $Global:UserCredDksund -ShowProgress $true -ShowBanner:$false
 Connect-AzureAD -Credential $Global:UserCredDksund
 #$Global:UserCredDksund = Get-Credential "$env:USERNAME@dksund.dk" -Message "DKSUND AD login, Exchange Online & Hybrid"
