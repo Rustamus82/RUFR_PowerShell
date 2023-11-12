@@ -21,8 +21,8 @@ cls
 Import-Module -Name Hyper-v -ErrorAction SilentlyContinue
 Get-Module -Name Hyper-V
 
-#Adding ad user for local group for administrative purpose and to get access to Hyper V Console from other PC's
-$Users = @("adm-rufr","adm-nise")
+<#Adding ad user for local group for administrative purpose and to get access to Hyper V Console from other PC's
+$Users = @("rf","administrator","isengard\rf","rustam@live.dk")
 
 foreach ($User in $Users)
 {
@@ -33,10 +33,10 @@ foreach ($User in $Users)
    Add-LocalGroupMember -Group 'Remote Desktop Users' -Member $User -ErrorAction SilentlyContinue -Verbose
    Add-LocalGroupMember -Group 'Brugere af Fjernskrivebord' -Member $User -ErrorAction SilentlyContinue -Verbose
 }
-
+#>
 
 #Get-PSDrive; 
-Set-Location -Path 'D:'
+Set-Location -Path 'C:'
 
 #removing VMs
 Get-VM| Stop-VM -TurnOff -Force -Verbose
@@ -55,11 +55,12 @@ New-Item -Path "\Hyper-V\Virtual Machines" -ItemType Directory -Verbose
 Set-VMHost -VirtualHardDiskPath "\Hyper-V\Virtual Hard Disks" -Verbose
 Set-VMHost -VirtualMachinePath "\Hyper-V\Virtual Machines" -Verbose
 
-#Copy rebuild scripts bats
+<#Copy rebuild scripts bats
 New-Item -Path "Hyper-V" -ItemType Directory -Force
 Copy-Item -Path "$PSScriptRoot\ReBuildVM_3.ps1" -Destination "\Hyper-V\" -Force -Verbose
 Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.ps1" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
 Copy-Item -Path "$PSScriptRoot\Call_rebuild_script_AsAdmin.bat" -Destination "$Env:PUBLIC\desktop\" -Force -Verbose
+#>
 
 #Create a virtual switch by using Windows PowerShell - https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines
 #Get-NetAdapter
@@ -76,15 +77,15 @@ New-VMSwitch -name PrivateSwitch -SwitchType Private -ErrorAction SilentlyContin
 
 ### Creat one VM
 <#
-$VM = "VM01-WXU"
+$VM = "VM01-WXI"
 New-VM -Name $VM -MemoryStartupBytes 4GB  -BootDevice VHD -NewVHDPath "C:\Hyper-V\Virtual Hard Disks\$VM.vhdx" -Path "C:\Hyper-V\Virtual Machines\$VM" -NewVHDSizeBytes 128GB -Generation 2 -Switch ExternalSwitch
 #>
 
-<### Configure one VM
-#Configures a virtual machine - https://docs.microsoft.com/en-us/powershell/module/hyper-v/set-vm?view=win10-ps
+### Configure one VM
+<#Configures a virtual machine - https://docs.microsoft.com/en-us/powershell/module/hyper-v/set-vm?view=win10-ps
 
-$VM = "VM01-WXU"
-Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  COMPANY:  AD:  " -SnapshotFileLocation "C:\Hyper-V\Virtual Hard Disks\$VM _Snapshot" -SmartPagingFilePath "C:\Hyper-V\Virtual Machines\$VM" -CheckpointType ProductionOnly -AutomaticCheckpointsEnabled $False   
+$VM = "VM01-WXI"
+Set-VM -Name $VM -GuestControlledCacheTypes $true -DynamicMemory -MemoryMinimumBytes 4GB -MemoryMaximumBytes 4Gb -ProcessorCount 2 -AutomaticStartAction Nothing -AutomaticStopAction Save -Notes "INITIALS:  COMPANY:  AD:  " -SnapshotFileLocation "C:\Hyper-V\Virtual Hard Disks\" -SmartPagingFilePath "C:\Hyper-V\Virtual Machines\" -CheckpointType ProductionOnly -AutomaticCheckpointsEnabled $False   
 Set-VMMemory $VM -Buffer 5 -Priority 10
 Enable-VMIntegrationService -VMName $VM -Name "Guest Service Interface" -ErrorAction SilentlyContinue
 Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" -ErrorAction SilentlyContinue
@@ -93,19 +94,19 @@ Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" 
 
 ## Creation of multiple VMs
 #Naming VMs
-#$VMs = @("VM01-WXU","VM02-WXU","VM03-WXU","VM04-WXU","VM05-WXU","VM06-WXU","VM07-WXU","VM08-WXU","VM09-WXU","VM10-WXU","VM11-WXU","VM12-WXU");cls
+#$VMs = @("VM01-WXI","VM02-WXI","VM03-WXI","VM04-WXI","VM05-WXI","VM06-WXI","VM07-WXI","VM08-WXI","VM09-WXI","VM10-WXI","VM11-WXI","VM12-WXI");cls
 
 
-$VMs = for ($i = 1; $i -lt 21; $i++)
+$VMs = for ($i = 1; $i -lt 5; $i++)
 { 
     "VM{0:D2}" -f $i
 }
 
 
 <#
-$wxu = for ($i = 1; $i -lt 9; $i++)
+$WXI = for ($i = 1; $i -lt 9; $i++)
 { 
-    "VM{0:D2}-WXU" -f $i
+    "VM{0:D2}-WXI" -f $i
 }
 
 $win10Dev = "VM{0:D2}-WXD" -f 9
@@ -121,7 +122,7 @@ $win7 = for ($i = 12; $i -lt 14; $i++)
     "VM{0:D2}-WIN7" -f $i
 }
 
-$VMs = $wxu+$win10Dev+$win8+$win7
+$VMs = $WXI+$win10Dev+$win8+$win7
 #>
 
 
@@ -141,8 +142,53 @@ foreach ($VM in $VMs)
   Set-VMMemory $VM -Buffer 5 -Priority 10 -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Guest Service Interface" -ErrorAction SilentlyContinue -Verbose
   Enable-VMIntegrationService -VMName $VM -Name "Grænseflade til gæstetjeneste" -ErrorAction SilentlyContinue -Verbose
-  #Get-VMIntegrationService -VMName VM12-WXU
-  #$VM ="VM12-WXU"
+  #Get-VMIntegrationService -VMName VM12-WXI
+  #$VM ="VM12-WXI"
 }
+
+<#for workgroup for remote HyperV connection
+get-service *winrm* | Set-Service -StartupType Automatic
+
+#winrm quickconfig
+
+Enable-PSRemoting
+Enable-WSManCredSSP -Role server
+
+##machine from where I connecto to HyperV server
+Get-Item WSMan:\localhost\Client\TrustedHosts
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "isengard"
+Enable-WSManCredSSP -Role client -DelegateComputer "isengard"
+Get-Item WSMan:\localhost\Client\TrustedHosts
+#>
+
+
+<# configure the computer you'll use to manage the Hyper-V host eg. on Isengard IN WORKGROUP
+get-service *winrm* | Start-Service
+get-service *winrm* | Set-Service -StartupType Automatic
+get-NetConnectionProfile |set-NetConnectionProfile -NetworkCategory Private
+winrm quickconfig
+Get-Item WSMan:\localhost\Client\TrustedHosts
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "rohan"
+Enable-WSManCredSSP -Role client -DelegateComputer "rohan"
+Get-Item WSMan:\localhost\Client\TrustedHosts
+
+#and to disable
+Disable-PSRemoting -Force
+Stop-Service WinRM -PassThru
+Set-Service WinRM -StartupType Disabled -PassThru 
+#>
+
+<#
+[Window Title]
+Hyper-V Manager
+
+[Main Instruction]
+An error occurred while attempting to connect to server "ROHAN". Check that the Virtual Machine Management service is running and that you are authorized to connect to the server.
+
+[Content]
+The operation on computer 'ROHAN' failed: The WinRM client cannot process the request. A computer policy does not allow the delegation of the user credentials to the target computer because the computer is not trusted. The identity of the target computer can be verified if you configure the WSMAN service to use a valid certificate using the following command: winrm set winrm/config/service @{CertificateThumbprint="<thumbprint>"}  Or you can check the Event Viewer for an event that specifies that the following SPN could not be created: WSMAN/<computerFQDN>. If you find this event, you can manually create the SPN using setspn.exe .  If the SPN exists, but CredSSP cannot use Kerberos to validate the identity of the target computer and you still want to allow the delegation of the user credentials to the target computer, 
+use gpedit.msc and look at the following policy: Computer Configuration -> Administrative Templates -> System -> Credentials Delegation -> Allow Fresh Credentials with NTLM-only Server Authentication.  Verify that it is enabled and configured with an SPN appropriate for the target computer. For example, for a target computer name "myserver.domain.com", the SPN can be one of the following: WSMAN/myserver.domain.com or WSMAN/*.domain.com. Try the request again after these changes.
+
+#>
 
 pause
