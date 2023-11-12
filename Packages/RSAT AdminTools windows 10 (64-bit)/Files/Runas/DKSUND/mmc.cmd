@@ -1,0 +1,1 @@
+start C:\Runas\DKSUND\ADUC.msc

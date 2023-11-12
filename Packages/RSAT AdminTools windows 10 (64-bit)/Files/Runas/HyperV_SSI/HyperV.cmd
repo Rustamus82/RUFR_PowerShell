@@ -1,0 +1,1 @@
+start %windir%\System32\mmc.exe "%windir%\System32\virtmgmt.msc"

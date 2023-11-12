@@ -1,0 +1,23 @@
+<Configuration ID="82065c78-ade1-42c0-a639-94c8a1591202" Host="cm">
+ <Add OfficeClientEdition="64" Channel="PerpetualVL2019" OfficeMgmtCOM="TRUE" Version="16.0.10356.20006">
+ <Product ID="ProPlus2019Volume" PIDKEY="YCP8Y-X2VHJ-MXQVB-6HX9V-Q8CGC">
+ <Language ID="da-dk" />
+ <Language ID="en-us" />
+ <ExcludeApp ID="Groove" />
+ </Product>
+ <Product ID="LanguagePack">
+ <Language ID="da-dk" />
+ <Language ID="en-us" />
+ <ExcludeApp ID="Groove" />
+ </Product>
+ </Add>
+ <Property Name="SharedComputerLicensing" Value="0" />
+ <Property Name="PinIconsToTaskbar" Value="TRUE" />
+ <Property Name="SCLCacheOverride" Value="0" />
+ <Property Name="AUTOACTIVATE" Value="0" />
+ <Property Name="FORCEAPPSHUTDOWN" Value="TRUE" />
+ <Property Name="DeviceBasedLicensing" Value="0" />
+ <RemoveMSI />
+ <Display Level="Full" AcceptEULA="TRUE" />
+ <Logging Level="Off" />
+</Configuration>

@@ -1,0 +1,21 @@
+VIA SCCM/CMD
+*****************************************************************
+Install Application: 
+"Deploy-Application.exe" -DeploymentType "Install" -DeployMode Interactive -AllowRebootPassThru
+
+"Deploy-Application.exe" -DeploymentType "Install" -DeployMode Silent -AllowRebootPassThru
+
+Uninstall Application:
+"Deploy-Application.exe" -DeploymentType "Uninstall" -DeployMode Interactive -AllowRebootPassThru
+
+"Deploy-Application.exe" -DeploymentType "Uninstall" -DeployMode Silent -AllowRebootPassThru
+
+*****************************************************************
+
+Via Powershell prompt:
+Install Application:
+.\Deploy-Application.exe -DeploymentType Install -DeployMode Interactive -AllowRebootPassThru
+
+Uninstall Application:
+.\Deploy-Application.exe -DeploymentType Uninstall -DeployMode Interactive -AllowRebootPassThru
+*****************************************************************

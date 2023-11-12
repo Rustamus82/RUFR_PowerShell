@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+ 
+[HKEY_CURRENT_USER\Software\Fischer & Kerrn\FKConcAs]
+"ForceCredentialsPrompt"=dword:00000001
+"EWSVersion"="Exchange2013"
+"EWSURL"="https://outlook.office365.com/EWS/Exchange.asmx"
+"autodiscoverdisabled"=dword:00000000
+"UPNSuffix"="dksund.dk"
+  
+[HKEY_CURRENT_USER\Software\Fischer & Kerrn A/S\Concierge Services Storage\Settings]
+"UseWebService"=dword:00000001

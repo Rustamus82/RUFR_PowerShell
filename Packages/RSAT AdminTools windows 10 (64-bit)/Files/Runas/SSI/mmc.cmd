@@ -1,0 +1,1 @@
+start C:\Runas\SSI\ADUC.msc
